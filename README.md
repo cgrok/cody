@@ -1,7 +1,13 @@
-# grokbot
+<div align="center">
+        <p> <img src="https://i.imgur.com/avDbgQa.png"/> </p>
+</div> 
 
-hi
+## Get the Bot
+[Invite](oauth)
 
+## Documentation
+Documentation is a word
 
-In Development 
-
+## Contributors
+> number 1    
+> number 2
