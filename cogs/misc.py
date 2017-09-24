@@ -11,8 +11,8 @@ class Misc:
         await ctx.channel.send(f'Invite me to *__your__* server with this link: \n\n<{inviter}>')
 
     @commands.command()
-    async def esrever(self, ctx, *, msg:str = None):
-        """debmE ni ,snosaer esuaceb sdrawkcab setirW"""
+    async def reverse(self, ctx, *, msg:str = None):
+        """Writes backwards because reasons, in Embed"""
         e = discord.Embed()
         e.colour = discord.Colour(0x8e44ad)
         if msg == None:
