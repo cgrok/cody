@@ -132,7 +132,7 @@ class GrokBot(commands.Bot):
         ---------------
         Client is ready!
         ---------------
-        Authors: verixx, fourjr, add the rest here bois
+        Authors: verixx, fourjr, kwugfighter, add the rest here bois
         ---------------
         Logged in as: {self.user}
         User ID: {self.user.id}
