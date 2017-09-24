@@ -1,5 +1,5 @@
 <div align="center">
-        <p> <img src="https://i.imgur.com/RpJnXH8.png"/> </p>
+        <p> <img src="https://i.imgur.com/avDbgQa.png"/> </p>
 </div> 
 
 ## Get the Bot
