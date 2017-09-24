@@ -84,8 +84,8 @@ class GrokBot(commands.Bot):
                 if not os.environ.get('TOKEN'):
                     self.run_wizard()
             else:
-                #token = config.get('TOKEN').strip('\"')
-                token = "MzYxNDgyNjcxNDUwMzU3NzYy.DKkwmw.MZF4orBpH2xBZi1isx0s5MvvppU"
+                token = config.get('TOKEN').strip('\"')
+
         return os.environ.get('TOKEN') or token
 
     @staticmethod
