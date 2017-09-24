@@ -77,7 +77,6 @@ class Utility:
             env.update(globals())
 
             body = self.cleanup_code(body)
-            await self.edit_to_codeblock(ctx, body)
             stdout = io.StringIO()
             err = out = None
 
@@ -117,11 +116,6 @@ class Utility:
                 await out.add_reaction('\u2705')
             if err:
                 await err.add_reaction('\u2049')
-
-
-    async def edit_to_codeblock(self, ctx, body):
-        msg = f'```py\n{body}\n```'
-        await ctx.message.edit(content=msg)
 
     def cleanup_code(self, content):
         """Automatically removes code blocks from the code."""
