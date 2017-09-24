@@ -1,2 +1,3 @@
-Read
-Send
+Read Messages
+Send Messages
+Read Message History
