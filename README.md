@@ -1,7 +1,3 @@
-# grokbot
-
-hi
-
-
-In Development 
-
+<div align="center">
+        <p> <img src="https://i.imgur.com/RpJnXH8.png"/> </p>
+</div> 
