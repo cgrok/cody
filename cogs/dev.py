@@ -26,15 +26,15 @@ import discord
 from discord.ext import commands
 from discord.ext.commands import TextChannelConverter
 from contextlib import redirect_stdout
-from ext.utility import load_json
+#from .ext.utility import load_json
 from urllib.parse import parse_qs
 from mtranslate import translate
 from lxml import etree
-from ext import fuzzy
+#from ext import fuzzy
 import unicodedata
 import traceback
 import textwrap
-import wikipedia
+#import wikipedia
 import aiohttp
 import inspect
 import re
@@ -42,11 +42,11 @@ import io
 
 dev_list = [
     180314310298304512,
-    299357465236078592, 
-    227620842903830528, 
-    168143064517443584, 
-    273381165229146112, 
-    319395783847837696, 
+    299357465236078592,
+    227620842903830528,
+    168143064517443584,
+    273381165229146112,
+    319395783847837696,
     323578534763298816
 ]
 
@@ -54,7 +54,7 @@ class Developer:
     '''Useful commands to make your life easier'''
     def __init__(self, bot):
         self.bot = bot
-        self.lang_conv = load_json('data/langs.json')
+        #self.lang_conv = load_json('data/langs.json')
         self._last_embed = None
         self._rtfm_cache = None
         self._last_google = None
