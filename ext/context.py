@@ -17,12 +17,40 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 '''
-
+import discord
 from discord.ext import commands
-
+from colorthief import ColorThief
+from urllib.parse import urlparse
+import io
 
 class CustomContext(commands.Context):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+    @property
+    def db(self):
+        '''returns the bot's database'''
+        return self.bot.database
 
+    @staticmethod
+    def is_valid_image_url(url):
+        '''Checks if a url leads to an image.'''
+        types = ['.png', '.jpg', '.gif', '.bmp', '.webp']
+        path = urlparse(url).path
+        if any(path.endswith(i) for i in types):
+            return True
+
+    async def get_dominant_color(self, url):
+        '''Returns the dominant color of an image from a url'''
+        if not self.is_valid_image_url(url):
+            raise ValueError('Invalid image url passed.')
+        try:
+            async with self.session.get(url) as resp:
+                image = await resp.read()
+        except:
+            return discord.Color.default()
+
+        with io.BytesIO(image) as f:
+            color = ColorThief(f).get_color(quality=1)
+
+        return discord.Color.from_rgb(*color)
