@@ -18,7 +18,7 @@ class Misc:
         if msg == None:
             usage = 'Write a message after command'
             e.description = usage
-        if msg != None:
+        else:
             e.description = f'\N{LEFTWARDS BLACK ARROW} `{msg.lower()[::-1]}`'
         await ctx.channel.send(embed=e)
         await ctx.delete_message(msg)
