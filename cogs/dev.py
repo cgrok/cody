@@ -60,6 +60,19 @@ class Developer:
         self._last_google = None
         self._last_result = None
 
+    @commands.command(hidden=True)
+    async def reloadcog(self, ctx, *, cog:str):
+        """Reloads a cog"""
+        if ctx.author.id in dev_list:
+            cog = "commands.{}".format(cog)
+            if cog in cog:
+                await ctx.channel.send("Attempting to reload {}...".format(cog))
+                self.unload_extension(cog)
+                self.load_extension(cog)
+                await ctx.channel.send("Successfully reloaded the {} cog!".format(cog))
+            else:
+                await ctx.channel.send("Either an error occurred or the cog does not exist.")
+
     @commands.command(pass_context=True, hidden=True, name='eval')
     async def _eval(self, ctx, *, body: str):
         """Evaluates a code"""
