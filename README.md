@@ -15,17 +15,17 @@
 Currently a work in progress, but please keep tuned because there are great things to come. In the mean time visit Grok Discord Server to check the development and perhaps also request features. **I'M GROK** BOT, a Discord bot made with love ♡
 
 ## Contributors
-> verixx
+> [verixx](https://github.com/verixx)
     
-> Kwug
+> [Kwug](https://github.com/kwugfighter)
     
-> 4JR
+> [4JR](https://github.com/fourjr)
     
-> XAOS1502
+> [XAOS1502](https://github.com/XAOS1502)
     
-> FloatCobra
+> [FloatCobra](https://github.com/FloatCobra)
     
-> Dark knight
+> [Dark knight](https://github.com/ComputerGeek101)
     
-> darthgimdalf
+> [darthgimdalf](https://github.com/ComputerGeek101)
     
