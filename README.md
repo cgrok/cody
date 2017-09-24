@@ -1,6 +1,9 @@
 <div align="center">
         <p> <img src="https://i.imgur.com/avDbgQa.png"/> </p>
-        <a href="https://discord.gg/pmQSbAd"><img src="https://discordapp.com/api/guilds/345787308282478592/widget.png?style=banner2" alt="" /></a>
+	<p> 
+		<a href="https://discord.gg/pmQSbAd"><img src="https://discordapp.com/api/guilds/345787308282478592/embed.png" alt="" /></a>
+		<img src="https://img.shields.io/badge/python-3.6-brightgreen.svg" alt="python 3.6" /></a>
+	</p>
 </div> 
 
 
