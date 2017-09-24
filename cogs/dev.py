@@ -50,7 +50,7 @@ dev_list = [
     323578534763298816
 ]
 
-class Utility:
+class Developer:
     '''Useful commands to make your life easier'''
     def __init__(self, bot):
         self.bot = bot
@@ -127,4 +127,4 @@ class Utility:
         return content.strip('` \n')
 
 def setup(bot):
-    bot.add_cog(Utility(bot))
+    bot.add_cog(Developer(bot))
