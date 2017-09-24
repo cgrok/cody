@@ -16,9 +16,16 @@ Currently a work in progress, but please keep tuned because there are great thin
 
 ## Contributors
 > verixx
+    
 > Kwug
+    
 > 4JR
+    
 > XAOS1502
+    
 > FloatCobra
+    
 > Dark knight
+    
 > darthgimdalf
+    
