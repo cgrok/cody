@@ -174,26 +174,6 @@ class GrokBot(commands.Bot):
             em_list = await embedtobox.etb(emb)
             for page in em_list:
                 await ctx.send(page)
-    class db:
-        '''Holds all the server info and bot info'''
-        def __init__(self):
-            self.path = "./data/config.db"
-            self.conn = sqlite3.connect(self.path)
-            self.cur = self.conn.cursor()
-            with self.conn:
-                struc = "(server_id INTEGER PRIMARY KEY UNIQUE, prefixes TEXT, modlog INTEGER, serverlog INTEGER,leave_enabled TEXT,autorole_enabled TEXT, log_enabled TEXT,join_enabled TEXT, join_message TEXT, leave_message TEXT, join_leave_channel INTEGER)"
-                self.conn.execute(f"CREATE TABLE IF NOT EXISTS config {struc}")
-                # I've stored all the bools as text because it's simple and it works
-
-        def get_server(self, id):
-            """Returns a dict of all fields"""
-            self.cur.execute(f"SELECT * FROM config WHERE server_id = {id}")
-            row = self.cur.fetchone()
-            if row is None:
-                return None
-            else:
-
-                return {"server_id":row[0], "prefixes":row[1], "modlog":row[2], "serverlog":row[3], "leave_enabled":bool(row[4]), "autorole_enabled":bool(row[4]), "log_enabled":bool(row[5]), "join_enabled":bool(row[6]), "join_message":row[7], "leave_message":row[8], "join_leave_channel":row[9]}
 
 if __name__ == '__main__':
     GrokBot.init()
