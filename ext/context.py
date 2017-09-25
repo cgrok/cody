@@ -32,10 +32,14 @@ class CustomContext(commands.Context):
         '''returns the bot's database'''
         return self.bot.database
 
+    @property
+    def session(self):
+        return self.bot.session
+
     @staticmethod
     def is_valid_image_url(url):
         '''Checks if a url leads to an image.'''
-        types = ['.png', '.jpg', '.gif', '.bmp', '.webp']
+        types = ['.png', '.jpg', '.gif', '.webp']
         path = urlparse(url).path
         if any(path.endswith(i) for i in types):
             return True
