@@ -17,8 +17,7 @@ class GuildConfig:
         self.cur = database.cur
         self.bot = database.bot
         self.id = id
-        if self.db.get_value(self.id, "guild_id") is None:
-            self.db.set_default_config(self.id)
+        
     @property
     def join_message(self):
         return self.db.get_value(self.id, 'join_message')
