@@ -1,5 +1,6 @@
 import sqlite3
 import json
+import shlex
 import discord
 
 class GuildConfig:
@@ -92,28 +93,60 @@ class GuildConfig:
 
     @property
     def prefixes(self):
-        prefixes = json.loads(self.db.get_value(self.id, 'prefixes'))
-        return prefixes
+        return json.loads(self.db.get_value(self.id, 'prefixes'))
+        
 
     @prefixes.setter
     def set_prefixes(self, prefixes):
-        prefixes = prefixes.split()
-        return self.db.set_value(self.id, 'prefixes', json.dumps(prefixes))
+        # Prefixes must be seperated with a single space
+        # Prefixes must be wrapped in double quotes if they are multi word
+        return self.db.set_value(self.id, 'prefixes', json.dumps(shlex.split(prefixes)))
 
     @property
     def leave_enabled(self):
         return bool(self.db.get_value(self.id, 'leave_enabled'))
 
-    #NOTE: This can either be a toggle switch or the current system
     @leave_enabled.setter
-    def toggle_leave_enabled(self):
+    def toggle_leave(self):
         value = int(not self.db.get_value(self.id, 'leave_enabled')))
         return self.db.set_value(self.id, 'leave_enabled', value)
+    
+    @property
+    def join_enabled(self):
+        return bool(self.db.get_value(self.id, 'join_enabled')))
+    
+    @join_enabled.setter
+    def toggle_join(self):
+        value = int(not self.db.get_value(self.id, 'join_enabled')))
+        return self.db.set_value(self.id, 'join_enabled', value)
+    
+    @property
+    def autorole_enabled(self):
+        return bool(self.db.get_value(self.id, 'autorole_enabled')))
+    
+    @autorole_enabled.setter
+    def toggle_autorole(self):
+        value = int(not self.db.get_value(self.id, 'autorole_enabled')))
+        return self.db.set_value(self.id, 'autorole_enabled', value)
+    
+    @property
+    def modlog_enabled(self):
+        return bool(self.db.get_value(self.id, 'modlog_enabled')))
+        
+    @modlog_enabled.setter
+    def toggle_modlog(self):
+        value = int(not self.db.get_value(self.id, 'modlog_enabled')))
+        return self.db.set_value(self.id, 'modlog_enabled', value)
 
-
-
-
-
+    @property
+    def selfroles(self):
+        return json.loads(self.db.get_value(self.id, "selfroles"))
+    
+    @selfroles.setter
+    def set_selfroles(self, roles):
+        # Prefixes must be seperated with a single space
+        # Prefixes must be wrapped in double quotes if they are multi word
+        return self.db.set_value(self.id, 'selfroles', json.dumps(shlex.split(roles)))
 
 class ConfigDatabase:
     '''Database functions'''
