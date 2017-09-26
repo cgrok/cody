@@ -107,7 +107,7 @@ class GuildConfig:
     #NOTE: This can either be a toggle switch or the current system
     @leave_enabled.setter
     def toggle_leave_enabled(self):
-        value = int(not self.db.get_value(self.id, 'leave_enabled')))
+        value = int(not self.db.get_value(self.id, 'leave_enabled'))
         return self.db.set_value(self.id, 'leave_enabled', value)
 
 
