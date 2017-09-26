@@ -131,6 +131,11 @@ class GrokBot(commands.Bot):
         '''Bot startup, sets uptime.'''
         if not hasattr(self, 'uptime'):
             self.uptime = datetime.datetime.utcnow()
+
+        for guild in self.guilds: # sets default configs for all guilds.
+            if self.db.get_data(guild.id) is None:
+                self.db.set_default_config(guild.id)
+
         print(textwrap.dedent(f'''
         ---------------
         Client is ready!
