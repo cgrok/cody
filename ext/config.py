@@ -145,9 +145,9 @@ class ConfigDatabase:
         with self.conn:
             default = (
                 guild_id,"[\"g.\"]",0,0,0,0,0,0,0,
-                "Welcome {user.mention} to {guild.name}","Bye Bye {user.name}!","[]",0
+                f"Welcome {user.mention} to {guild.name}",f"Bye Bye {user.name}!","[]",0
                 )
-            self.cur.execute("INSERT INTO config VALUES {default}".format(default=default))
+            self.cur.execute(f"INSERT INTO config VALUES {default}")
 
     def get_guild(self, guild_id):
         """Returns a dict of all fields"""
