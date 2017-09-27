@@ -30,7 +30,11 @@ class CustomContext(commands.Context):
     @property
     def db(self):
         '''returns the bot's database'''
-        return self.bot.database
+        return self.bot.db
+
+    @property
+    def config(self):
+        return self.db.get_guild(self.guild.id)
 
     @property
     def session(self):
