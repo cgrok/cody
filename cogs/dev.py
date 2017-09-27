@@ -83,6 +83,7 @@ class Developer:
             env.update(globals())
 
             body = self.cleanup_code(body)
+
             stdout = io.StringIO()
             err = out = None
 
@@ -119,11 +120,45 @@ class Developer:
                         out = await ctx.send('Result was too long to send.')
 
             if out:
-                return await out.add_reaction('\u2705')
-            if err:
-                return await err.add_reaction('\u2049')
+                to_log = self.cleanup_code(out.content)
+                await out.add_reaction('\u2705')
+            elif err:
+                to_log = self.cleanup_code(err.content)
+                await err.add_reaction('\u2049')
+            else:
+                to_log = 'No textual output.'
+                await ctx.message.add_reaction('\u2705')
 
-            await ctx.message.add_reaction('\u2705')
+            await self.log_eval(ctx, body, out, err)
+
+
+    async def log_eval(self, ctx, body, out, err):
+        if out:
+            to_log = self.cleanup_code(out.content)
+            color = discord.Color.red()
+            name = 'Output'
+        elif err:
+            to_log = self.cleanup_code(err.content)
+            color = discord.Color.green()
+            name = 'Error'
+        else:
+            to_log = 'No textual output.'
+            color = discord.Color.gold()
+            name = 'Output'
+
+        to_log = to_log.replace('`','\u200b`')
+
+        em = discord.Embed(color=color,timestamp=ctx.message.created_at)
+        em.set_author(name=str(ctx.author), icon_url=ctx.author.avatar_url)
+        em.add_field(name='Input', value=f'```py\n{body}\n```')
+        em.add_field(name=name, value=f'```{to_log}```')
+        em.set_footer(text=f'User ID: {ctx.author.id}')
+
+        await self.bot.get_channel(362574671905816576).send(embed=em)
+
+
+
+
 
     def cleanup_code(self, content):
         """Automatically removes code blocks from the code."""
