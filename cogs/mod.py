@@ -33,7 +33,7 @@ class Mod:
                 await ctx.channel.send("You don't have permission to do this.")
         else:
             await ctx.channel.send("I can't add a nonexistent role.")
-            
+
     @commands.command()
     @commands.has_permissions(manage_roles = True)
     async def removerole(self, ctx, user: discord.Member, role: str):
@@ -63,6 +63,7 @@ class Mod:
         await ctx.channel.set_permissions(user, send_messages=True)
         await  ctx.channel.send(user.mention + ' has been unmuted.')
 
+    
 
 
 

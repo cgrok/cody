@@ -27,7 +27,7 @@ from collections import defaultdict
 import asyncio
 import aiohttp
 import datetime
-import psutil
+#import psutil
 import time
 import json
 import sys
