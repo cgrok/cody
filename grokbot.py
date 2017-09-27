@@ -169,7 +169,6 @@ class GrokBot(commands.Bot):
         self.last_message = time.time()
         await self.process_commands(message)
 
-
     @commands.command()
     async def ping(self, ctx):
         """Pong! Returns your websocket latency."""
