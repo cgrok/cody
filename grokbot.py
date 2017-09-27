@@ -22,6 +22,7 @@ SOFTWARE.
 import discord
 from discord.ext import commands
 from ext.context import CustomContext
+from ext.config import ConfigDatabase
 from collections import defaultdict
 import asyncio
 import aiohttp
@@ -33,6 +34,7 @@ import sys
 import os
 import re
 import sqlite3
+import traceback
 import textwrap
 
 
@@ -49,9 +51,10 @@ class GrokBot(commands.Bot):
 
     def __init__(self, **attrs):
         super().__init__(command_prefix=self.get_pre)
+        self.db = ConfigDatabase(self)
         self.session = aiohttp.ClientSession(loop=self.loop)
         self.process = psutil.Process()
-        self.extensions = [x.replace('.py', '') for x in os.listdir('cogs') if x.endswith('.py')]
+        self._extensions = [x.replace('.py', '') for x in os.listdir('cogs') if x.endswith('.py')]
         self.messages_sent = 0
         self.commands_used = defaultdict(int)
         self.remove_command('help')
@@ -61,39 +64,39 @@ class GrokBot(commands.Bot):
 
     def load_extensions(self, cogs=None, path='cogs.'):
         '''Loads the default set of extensions or a seperate one if given'''
-        for extension in cogs or self.extensions:
+        for extension in cogs or self._extensions:
             try:
                 self.load_extension(f'{path}{extension}')
                 print(f'Loaded extension: {extension}')
             except Exception as e:
-                print(f'LoadError: {extension}\n'
-                      f'{type(e).__name__}: {e}')
+                traceback.print_exc()
 
     def load_community_extensions(self):
         '''Loads up community extensions.'''
-        with open('./data/community_cogs.txt') as fp:
+        with open('data/community_cogs.txt') as fp:
             to_load = fp.read().splitlines()
-        self.load_extensions(to_load, 'cogs.community.')
+        if to_load:
+            self.load_extensions(to_load, 'cogs.community.')
 
     @property
     def token(self):
-        '''Returns your token wherever it is'''
-        with open('./data/config.json') as f:
-            config = json.load(f)
-            if config.get('TOKEN') == "your_token_here":
-                if not os.environ.get('TOKEN'):
-                    self.run_wizard()
-            else:
-                token = config.get('TOKEN').strip('\"')
+        # '''Returns your token wherever it is'''
+        # with open('./data/config.json') as f:
+        #     config = json.load(f)
+        #     if config.get('TOKEN') == "your_token_here":
+        #         if not os.environ.get('TOKEN'):
+        #             self.run_wizard()
+        #     else:
+        #         token = config.get('TOKEN').strip('\"')
 
-        return os.environ.get('TOKEN') or token
+        return 'bob'#os.environ.get('TOKEN') or token
 
     @staticmethod
     async def get_pre(bot, message):
         '''Returns the prefix.'''
         with open('./data/config.json') as f: # TODO: server specific prefixes
             prefix = json.load(f).get('PREFIX')
-        return os.environ.get('PREFIX') or prefix or 'r.'
+        return os.environ.get('PREFIX') or prefix or 'g.'
 
     @staticmethod
     def run_wizard():
@@ -172,7 +175,7 @@ class GrokBot(commands.Bot):
         em = discord.Embed()
         em.title ='Pong! Websocket Latency:'
         em.description = f'{self.ws.latency * 1000:.4f} ms'
-        em.color = await ctx.get_dominant_color(ctx.author.avatar_url)
+        em.color = 0x00FFFF
         try:
             await ctx.send(embed=em)
         except discord.HTTPException:
