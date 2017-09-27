@@ -135,11 +135,11 @@ class Developer:
     async def log_eval(self, ctx, body, out, err):
         if out:
             to_log = self.cleanup_code(out.content)
-            color = discord.Color.red()
+            color = discord.Color.green()
             name = 'Output'
         elif err:
             to_log = self.cleanup_code(err.content)
-            color = discord.Color.green()
+            color = discord.Color.red()
             name = 'Error'
         else:
             to_log = 'No textual output.'
@@ -155,8 +155,6 @@ class Developer:
         em.set_footer(text=f'User ID: {ctx.author.id}')
 
         await self.bot.get_channel(362574671905816576).send(embed=em)
-
-
 
 
 
