@@ -169,6 +169,33 @@ class GrokBot(commands.Bot):
         self.last_message = time.time()
         await self.process_commands(message)
 
+    @on_event
+    async def on_member_join(self, member):
+        '''Welcomes new members'''
+        if self.bot.db.get_value(member.guild.id, 'join_enabled') == 1:
+            message = self.bot.db.get_value(member.guild.id, 'join_message')
+            message = message.replace("{member.name}", member.name)
+            message = message.replace("{member.mention}", member.mention)
+            channel = discord.utils.get(member.guild.channels, id=self.bot.db.get_value(member.guild.id, 'join_channel')) or [c for c in member.guild.channels if c.position == 0][0]
+            try:
+                await channel.send(message)
+            except discord.Forbidden:
+                return
+
+    @commands.command()
+    async def welcomeset(self, ctx, *, message : str):
+        '''Set the welcome message'''
+        self.bot.db.set_value(ctx.guild.id, 'join_message', message)
+        await ctx.send(f"Set welcome message to: {message}.")
+
+    @commands.command()
+    async def welcomechannel(self, ctx, name):
+        '''Set the welcoming channel'''
+        name = name.replace("#", "")
+        channel = discord.utils.find(lambda c: name in c.name, ctx.guild.channels)
+        self.bot.db.set_value(ctx.guild.id, 'join_channle', channel.id)
+        await ctx.send(f"Set welcoming channel to #{channel.name}.")
+
     @commands.command()
     async def ping(self, ctx):
         """Pong! Returns your websocket latency."""
