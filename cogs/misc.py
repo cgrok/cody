@@ -1,4 +1,6 @@
 from datetime import date
+import discord
+from discord.ext import commands
 
 halloween = date(2017, 10, 31)
 christmas = date(2017, 12, 25)
