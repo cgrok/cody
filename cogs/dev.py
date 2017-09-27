@@ -150,7 +150,7 @@ class Developer:
 
         em = discord.Embed(color=color,timestamp=ctx.message.created_at)
         em.set_author(name=str(ctx.author), icon_url=ctx.author.avatar_url)
-        em.add_field(name='Input', value=f'```py\n{body}\n```')
+        em.add_field(name='Input', value=f'```py\n{body}\n```', inline=False)
         em.add_field(name=name, value=f'```{to_log}```')
         em.set_footer(text=f'User ID: {ctx.author.id}')
 
