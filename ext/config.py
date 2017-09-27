@@ -1,5 +1,6 @@
 import sqlite3
 import json
+import shlex
 import discord
 
 class GuildConfig:
@@ -16,8 +17,11 @@ class GuildConfig:
         self.cur = database.cur
         self.bot = database.bot
         self.id = id
-        if self.db.get_value(self.id, "guild_id") is None:
-            self.db.set_default_config(self.id)
+
+
+    def __str__(self):
+        return json.dumps(self.db.get_data(self.id), indent=4)
+        
     @property
     def join_message(self):
         return self.db.get_value(self.id, 'join_message')
@@ -92,54 +96,96 @@ class GuildConfig:
 
     @property
     def prefixes(self):
-        prefixes = json.loads(self.db.get_value(self.id, 'prefixes'))
-        return prefixes
+        return json.loads(self.db.get_value(self.id, 'prefixes'))
+        
 
     @prefixes.setter
     def set_prefixes(self, prefixes):
-        prefixes = prefixes.split()
-        return self.db.set_value(self.id, 'prefixes', json.dumps(prefixes))
+        '''
+        String input:
+            Prefixes must be seperated with a single space
+            Prefixes must be wrapped in double quotes if they are multi word
+        '''
+        if isinstance(prefixes, list):
+            set_val = json.dumps(prefixes)
+        if isinstance(prefixes, str):
+            set_val = json.dumps(shlex.split(prefixes))
+        return self.db.set_value(self.id, 'prefixes', set_val)
 
     @property
     def leave_enabled(self):
         return bool(self.db.get_value(self.id, 'leave_enabled'))
 
-    #NOTE: This can either be a toggle switch or the current system
     @leave_enabled.setter
-    def toggle_leave_enabled(self):
+    def toggle_leave(self):
         value = int(not self.db.get_value(self.id, 'leave_enabled'))
         return self.db.set_value(self.id, 'leave_enabled', value)
+    
+    @property
+    def join_enabled(self):
+        return bool(self.db.get_value(self.id, 'join_enabled'))
+    
+    @join_enabled.setter
+    def toggle_join(self):
+        value = int(not self.db.get_value(self.id, 'join_enabled'))
+        return self.db.set_value(self.id, 'join_enabled', value)
+    
+    @property
+    def autorole_enabled(self):
+        return bool(self.db.get_value(self.id, 'autorole_enabled'))
+    
+    @autorole_enabled.setter
+    def toggle_autorole(self):
+        value = int(not self.db.get_value(self.id, 'autorole_enabled'))
+        return self.db.set_value(self.id, 'autorole_enabled', value)
+    
+    @property
+    def modlog_enabled(self):
+        return bool(self.db.get_value(self.id, 'modlog_enabled'))
+        
+    @modlog_enabled.setter
+    def toggle_modlog(self):
+        value = int(not self.db.get_value(self.id, 'modlog_enabled'))
+        return self.db.set_value(self.id, 'modlog_enabled', value)
 
-
-
-
-
+    @property
+    def selfroles(self):
+        return json.loads(self.db.get_value(self.id, "selfroles"))
+    
+    @selfroles.setter
+    def set_selfroles(self, roles):
+        # Prefixes must be seperated with a single space
+        # Prefixes must be wrapped in double quotes if they are multi word
+        return self.db.set_value(self.id, 'selfroles', json.dumps(shlex.split(roles)))
 
 class ConfigDatabase:
     '''Database functions'''
-    def __init__(self, bot):
+    slots = ('bot','path','conn','cur')
 
-        self.path = "../data/config.db"
+    def __init__(self, bot):
+        self.bot = bot
+        self.path = "data/config.db"
         self.conn = sqlite3.connect(self.path)
         self.cur = self.conn.cursor()
         self.create_config_table()
 
     def create_config_table(self):
-        self.conn.execute("""
-            CREATE TABLE IF NOT EXISTS config
-            (guild_id INTEGER PRIMARY KEY UNIQUE,
-            prefixes TEXT,
-            modlog_channel INT,
-            join_channel INT,
-            leave_channel INT,
-            leave_enabled INT(1),
-            autorole_enabled INT(1),
-            modlog_enabled INT(1),
-            join_enabled INT(1),
-            join_message TEXT,
-            leave_message TEXT,
-            selfroles TEXT,
-            autorole INT)""")
+        with self.conn:
+            self.cur.execute("""
+                CREATE TABLE IF NOT EXISTS config
+                (guild_id INTEGER PRIMARY KEY UNIQUE,
+                prefixes TEXT,
+                modlog_channel INT,
+                join_channel INT,
+                leave_channel INT,
+                leave_enabled INT(1),
+                autorole_enabled INT(1),
+                modlog_enabled INT(1),
+                join_enabled INT(1),
+                join_message TEXT,
+                leave_message TEXT,
+                selfroles TEXT,
+                autorole INT)""")
 
     def set_default_config(self, guild_id):
         with self.conn:
@@ -147,7 +193,7 @@ class ConfigDatabase:
                 guild_id,"[\"g.\"]",0,0,0,0,0,0,0,
                 "Welcome {user.mention} to {guild.name}","Bye Bye {user.name}!","[]",0
                 )
-            self.cur.execute("INSERT INTO config VALUES {default}".format(default=default))
+            self.cur.execute(f"INSERT INTO config VALUES {default}")
 
     def get_guild(self, guild_id):
         """Returns a dict of all fields"""
@@ -172,4 +218,4 @@ class ConfigDatabase:
 
     def set_value(self, guild_id, column, new_val):
         with self.conn:
-            self.cur.execute(f"UPDATE config SET {column} = {new_val} WHERE guild_id = {guild_id}")
+            self.cur.execute(f"UPDATE config SET {column} = ? WHERE guild_id = {guild_id}", (new_val,))
