@@ -53,11 +53,11 @@ class GrokBot(commands.Bot):
         super().__init__(command_prefix=self.get_pre)
         self.db = ConfigDatabase(self)
         self.session = aiohttp.ClientSession(loop=self.loop)
-        self.process = psutil.Process()
+        #self.process = psutil.Process()
         self._extensions = [x.replace('.py', '') for x in os.listdir('cogs') if x.endswith('.py')]
         self.messages_sent = 0
         self.commands_used = defaultdict(int)
-        self.remove_command('help')
+        #self.remove_command('help')
         self.add_command(self.ping)
         self.load_extensions()
         self.load_community_extensions()
