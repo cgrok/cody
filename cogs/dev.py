@@ -53,21 +53,19 @@ class Developer:
         self._last_google = None
         self._last_result = None
 
-    @commands.command(hidden=True)
+    @commands.command(aliases=["reload"])
     async def reloadcog(self, ctx, *, cog:str):
         """Reloads a cog"""
         if ctx.author.id in dev_list:
-            #cog = "cogs.{}".format(cog)
-            if self.bot.get_cog(cog) is not None:
-                x = await ctx.send("Attempting to reload {}...".format(cog))
-                self.bot.unload_extension(cog)
-                try:
-                    self.bot.load_extension(cog)
-                    await x.edit("Successfully reloaded the {} cog!".format(cog))
-                except Exception as e:
-                    await ctx.send(f"```py\nError loading cog: {cog}\n{e}\n```")
-            else:
-                await ctx.send("Cog not found.")
+            cog = "cogs.{}".format(cog)
+            x = await ctx.send("Attempting to reload {}...".format(cog))
+            self.bot.unload_extension(cog)
+            try:
+                self.bot.load_extension(cog)
+                await x.edit("Successfully reloaded the {} cog!".format(cog))
+            except Exception as e:
+                await x.edit(f"```py\nError loading cog: {cog}\n{e}\n```")
+
 
     @commands.command(pass_context=True, hidden=True, name='eval')
     async def _eval(self, ctx, *, body: str):
