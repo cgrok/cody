@@ -62,9 +62,9 @@ class Developer:
             self.bot.unload_extension(cog)
             try:
                 self.bot.load_extension(cog)
-                await x.edit("Successfully reloaded the {} cog!".format(cog))
+                await x.edit(content="Successfully reloaded the {} cog!".format(cog))
             except Exception as e:
-                await x.edit(f"```py\nError loading cog: {cog}\n{e}\n```")
+                await x.edit(content=f"```py\nError loading cog: {cog}\n{e}\n```")
 
 
     @commands.command(pass_context=True, hidden=True, name='eval')
