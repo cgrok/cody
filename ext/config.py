@@ -21,7 +21,7 @@ class GuildConfig:
 
     def __str__(self):
         return json.dumps(self.db.get_data(self.id), indent=4)
-        
+
     @property
     def join_message(self):
         return self.db.get_value(self.id, 'join_message')
@@ -70,7 +70,7 @@ class GuildConfig:
 
     @property
     def welcome_channel(self):
-        id = data.get('join_message_channel')
+        id = self.db.get_value(self.id, 'join_message_channel')
         return self.guild.get_channel(id)
 
     @welcome_channel.setter
@@ -83,7 +83,7 @@ class GuildConfig:
 
     @property
     def leave_channel(self):
-        id = data.get('leave_message_channel')
+        id = self.db.get_value(self.id,'leave_message_channel')
         return self.guild.get_channel(id)
 
     @leave_channel.setter
@@ -97,7 +97,7 @@ class GuildConfig:
     @property
     def prefixes(self):
         return json.loads(self.db.get_value(self.id, 'prefixes'))
-        
+
 
     @prefixes.setter
     def set_prefixes(self, prefixes):
@@ -120,29 +120,29 @@ class GuildConfig:
     def toggle_leave(self):
         value = int(not self.db.get_value(self.id, 'leave_enabled'))
         return self.db.set_value(self.id, 'leave_enabled', value)
-    
+
     @property
     def join_enabled(self):
         return bool(self.db.get_value(self.id, 'join_enabled'))
-    
+
     @join_enabled.setter
     def toggle_join(self):
         value = int(not self.db.get_value(self.id, 'join_enabled'))
         return self.db.set_value(self.id, 'join_enabled', value)
-    
+
     @property
     def autorole_enabled(self):
         return bool(self.db.get_value(self.id, 'autorole_enabled'))
-    
+
     @autorole_enabled.setter
     def toggle_autorole(self):
         value = int(not self.db.get_value(self.id, 'autorole_enabled'))
         return self.db.set_value(self.id, 'autorole_enabled', value)
-    
+
     @property
     def modlog_enabled(self):
         return bool(self.db.get_value(self.id, 'modlog_enabled'))
-        
+
     @modlog_enabled.setter
     def toggle_modlog(self):
         value = int(not self.db.get_value(self.id, 'modlog_enabled'))
@@ -151,7 +151,7 @@ class GuildConfig:
     @property
     def selfroles(self):
         return json.loads(self.db.get_value(self.id, "selfroles"))
-    
+
     @selfroles.setter
     def set_selfroles(self, roles):
         # Prefixes must be seperated with a single space

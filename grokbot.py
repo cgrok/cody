@@ -80,16 +80,16 @@ class GrokBot(commands.Bot):
 
     @property
     def token(self):
-        # '''Returns your token wherever it is'''
-        # with open('./data/config.json') as f:
-        #     config = json.load(f)
-        #     if config.get('TOKEN') == "your_token_here":
-        #         if not os.environ.get('TOKEN'):
-        #             self.run_wizard()
-        #     else:
-        #         token = config.get('TOKEN').strip('\"')
+        '''Returns your token wherever it is'''
+        with open('./data/config.json') as f:
+            config = json.load(f)
+            if config.get('TOKEN') == "your_token_here":
+                if not os.environ.get('TOKEN'):
+                    self.run_wizard()
+            else:
+                token = config.get('TOKEN').strip('\"')
 
-        return 'bob'#os.environ.get('TOKEN') or token
+        return os.environ.get('TOKEN') or token
 
     @staticmethod
     async def get_pre(bot, message):
@@ -168,6 +168,7 @@ class GrokBot(commands.Bot):
         self.messages_sent += 1
         self.last_message = time.time()
         await self.process_commands(message)
+
 
     @commands.command()
     async def ping(self, ctx):
