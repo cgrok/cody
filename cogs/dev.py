@@ -58,13 +58,13 @@ class Developer:
         """Reloads a cog"""
         if ctx.author.id in dev_list:
             cog = "cogs.{}".format(cog)
-            x = await ctx.send("Attempting to reload {}...".format(cog))
+            await ctx.send("Attempting to reload {}...".format(cog))
             self.bot.unload_extension(cog)
             try:
                 self.bot.load_extension(cog)
-                await x.edit(content="Successfully reloaded the {} cog!".format(cog))
+                await ctx.send("Successfully reloaded the {} cog!".format(cog))
             except Exception as e:
-                await x.edit(content=f"```py\nError loading cog: {cog}\n{e}\n```")
+                await ctx.send(f"```py\nError loading cog: {cog}\n{e}\n```")
 
 
     @commands.command(pass_context=True, hidden=True, name='eval')
