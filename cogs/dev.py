@@ -26,15 +26,8 @@ import discord
 from discord.ext import commands
 from discord.ext.commands import TextChannelConverter
 from contextlib import redirect_stdout
-#from .ext.utility import load_json
-from urllib.parse import parse_qs
-from mtranslate import translate
-from lxml import etree
-#from ext import fuzzy
-import unicodedata
 import traceback
 import textwrap
-#import wikipedia
 import aiohttp
 import inspect
 import re
@@ -126,9 +119,11 @@ class Developer:
                         out = await ctx.send('Result was too long to send.')
 
             if out:
-                await out.add_reaction('\u2705')
+                return await out.add_reaction('\u2705')
             if err:
-                await err.add_reaction('\u2049')
+                return await err.add_reaction('\u2049')
+
+            await ctx.message.add_reaction('\u2705')
 
     def cleanup_code(self, content):
         """Automatically removes code blocks from the code."""
@@ -138,6 +133,16 @@ class Developer:
 
         # remove `foo`
         return content.strip('` \n')
+
+    @commands.command()
+    async def set_val(self, ctx, field, *, value):
+        self.bot.db.set_value(ctx.server.id, field, value)
+        await ctx.send(f'Updated `{field}` to `{value}`')
+
+    @commands.command()
+    async def get_val(self, ctx, field):
+        value = self.bot.db.get_value(ctx.guild.id, field)
+        await ctx.send(f'Value for `{field}`: `{value}`')
 
 def setup(bot):
     bot.add_cog(Developer(bot))
