@@ -41,7 +41,7 @@ class Misc:
         if date.today() == christmas:
             ctx.channel.send("Yes, it is Christmas today.")
         else:
-            msg = f'No, it is not Christmas today. There are {(christmas - date.today()).days)} days until Christmas.'
+            msg = f'No, it is not Christmas today. There are {(christmas - date.today()).days} days until Christmas.'
             ctx.channel.send(msg)
 
     @commands.command(aliases=['halloween', 'hween', 'hwn'])
@@ -49,7 +49,7 @@ class Misc:
         if date.today() == halloween:
             ctx.channel.send("Yes, it is Halloween today.")
         else:
-            msg = f'No, it is not Halloween today. There are {(halloween - date.today()).days)} days until Halloween.'
+            msg = f'No, it is not Halloween today. There are {(halloween - date.today()).days} days until Halloween.'
             ctx.channel.send(msg)
 
     @commands.command(description='This command might get you banned')
