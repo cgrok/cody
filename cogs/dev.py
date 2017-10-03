@@ -191,5 +191,19 @@ class Developer:
         value = self.bot.db.get_value(ctx.guild.id, field)
         await ctx.send(f'Value for `{field}`: `{value}`')
 
+    @commands.command()
+    async def source(self, ctx, *, command):
+        '''See the source code for any command.'''
+        source = str(inspect.getsource(self.bot.get_command(command).callback))
+        fmt = '​`​`​`py\n'+source.replace('​`','\u200b​`')+'\n​`​`​`'
+        if len(fmt) > 2000:
+            async with ctx.session.post("https://hastebin.com/documents", data=source) as resp:
+                data = await resp.json()
+            key = data['key']
+            return await ctx.send(f'Command source: <https://hastebin.com/{key}.py>')
+        else:
+            return await ctx.send(fmt)
+
+
 def setup(bot):
     bot.add_cog(Developer(bot))
