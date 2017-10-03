@@ -37,7 +37,7 @@ class PaginatorSession:
             '◀': self.previous_page,
             '▶': self.next_page,
             '⏭': self.last_page,
-            '🔢': self.numbered_page,
+            '🔢': self.ask_for_page,
             '⏹': self.close,
             })
 
@@ -112,16 +112,17 @@ class PaginatorSession:
     def last_page(self):
         return self.show_page(len(self.pages)-1)
 
-    def close(self):
+    def close(self, delete=True):
         self.running = False
-        return self.base.delete()
+        if delete:
+            return self.base.delete()
 
     def message_check(self, m):
         return m.author == self.ctx.author and \
             self.ctx.channel == m.channel and \
             m.content.isdigit()
 
-    async def numbered_page(self):
+    async def ask_for_page(self):
         to_delete = []
         x = await self.ctx.send('What page do you want to go to?')
         to_delete.append(x)
@@ -131,7 +132,6 @@ class PaginatorSession:
         except asyncio.TimeoutError:
             x = await self.ctx.send('Took too long.')
             to_delete.append(x)
-            await asyncio.sleep(5)
         else:
             page = int(msg.content)
             to_delete.append(msg)
@@ -140,8 +140,8 @@ class PaginatorSession:
             else:
                 x = await self.ctx.send(f'Invalid page given. ({page}/{len(self.pages)})')
                 to_delete.append(x)
-                await asyncio.sleep(5)
         try:
+            await asyncio.sleep(5)
             await self.ctx.channel.delete_messages(to_delete)
         except Exception:
             pass
