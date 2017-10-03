@@ -79,8 +79,9 @@ class StatsBoard:
         if days:
             fmt = '{d}d ' + fmt
         uptime = fmt.format(d=days, h=hours, m=minutes, s=seconds)
-
-        em.add_field(name='Authors', value='put ur names here')
+        g_authors = verixx, fourjr, kwugfighter, FloatCobra, XAOS1502, Protty, Dark knight, darthgimdalf
+        
+        em.add_field(name='Authors', value=g_authors)
         em.add_field(name='Uptime', value=uptime)
         em.add_field(name='Guilds', value=len(self.bot.guilds))
         em.add_field(name='Members', value=f'{total_unique} total\n{total_online} online')
@@ -224,7 +225,9 @@ class GrokBot(commands.Bot):
         ---------------
         Client is ready!
         ---------------
-        Authors: verixx, fourjr, kwugfighter, FloatCobra, add the rest here bois
+        Authors: verixx, fourjr, kwugfighter, 
+                 FloatCobra, XAOS1502, Protty, 
+                 Dark knight, darthgimdalf
         ---------------
         Logged in as: {self.user}
         User ID: {self.user.id}
