@@ -27,7 +27,7 @@ from collections import defaultdict
 import asyncio
 import aiohttp
 import datetime
-#import psutil
+import psutil
 import time
 import json
 import sys
@@ -36,6 +36,87 @@ import re
 import sqlite3
 import traceback
 import textwrap
+
+class StatsBoard:
+    def __init__(self, bot, channel, base=None):
+        self.bot = bot
+        self.channel = channel
+        self.base = base
+        self.running = bool(base)
+
+    @property
+    def current_stats(self):
+        em = discord.Embed()
+        me = self.channel.guild.me
+        if str(me.status) == 'online':
+            em.color = discord.Color.green()
+        else:
+            em.color = discord.Color.red()
+
+        em.set_author(name="I'm Grok - Live Stats", icon_url=self.channel.guild.me.avatar_url)
+
+        total_members = sum(1 for _ in self.bot.get_all_members())
+        total_online = len({m.id for m in self.bot.get_all_members() if m.status is discord.Status.online})
+        total_unique = len(self.bot.users)
+
+        voice_channels = []
+        text_channels = []
+        for guild in self.bot.guilds:
+            voice_channels.extend(self.channel.guild.voice_channels)
+            text_channels.extend(self.channel.guild.text_channels)
+
+        text = len(text_channels)
+        voice = len(voice_channels)
+        dm = len(self.bot.private_channels)
+
+        now = datetime.datetime.utcnow()
+        delta = now - self.bot.uptime
+        hours, remainder = divmod(int(delta.total_seconds()), 3600)
+        minutes, seconds = divmod(remainder, 60)
+        days, hours = divmod(hours, 24)
+
+        fmt = '{h}h {m}m {s}s'
+        if days:
+            fmt = '{d}d ' + fmt
+        uptime = fmt.format(d=days, h=hours, m=minutes, s=seconds)
+
+        em.add_field(name='Authors', value='put ur names here')
+        em.add_field(name='Uptime', value=uptime)
+        em.add_field(name='Guilds', value=len(self.bot.guilds))
+        em.add_field(name='Members', value=f'{total_unique} total\n{total_online} online')
+        em.add_field(name='Channels', value=f'{text} text\n{voice} voice\n{dm} direct')
+        memory_usage = self.bot.process.memory_full_info().uss / 1024**2
+        cpu_usage = self.bot.process.cpu_percent() / psutil.cpu_count()
+        em.add_field(name='Process', value=f'{memory_usage:.2f} MiB\n{cpu_usage:.2f}% CPU')
+        em.add_field(name='Commands Used', value=sum(self.bot.commands_used.values()))
+        em.add_field(name='Messages Recieved', value=self.bot.messages_sent)
+        em.set_footer(text=f'Powered by discord.py {discord.__version__}')
+
+        return em
+
+    async def make_base(self):
+        self.base = await self.channel.send(embed=self.current_stats)
+        self.running = True
+        with open('data/config.json') as f:
+            data = json.load(f)
+        with open('data/config.json', 'w') as f:
+            data['base'] = self.base.id
+            json.dump(data, f)
+
+    async def run(self):
+        if not self.running:
+            await self.make_base()
+
+        if isinstance(self.base, int):
+            try:
+                self.base = await self.channel.get_message(self.base)
+            except:
+                await self.make_base()
+
+        while self.running:
+            await self.base.edit(embed=self.current_stats)
+            await asyncio.sleep(5)
+
 
 
 class GrokBot(commands.Bot):
@@ -51,12 +132,14 @@ class GrokBot(commands.Bot):
 
     def __init__(self, **attrs):
         super().__init__(command_prefix=self.get_pre)
+        self.uptime = datetime.datetime.utcnow()
         self.db = ConfigDatabase(self)
         self.session = aiohttp.ClientSession(loop=self.loop)
-        #self.process = psutil.Process()
+        self.process = psutil.Process()
         self._extensions = [x.replace('.py', '') for x in os.listdir('cogs') if x.endswith('.py')]
         self.messages_sent = 0
         self.commands_used = defaultdict(int)
+        self.loop.create_task(self.statsboard())
         #self.remove_command('help')
         self.add_command(self.ping)
         self.load_extensions()
@@ -132,8 +215,7 @@ class GrokBot(commands.Bot):
 
     async def on_ready(self):
         '''Bot startup, sets uptime.'''
-        if not hasattr(self, 'uptime'):
-            self.uptime = datetime.datetime.utcnow()
+            
 
         for guild in self.guilds: # sets default configs for all guilds.
             if self.db.get_data(guild.id) is None:
@@ -169,6 +251,14 @@ class GrokBot(commands.Bot):
         self.last_message = time.time()
         await self.process_commands(message)
 
+    async def statsboard(self):
+        await self.wait_until_ready()
+        channel = self.get_channel(364720838743949313)
+        with open('data/config.json') as f:
+            base = json.load(f).get('base')
+        board = StatsBoard(self, channel, base)
+        await board.run()
+
     @commands.command()
     async def ping(self, ctx):
         """Pong! Returns your websocket latency."""
@@ -184,4 +274,4 @@ class GrokBot(commands.Bot):
                 await ctx.send(page)
 
 if __name__ == '__main__':
-    GrokBot.init()
+    GrokBot.init('MzYxNDgyNjcxNDUwMzU3NzYy.DK1G3Q.BHxe4PaY_njUC21vN-5oTnt9LJ4')
