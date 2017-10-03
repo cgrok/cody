@@ -9,7 +9,7 @@ class Checks:
         if ctx.message.author.id in devs:
             return True
     def check_permissions(ctx, perms, *, check=all):
-        dev = is_dev(ctx)
+        dev = self.is_dev(ctx)
         if dev:
             return True
 
@@ -22,7 +22,7 @@ class Checks:
         return commands.check(pred)
 
     def check_guild_permissions(ctx, perms, *, check=all):
-        dev = is_dev(ctx)
+        dev = self.is_dev(ctx)
         if dev:
             return True
 
