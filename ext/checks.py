@@ -2,12 +2,14 @@ from discord.ext import commands
 import json
 #
 class Checks:
-
+    def __init__(self):
+        self.filler = "lol"
     def is_dev(ctx):
         with open('./data/devs.json') as f:
             devs = json.load(f)
         if ctx.message.author.id in devs:
             return True
+
     def check_permissions(ctx, perms, *, check=all):
         dev = self.is_dev(ctx)
         if dev:
