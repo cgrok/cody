@@ -163,13 +163,23 @@ class Developer:
 
         to_log = to_log.replace('`','\u200b`')
 
+        '''
         em = discord.Embed(color=color,timestamp=ctx.message.created_at)
         em.set_author(name=str(ctx.author), icon_url=ctx.author.avatar_url)
         em.add_field(name='Input', value=f'```py\n{body}\n```', inline=False)
         em.add_field(name=name, value=f'```{to_log}```')
         em.set_footer(text=f'User ID: {ctx.author.id} | Server ID: {serverid}')
-
         await self.bot.get_channel(364794381649051648).send(embed=em)
+        '''
+        e_input = discord.Embed(color=color,timestamp=ctx.message.created_at)
+        e_input.set_author(name=str(ctx.author), icon_url=ctx.author.avatar_url)
+        e_input.add_field(name='Input', value=f'```py\n{body}\n```', inline=False)
+        e_input.set_footer(text=f'User ID: {ctx.author.id}')
+        await self.bot.get_channel(364794381649051648).send(embed=e_input)
+        e_output = discord.Embed(color=color, timestamp=ctx.message.created_at)
+        e_output.set_author(name=f'{str(ctx.author)}: {name}', icon_url=ctx.author.avatar_url)
+        e_output.description = f'```{to_log}```'
+        await self.bot.get_channel(364794381649051648).send(embed=e_output)
 
 
 
