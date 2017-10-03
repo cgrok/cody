@@ -26,6 +26,7 @@ import discord
 from discord.ext import commands
 from discord.ext.commands import TextChannelConverter
 from ext.paginator import PaginatorSession
+
 from contextlib import redirect_stdout
 import traceback
 import textwrap
@@ -36,7 +37,6 @@ import io
 
 dev_list = [
     180314310298304512,
-    299357465236078592,
     227620842903830528,
     168143064517443584,
     273381165229146112,
@@ -139,10 +139,15 @@ class Developer:
                 to_log = 'No textual output.'
                 await ctx.message.add_reaction('\u2705')
 
-            await self.log_eval(ctx, body, out, err)
+            if ctx.guild:
+                serverid = ctx.guild.id
+            else:
+                serverid = None
+
+            await self.log_eval(ctx, body, out, err, serverid)
 
 
-    async def log_eval(self, ctx, body, out, err):
+    async def log_eval(self, ctx, body, out, err, serverid):
         if out:
             to_log = self.cleanup_code(out.content)
             color = discord.Color.green()
@@ -162,9 +167,9 @@ class Developer:
         em.set_author(name=str(ctx.author), icon_url=ctx.author.avatar_url)
         em.add_field(name='Input', value=f'```py\n{body}\n```', inline=False)
         em.add_field(name=name, value=f'```{to_log}```')
-        em.set_footer(text=f'User ID: {ctx.author.id}')
+        em.set_footer(text=f'User ID: {ctx.author.id} | Server ID: {serverid}')
 
-        await self.bot.get_channel(362574671905816576).send(embed=em)
+        await self.bot.get_channel(364794381649051648).send(embed=em)
 
 
 
@@ -186,6 +191,20 @@ class Developer:
     async def get_val(self, ctx, field):
         value = self.bot.db.get_value(ctx.guild.id, field)
         await ctx.send(f'Value for `{field}`: `{value}`')
+
+    @commands.command()
+    async def source(self, ctx, *, command):
+        '''See the source code for any command.'''
+        source = str(inspect.getsource(self.bot.get_command(command).callback))
+        fmt = '​`​`​`py\n'+source.replace('​`','\u200b​`')+'\n​`​`​`'
+        if len(fmt) > 2000:
+            async with ctx.session.post("https://hastebin.com/documents", data=source) as resp:
+                data = await resp.json()
+            key = data['key']
+            return await ctx.send(f'Command source: <https://hastebin.com/{key}.py>')
+        else:
+            return await ctx.send(fmt)
+
 
 def setup(bot):
     bot.add_cog(Developer(bot))

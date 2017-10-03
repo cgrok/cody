@@ -9,7 +9,8 @@
 
 
 ## Get the Bot
-[Invite](oauth)
+[Invite](https://discordapp.com/oauth2/authorize/?permissions=0&scope=bot&client_id=361482671450357762)    
+**LINK HAS NO PERMISISONS**
 
 ## Documentation
 Currently a work in progress, but please keep tuned because there are great things to come. In the mean time visit Grok Discord Server to check the development and perhaps also request features. **I'M GROK** BOT, a Discord bot made with love ♡
