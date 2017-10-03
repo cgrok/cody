@@ -25,6 +25,7 @@ SOFTWARE.
 import discord
 from discord.ext import commands
 from discord.ext.commands import TextChannelConverter
+from ext.paginator import PaginatorSession
 from contextlib import redirect_stdout
 import traceback
 import textwrap
@@ -52,6 +53,14 @@ class Developer:
         self._rtfm_cache = None
         self._last_google = None
         self._last_result = None
+
+    @commands.command()
+    async def paginate(self, ctx):
+        session = PaginatorSession(ctx)
+        for x in range(10):
+            em = discord.Embed(title=f'Page: {x}', description='hello'*x)
+            session.add_page(em)
+        await session.run()
 
     @commands.command(aliases=["reload"])
     async def reloadcog(self, ctx, *, cog:str):
