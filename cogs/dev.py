@@ -36,11 +36,10 @@ import io
 
 dev_list = [
     180314310298304512,
-    299357465236078592,
-    227620842903830528,
-    168143064517443584,
-    273381165229146112,
-    319395783847837696,
+    227620842903830528, 
+    168143064517443584, 
+    273381165229146112, 
+    319395783847837696, 
     323578534763298816
 ]
 
@@ -138,11 +137,16 @@ class Developer:
             else:
                 to_log = 'No textual output.'
                 await ctx.message.add_reaction('\u2705')
+               
+            if ctx.guild:
+                serverid = ctx.guild.id
+            else:
+                serverid = None
 
-            await self.log_eval(ctx, body, out, err)
+            await self.log_eval(ctx, body, out, err, serverid)
 
 
-    async def log_eval(self, ctx, body, out, err):
+    async def log_eval(self, ctx, body, out, err, serverid):
         if out:
             to_log = self.cleanup_code(out.content)
             color = discord.Color.green()
@@ -162,7 +166,7 @@ class Developer:
         em.set_author(name=str(ctx.author), icon_url=ctx.author.avatar_url)
         em.add_field(name='Input', value=f'```py\n{body}\n```', inline=False)
         em.add_field(name=name, value=f'```{to_log}```')
-        em.set_footer(text=f'User ID: {ctx.author.id}')
+        em.set_footer(text=f'User ID: {ctx.author.id} | Server ID: {serverid}')
 
         await self.bot.get_channel(362574671905816576).send(embed=em)
 
