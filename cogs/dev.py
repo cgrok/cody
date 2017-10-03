@@ -36,10 +36,10 @@ import io
 
 dev_list = [
     180314310298304512,
-    227620842903830528, 
-    168143064517443584, 
-    273381165229146112, 
-    319395783847837696, 
+    227620842903830528,
+    168143064517443584,
+    273381165229146112,
+    319395783847837696,
     323578534763298816
 ]
 
@@ -137,7 +137,7 @@ class Developer:
             else:
                 to_log = 'No textual output.'
                 await ctx.message.add_reaction('\u2705')
-               
+
             if ctx.guild:
                 serverid = ctx.guild.id
             else:
@@ -168,7 +168,7 @@ class Developer:
         em.add_field(name=name, value=f'```{to_log}```')
         em.set_footer(text=f'User ID: {ctx.author.id} | Server ID: {serverid}')
 
-        await self.bot.get_channel(362574671905816576).send(embed=em)
+        await self.bot.get_channel(364794381649051648).send(embed=em)
 
 
 

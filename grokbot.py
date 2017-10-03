@@ -115,7 +115,6 @@ class GrokBot(commands.Bot):
         print('Restarting...')
         print('------------------------------------------')
         os.execv(sys.executable, ['python'] + sys.argv)
-
     @classmethod
     def init(bot, token=None):
         '''Starts the actual bot'''
