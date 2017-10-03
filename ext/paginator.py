@@ -11,6 +11,8 @@ class PaginatorSession:
     ------------
     ctx: Context
         The context of the command.
+    timeout:
+        How long to wait for before the session closes
     pages: List[discord.Embed]
         A list of entries to paginate.
 
@@ -56,7 +58,7 @@ class PaginatorSession:
             return
         self.current = index
         page = self.pages[index]
-        
+
         if self.running:
             await self.base.edit(embed=page)
         else:
