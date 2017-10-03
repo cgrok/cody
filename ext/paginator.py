@@ -7,6 +7,8 @@ class PaginatorSession:
     '''
     Class that interactively paginates a set of embeds
 
+    - Made by verixx
+
     Parameters
     ------------
     ctx: Context
@@ -124,6 +126,7 @@ class PaginatorSession:
 
     async def ask_for_page(self):
         to_delete = []
+        
         x = await self.ctx.send('What page do you want to go to?')
         to_delete.append(x)
 
