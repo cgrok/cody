@@ -61,7 +61,7 @@ class Mod:
     async def unmute(self,ctx, user: discord.Member):
 
         await ctx.channel.set_permissions(user, send_messages=True)
-        await  ctx.channel.send(user.mention + ' has been unmuted.')
+        await ctx.channel.send(user.mention + ' has been unmuted.')
 
     
 
