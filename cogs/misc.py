@@ -1,9 +1,11 @@
 import discord
 import random
+import io
 from discord.ext import commands
 from datetime import date
 from enum import Enum
 from urllib.request import urlopen
+from PIL import Image
 
 halloween = date(2017, 10, 31)
 christmas = date(2017, 12, 25)
@@ -149,6 +151,17 @@ class Misc:
         else:
             pass
 
+    @commands.command(aliases=['qr','qrgen'])
+    async def generateqr(self, ctx, *str = None):
+        if str == None:
+            await ctx.channel.send("You must include text or a link to convert to a QR code, {}".format(ctx.message.author.mention))
+        else:
+            oldurl = 'https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl={}&choe=UTF-8'.format(url)
+            with urllib.request.urlopen(URL) as url:
+                qrimgpage = io.BytesIO(url.read())
+                qrimg = Image.open(qrimgpage)
+            await ctx.channel.send(qrimg)
+        
     @commands.command(aliases=['rock', 'paper', 'scissors', 'lizard', 'spock', 'rps'])
     async def settle(self, ctx, your_choice : RPSLSParser= None):
         """Play rock paper scissors lizard spock """
