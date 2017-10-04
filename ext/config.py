@@ -202,7 +202,7 @@ class ConfigDatabase:
 
     def get_data(self, guild_id):
         """Returns a raw dict of all fields"""
-        self.cur.execute("SELECT * FROM config WHERE guild_id = ?",(guild_id,))
+        self.cur.execute("SELECT * FROM config WHERE guild_id = ?",(guild_id))
         columns = [x[0] for x in self.cur.description]
         rows = self.cur.fetchone()
         if rows is None:
