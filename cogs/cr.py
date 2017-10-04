@@ -227,12 +227,7 @@ class ClashRoyale:
         for player in data['members']:
             if player['currentRank'] == 26:
                 em.set_footer(text="Cog made by kwugfighter | Powered by cr-api", icon_url="http://cr-api.com/static/img/branding/cr-api-logo.png")
-                try:
-                    await ctx.send(embed=em)
-                except discord.Forbidden:
-                    pages = await embedtobox.etb(em)
-                    for page in pages:
-                        await ctx.send(page)
+                await ctx.send(page)
                 em = discord.Embed(color=discord.Color(value=0x33ff30), title=f"{data['name']} (#{tag})", description='Page 2')
                 em.set_thumbnail(url=f"http://api.cr-api.com{data['badge']['url']}")
             em.add_field(name=player['name'], value=f"(#{player['tag']})\nTrophies: {player['score']}\nDonations: {player['donations']}\nCrowns: {player['clanChestCrowns']}\nRole: {player['roleName']}")
