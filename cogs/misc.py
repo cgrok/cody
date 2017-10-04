@@ -149,7 +149,7 @@ class Misc:
         if str == None:
             await ctx.send(f"You must include text or a link to convert to a QR code, {ctx.message.author.mention}")
         else:
-            oldurl = f'https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl={url}&choe=UTF-8'
+            url = f'https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl={str}&choe=UTF-8'
             with urllib.request.urlopen(URL) as url:
                 qrimgpage = io.BytesIO(url.read())
                 qrimg = Image.open(qrimgpage)
@@ -196,16 +196,16 @@ class Misc:
                 outcome = cond[(player_choice, bot_choice)]
             if outcome is True:
                 em.set_footer(text="You win!")
-                await ctx.channel.send(embed=em)
+                await ctx.send(embed=em)
             elif outcome is False:
                 em.set_footer(text="You lose...")
-                await ctx.channel.send(embed=em)
+                await ctx.send(embed=em)
             else:
                 em.set_footer(text="We're square")
-                await ctx.channel.send(embed=em)
+                await ctx.send(embed=em)
         else:
             msg = 'rock, paper, scissors, lizard, OR spock'
-            await ctx.channel.send(f'Enter: `{ctx.prefix}{ctx.invoked_with} {msg}`', delete_after=5)
+            await ctx.send(f'Enter: `{ctx.prefix}{ctx.invoked_with} {msg}`', delete_after=5)
 
 
 def setup(bot):
