@@ -47,27 +47,23 @@ class StatsBoard:
     @property
     def current_stats(self):
         em = discord.Embed()
+        status = None
         me = self.channel.guild.me
-        if str(me.status) == 'online':
+        status = str(me.status)
+        if status == 'online':
+            em.set_author(name="I'm Grok - Live Stats", icon_url='https://i.imgur.com/wlh1Uwb.png')
             em.color = discord.Color.green()
+        elif status == 'dnd':
+            status = 'maintenance'
+            em.set_author(name="I'm Grok - Live Stats", icon_url='https://i.imgur.com/lbMqojO.png')
+            em.color = discord.Color.purple()
         else:
+            em.set_author(name="I'm Grok - Live Stats", icon_url='https://i.imgur.com/dCLTaI3.png')
             em.color = discord.Color.red()
 
-        em.set_author(name="I'm Grok - Live Stats", icon_url=self.channel.guild.me.avatar_url)
-
-        total_members = sum(1 for _ in self.bot.get_all_members())
-        total_online = len({m.id for m in self.bot.get_all_members() if m.status is discord.Status.online})
+        total_online = len({m.id for m in self.bot.get_all_members() if m.status is not discord.Status.offline})
         total_unique = len(self.bot.users)
-
-        voice_channels = []
-        text_channels = []
-        for guild in self.bot.guilds:
-            voice_channels.extend(self.channel.guild.voice_channels)
-            text_channels.extend(self.channel.guild.text_channels)
-
-        text = len(text_channels)
-        voice = len(voice_channels)
-        dm = len(self.bot.private_channels)
+        channels = sum(1 for g in self.bot.guilds for _ in g.channels)
 
         now = datetime.datetime.utcnow()
         delta = now - self.bot.uptime
@@ -79,18 +75,21 @@ class StatsBoard:
         if days:
             fmt = '{d}d ' + fmt
         uptime = fmt.format(d=days, h=hours, m=minutes, s=seconds)
-        g_authors = verixx, fourjr, kwugfighter, FloatCobra, XAOS1502, Protty, Dark knight, darthgimdalf
+        g_authors = 'verixx, fourjr, kwugfighter, FloatCobra, XAOS1502'
         
-        em.add_field(name='Authors', value=g_authors)
+        em.add_field(name='Current Status', value=str(status).title())
         em.add_field(name='Uptime', value=uptime)
+        em.add_field(name='Latency', value=f'{self.bot.ws.latency*1000:.2f} ms')
         em.add_field(name='Guilds', value=len(self.bot.guilds))
-        em.add_field(name='Members', value=f'{total_unique} total\n{total_online} online')
-        em.add_field(name='Channels', value=f'{text} text\n{voice} voice\n{dm} direct')
+        em.add_field(name='Members', value=f'{total_online}/{total_unique} online')
+        em.add_field(name='Channels', value=f'{channels} total')
         memory_usage = self.bot.process.memory_full_info().uss / 1024**2
         cpu_usage = self.bot.process.cpu_percent() / psutil.cpu_count()
-        em.add_field(name='Process', value=f'{memory_usage:.2f} MiB\n{cpu_usage:.2f}% CPU')
-        em.add_field(name='Commands Used', value=sum(self.bot.commands_used.values()))
-        em.add_field(name='Messages Recieved', value=self.bot.messages_sent)
+        em.add_field(name='RAM Usage', value=f'{memory_usage:.2f} MiB')
+        em.add_field(name='CPU Usage',value=f'{cpu_usage:.2f}% CPU')
+        em.add_field(name='Commands Run', value=sum(self.bot.commands_used.values()))
+        em.add_field(name='Messages', value=self.bot.messages_sent)
+        # em.add_field(name='Authors', value=g_authors, inline=False)
         em.set_footer(text=f'Powered by discord.py {discord.__version__}')
 
         return em
@@ -104,6 +103,9 @@ class StatsBoard:
             data['base'] = self.base.id
             json.dump(data, f)
 
+    async def force_update(self):
+        await self.base.edit(embed=self.current_stats)
+
     async def run(self):
         if not self.running:
             await self.make_base()
@@ -115,7 +117,10 @@ class StatsBoard:
                 await self.make_base()
 
         while self.running:
-            await self.base.edit(embed=self.current_stats)
+            try:
+                await self.base.edit(embed=self.current_stats)
+            except discord.HTTPException:
+                await self.make_base()
             await asyncio.sleep(5)
 
 
@@ -143,6 +148,8 @@ class GrokBot(commands.Bot):
         self.loop.create_task(self.statsboard())
         #self.remove_command('help')
         self.add_command(self.ping)
+        self.add_command(self.shutdown)
+        self.add_command(self.maintenance)
         self.load_extensions()
         self.load_community_extensions()
 
@@ -199,6 +206,7 @@ class GrokBot(commands.Bot):
         print('Restarting...')
         print('------------------------------------------')
         os.execv(sys.executable, ['python'] + sys.argv)
+
     @classmethod
     def init(bot, token=None):
         '''Starts the actual bot'''
@@ -258,8 +266,8 @@ class GrokBot(commands.Bot):
         channel = self.get_channel(364720838743949313)
         with open('data/config.json') as f:
             base = json.load(f).get('base')
-        board = StatsBoard(self, channel, base)
-        await board.run()
+        self.statsboard = StatsBoard(self, channel, base)
+        await self.statsboard.run()
 
     @commands.command()
     async def ping(self, ctx):
@@ -275,5 +283,27 @@ class GrokBot(commands.Bot):
             for page in em_list:
                 await ctx.send(page)
 
+    @commands.command()
+    async def maintenance(self, ctx):
+        if str(ctx.guild.me.status) == 'dnd':
+            await ctx.send('Going back to normal.')
+            await self.change_presence(status=discord.Status.online, game=None)
+            return await self.statsboard.force_update()
+        await self.change_presence(status=discord.Status.dnd, game=discord.Game(name='under maintenance.'))
+        await ctx.send('Going into maintenance mode.')
+        await self.statsboard.force_update()
+
+    @commands.command()
+    async def shutdown(self, ctx, maintenance=None):
+        if maintenance:
+            await self.change_presence(status=discord.Status.dnd)
+        else:
+            await self.change_presence(status=discord.Status.offline)
+        await self.statsboard.force_update()
+        await ctx.send('Shutting Down...')
+        self.session.close()
+        await self.logout()
+
+
 if __name__ == '__main__':
-    GrokBot.init('MzYxNDgyNjcxNDUwMzU3NzYy.DK1G3Q.BHxe4PaY_njUC21vN-5oTnt9LJ4')
+    GrokBot.init('MzYxNDgyNjcxNDUwMzU3NzYy.DLWaCQ.xsaaBNrG0-g4O54DukLv3hAnwwE')
