@@ -185,7 +185,8 @@ class ConfigDatabase:
                 join_message TEXT,
                 leave_message TEXT,
                 selfroles TEXT,
-                autorole INT)""")
+                autorole INT,
+                stats TEXT)""")
 
     def set_default_config(self, guild_id):
         with self.conn:
