@@ -26,7 +26,6 @@ from collections import defaultdict
 import asyncio
 import aiohttp
 import datetime
-import psutil
 import time
 import json
 import sys
@@ -35,6 +34,11 @@ import re
 import sqlite3
 import traceback
 import textwrap
+try:
+    import psutil
+except:
+    pass
+
 
 class StatsBoard:
     def __init__(self, bot, channel, base=None):
