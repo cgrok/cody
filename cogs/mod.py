@@ -66,12 +66,14 @@ class Mod:
     @commands.command(aliases=['del', 'p', 'prune'], bulk=True)
     async def purge(self, ctx, limit: int):
         """Clean a number of messages"""
+        await ctx.message.delete()
         deleted = await ctx.channel.purge(limit=limit + 1)
         await ctx.channel.send(f'Successfully deleted {len(deleted)} message(s)', delete_after=6)
 
     @commands.command()
     async def clean(self, ctx, limit: int = 15):
         """Clean a number of bot's messages"""
+        await ctx.message.delete()
         deleted = await ctx.channel.purge(limit=limit + 1, check=lambda m: m.author == self.bot.user)
         await ctx.channel.send(f'Successfully deleted {len(deleted)} message(s)', delete_after=5)
 
