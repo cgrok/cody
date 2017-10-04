@@ -43,7 +43,7 @@ class Misc:
     async def invite(self, ctx):
         """Official url to invite bot to your server."""
         inviter = discord.utils.oauth_url(self.bot.user.id, permissions=discord.Permissions(permissions=473295983))
-        await ctx.channel.send(f'Invite me to *__your__* server with this link: \n\n<{inviter}>')
+        await ctx.send(f'Invite me to *__your__* server with this link: \n\n<{inviter}>')
 
     @commands.command()
     async def reverse(self, ctx, *, msg: str = None):
@@ -55,7 +55,7 @@ class Misc:
             e.description = usage
         else:
             e.description = f'\N{LEFTWARDS BLACK ARROW} `{msg.lower()[::-1]}`'
-        await ctx.channel.send(embed=e)
+        await ctx.send(embed=e)
         await ctx.delete_message(msg)
 
     @commands.command(aliases=['dvwl'])
@@ -63,13 +63,12 @@ class Misc:
         dvl = text.replace('a', '').replace('A', '').replace('e', '')\
                   .replace('E', '').replace('i', '').replace('I', '')\
                   .replace('o', '').replace('O', '').replace('u', '').replace('U', '')
-        author = ctx.message.author
         e = discord.Embed()
         e.color = await ctx.get_dominant_color(ctx.author.avatar_url)
-        e.set_author(name=f'{author.display_name}', icon_url=author.avatar_url)
+        e.set_author(name=f'{ctx.author.display_name}', icon_url=ctx.author.avatar_url)
         e.description = f'\N{SMALL BLUE DIAMOND}​ ~~{text}~~\n\N{WHITE SMALL SQUARE}​ {dvl}'
         await ctx.message.delete()
-        await ctx.channel.send(embed=e)
+        await ctx.send(embed=e)
 
     @commands.command(aliases=['thisis'])
     async def thisistisis(self, ctx, *, text):
@@ -81,34 +80,32 @@ class Misc:
         e.set_author(name=f'{author.display_name}', icon_url=author.avatar_url)
         e.description = f'\N{SMALL BLUE DIAMOND}​ ~~{text}~~\n\N{WHITE SMALL SQUARE}​ {sis}'
         await ctx.message.delete()
-        await ctx.channel.send(embed=e)
+        await ctx.send(embed=e)
 
     @commands.command(aliases=['christmas', 'xmas'])
     async def isitchristmas(self, ctx):
         if date.today() == christmas:
-            ctx.channel.send("Yes, it is Christmas today.")
+            await ctx.send("Yes, it is Christmas today.")
         else:
             msg = f'No, it is not Christmas today. There are {(christmas - date.today()).days} days until Christmas.'
-            ctx.channel.send(msg)
+            await ctx.send(msg)
 
     @commands.command(aliases=['halloween', 'hween', 'hwn'])
     async def isithalloween(self, ctx):
         if date.today() == halloween:
-            ctx.channel.send("Yes, it is Halloween today.")
+            await ctx.send("Yes, it is Halloween today.")
         else:
             msg = f'No, it is not Halloween today. There are {(halloween - date.today()).days} days until Halloween.'
-            ctx.channel.send(msg)
+            await ctx.send(msg)
 
     @commands.command(description='This command might get you banned')
     async def ultimate_annoying_spam_command(self, ctx, *, member=None, times: int = None):
         """Want to annoy a member with mentions?"""
-        channel = ctx.message.channel
-        author = ctx.message.author
-        message = ctx.message
+
         usage = f'```Usage: {ctx.prefix}ultimate_annoying_spam_command [@member] [times]```'
 
         if member or times is None:
-            await ctx.channel.send(usage)
+            await ctx.send(usage)
             return
 
         if times is None:
@@ -118,49 +115,45 @@ class Misc:
             times = 35
 
         if times is 0:
-            sorry = f'Someone, not saying who, *cough cough {author}* felt sorry about using this command.'
-            await ctx.channel.send(sorry)
+            await ctx.send(f'Someone, not saying who, *cough cough {author}* felt sorry about using this command.')
             return
 
         if times < 0:
-            chicken = "Well, that's just not enough times to annoy anybody. Don't chicken out now!"
-            await ctx.channel.send(chicken)
+            await ctx.send("Well, that's just not enough times to annoy anybody. Don't chicken out now!")
             return
 
         await message.delete()
 
         for i in range(0, times):
             try:
-                await channel.send(f'{member.mention} LOL')
+                await ctx.send(f'{member.mention} LOL')
             except Exception:
                 pass
 
     @commands.command(aliases=['tinyurl'])
     async def tiny_url(self, ctx, str = None):
-
-        apiurl = "http://tinyurl.com/api-create.php?url="
-        tinyurl = urlopen(apiurl + str).read().decode("utf-8")
+        tinyurl = urlopen("http://tinyurl.com/api-create.php?url=" + str).read().decode("utf-8")
         usage = f'Usage: {ctx.prefix}tinyurl https://github.com/verixx/grokbot'
         url = ctx.message.starts_with('https://')
         if str is None:
-            await ctx.channel.send(usage)
+            await ctx.send(usage)
         if str is int:
-            await ctx.channel.send(usage)
+            await ctx.send(usage)
         if str is url:
-            await ctx.channel.send(tinyurl)
+            await ctx.send(tinyurl)
         else:
             pass
 
     @commands.command(aliases=['qr','qrgen'])
     async def generateqr(self, ctx, *str = None):
         if str == None:
-            await ctx.channel.send("You must include text or a link to convert to a QR code, {}".format(ctx.message.author.mention))
+            await ctx.send(f"You must include text or a link to convert to a QR code, {ctx.message.author.mention}")
         else:
-            oldurl = 'https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl={}&choe=UTF-8'.format(url)
+            oldurl = f'https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl={url}&choe=UTF-8'
             with urllib.request.urlopen(URL) as url:
                 qrimgpage = io.BytesIO(url.read())
                 qrimg = Image.open(qrimgpage)
-            await ctx.channel.send(qrimg)
+            await ctx.send(qrimg)
         
     @commands.command(aliases=['rock', 'paper', 'scissors', 'lizard', 'spock', 'rps'])
     async def settle(self, ctx, your_choice : RPSLSParser= None):
