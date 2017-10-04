@@ -57,10 +57,29 @@ class Misc:
         await ctx.delete_message(msg)
 
     @commands.command(aliases=['dvwl'])
-    async def devowel(self, ctx, *text):
-        dvl = text.replace('a', '').replace('A', '').replace('e', '').replace('E', '').replace('i', '')\
-            .replace('I', '').replace('o', '').replace('O', '').replace('u', '').replace('U', '')
-        await ctx.channel.send(dvl)
+    async def devowel(self, ctx, *, text):
+        dvl = text.replace('a', '').replace('A', '').replace('e', '')\
+                  .replace('E', '').replace('i', '').replace('I', '')\
+                  .replace('o', '').replace('O', '').replace('u', '').replace('U', '')
+        author = ctx.message.author
+        e = discord.Embed()
+        e.color = await ctx.get_dominant_color(ctx.author.avatar_url)
+        e.set_author(name=f'{author.display_name}', icon_url=author.avatar_url)
+        e.description = f'\N{SMALL BLUE DIAMOND}​ ~~{text}~~\n\N{WHITE SMALL SQUARE}​ {dvl}'
+        await ctx.message.delete()
+        await ctx.channel.send(embed=e)
+
+    @commands.command(aliases=['thisis'])
+    async def thisistisis(self, ctx, *, text):
+        sis = text.replace('a', 'i').replace('A', 'I').replace('e', 'i').replace('E', 'I')\
+                  .replace('o', 'i').replace('O', 'I').replace('u', 'i').replace('U', 'I')
+        author = ctx.message.author
+        e = discord.Embed()
+        e.color = await ctx.get_dominant_color(ctx.author.avatar_url)
+        e.set_author(name=f'{author.display_name}', icon_url=author.avatar_url)
+        e.description = f'\N{SMALL BLUE DIAMOND}​ ~~{text}~~\n\N{WHITE SMALL SQUARE}​ {sis}'
+        await ctx.message.delete()
+        await ctx.channel.send(embed=e)
 
     @commands.command(aliases=['christmas', 'xmas'])
     async def isitchristmas(self, ctx):
