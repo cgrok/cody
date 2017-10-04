@@ -202,7 +202,7 @@ class ConfigDatabase:
 
     def get_data(self, guild_id):
         """Returns a raw dict of all fields"""
-        self.cur.execute("SELECT * FROM config WHERE guild_id = ?",(guild_id))
+        self.cur.execute(f"SELECT * FROM config WHERE guild_id = {guild_id}")
         columns = [x[0] for x in self.cur.description]
         rows = self.cur.fetchone()
         if rows is None:
@@ -219,4 +219,4 @@ class ConfigDatabase:
 
     def set_value(self, guild_id, column, new_val):
         with self.conn:
-            self.cur.execute(f"UPDATE config SET {column} = ? WHERE guild_id = {guild_id}", (new_val,))
+            self.cur.execute(f"UPDATE config SET {column} = {new_val} WHERE guild_id = {guild_id}")
