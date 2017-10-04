@@ -26,7 +26,7 @@ import discord
 from discord.ext import commands
 import aiohttp
 import string
-from cogs import embeds
+#from cogs import embeds
 import json
 
 
