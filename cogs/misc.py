@@ -145,7 +145,7 @@ class Misc:
             pass
 
     @commands.command(aliases=['qr','qrgen'])
-    async def generateqr(self, ctx, *str = None):
+    async def generateqr(self, ctx, *, str = None):
         if str == None:
             await ctx.send(f"You must include text or a link to convert to a QR code, {ctx.message.author.mention}")
         else:
