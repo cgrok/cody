@@ -192,7 +192,7 @@ class ConfigDatabase:
         with self.conn:
             default = (
                 guild_id,"[\"g.\"]",0,0,0,0,0,0,0,
-                "Welcome {user.mention} to {guild.name}","Bye Bye {user.name}!","[]",0
+                "Welcome {user.mention} to {guild.name}","Bye Bye {user.name}!","[]",0,""
                 )
             self.cur.execute(f"INSERT INTO config VALUES {default}")
 
