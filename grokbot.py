@@ -47,6 +47,7 @@ class StatsBoard:
     @property
     def current_stats(self):
         em = discord.Embed()
+        em.timestamp = datetime.datetime.utcnow()
         status = None
         me = self.channel.guild.me
         status = str(me.status)
@@ -89,8 +90,9 @@ class StatsBoard:
         em.add_field(name='CPU Usage',value=f'{cpu_usage:.2f}% CPU')
         em.add_field(name='Commands Run', value=sum(self.bot.commands_used.values()))
         em.add_field(name='Messages', value=self.bot.messages_sent)
-        # em.add_field(name='Authors', value=g_authors, inline=False)
-        em.set_footer(text=f'Powered by discord.py {discord.__version__}')
+        em.add_field(name='Github', value='[Click Here](https://github.com/verixx/grokbot)')
+        em.add_field(name='Invite', value=f'[Click Here]({discord.utils.oauth_url(self.bot.user.id)})')
+        em.set_footer(text=f'Bot ID: {self.bot.user.id}')
 
         return em
 
@@ -306,4 +308,4 @@ class GrokBot(commands.Bot):
 
 
 if __name__ == '__main__':
-    GrokBot.init('MzYxNDgyNjcxNDUwMzU3NzYy.DLWaCQ.xsaaBNrG0-g4O54DukLv3hAnwwE')
+    GrokBot.init()
