@@ -131,8 +131,8 @@ class Misc:
             pass
 
     @commands.command(aliases=['rock', 'paper', 'scissors', 'lizard', 'spock', 'rps'])
-    async def settle(self, ctx, your_choice : RPSLSParser = None):
-        """Play rock paper scissors lizard spock"""
+    async def settle(self, ctx, your_choice : RPSLSParser= None):
+        """Play rock paper scissors lizard spock """
         if your_choice != None:
             author = ctx.message.author.display_name
             grok = self.bot.user.name
