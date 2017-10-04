@@ -47,7 +47,7 @@ class Misc:
 
     @commands.command()
     async def reverse(self, ctx, *, msg: str = None):
-        """Writes backwards because reasons, in Embed"""
+        """Writes backwards because reasons, in Embed."""
         e = discord.Embed()
         e.colour = discord.Colour(0x8e44ad)
         if msg is None:
@@ -60,6 +60,7 @@ class Misc:
 
     @commands.command(aliases=['dvwl'])
     async def devowel(self, ctx, *, text):
+        """Removes vowels from text!"""
         dvl = text.replace('a', '').replace('A', '').replace('e', '')\
                   .replace('E', '').replace('i', '').replace('I', '')\
                   .replace('o', '').replace('O', '').replace('u', '').replace('U', '')
@@ -72,6 +73,7 @@ class Misc:
 
     @commands.command(aliases=['thisis'])
     async def thisistisis(self, ctx, *, text):
+        """Replaces vowels with the letter "i", pretty useless."""
         sis = text.replace('a', 'i').replace('A', 'I').replace('e', 'i').replace('E', 'I')\
                   .replace('o', 'i').replace('O', 'I').replace('u', 'i').replace('U', 'I')
         author = ctx.message.author
@@ -84,6 +86,7 @@ class Misc:
 
     @commands.command(aliases=['christmas', 'xmas'])
     async def isitchristmas(self, ctx):
+        """Is it Christmas yet?"""
         if date.today() == christmas:
             await ctx.send("Yes, it is Christmas today.")
         else:
@@ -92,6 +95,7 @@ class Misc:
 
     @commands.command(aliases=['halloween', 'hween', 'hwn'])
     async def isithalloween(self, ctx):
+        """Is it Halloween yet?"""
         if date.today() == halloween:
             await ctx.send("Yes, it is Halloween today.")
         else:
@@ -132,6 +136,7 @@ class Misc:
 
     @commands.command(aliases=['tinyurl'])
     async def tiny_url(self, ctx, str = None):
+        """Shorten URL"""
         tinyurl = urlopen("http://tinyurl.com/api-create.php?url=" + str).read().decode("utf-8")
         usage = f'Usage: {ctx.prefix}tinyurl https://github.com/verixx/grokbot'
         url = ctx.message.starts_with('https://')
@@ -146,6 +151,7 @@ class Misc:
 
     @commands.command(aliases=['qr','qrgen'])
     async def generateqr(self, ctx, str = None):
+        """Generate a QR code"""
         if str == None:
             await ctx.send(f"You must include text or a link to convert to a QR code, {ctx.message.author.mention}")
         else:
