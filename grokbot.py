@@ -87,7 +87,7 @@ class StatsBoard:
         em.add_field(name='Members', value=f'{total_online}/{total_unique} online')
         em.add_field(name='Channels', value=f'{channels} total')
         memory_usage = self.bot.process.memory_full_info().uss / 1024**2
-        cpu_usage = self.bot.process.cpu_percent() / psutil.cpu_count()
+        #cpu_usage = self.bot.process.cpu_percent() / psutil.cpu_count()
         em.add_field(name='RAM Usage', value=f'{memory_usage:.2f} MiB')
         em.add_field(name='CPU Usage',value=f'{cpu_usage:.2f}% CPU')
         em.add_field(name='Commands Run', value=sum(self.bot.commands_used.values()))
@@ -144,7 +144,7 @@ class GrokBot(commands.Bot):
         self.uptime = datetime.datetime.utcnow()
         self.db = ConfigDatabase(self)
         self.session = aiohttp.ClientSession(loop=self.loop)
-        self.process = psutil.Process()
+        #self.process = psutil.Process()
         self._extensions = [x.replace('.py', '') for x in os.listdir('cogs') if x.endswith('.py')]
         self.messages_sent = 0
         self.commands_used = defaultdict(int)
@@ -309,4 +309,4 @@ class GrokBot(commands.Bot):
 
 
 if __name__ == '__main__':
-    GrokBot.init('MzYxNDgyNjcxNDUwMzU3NzYy.DLWaCQ.xsaaBNrG0-g4O54DukLv3hAnwwE')
+    GrokBot.init()
