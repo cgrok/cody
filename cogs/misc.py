@@ -99,7 +99,7 @@ class Misc:
             await ctx.send(msg)
 
     @commands.command(description='This command might get you banned')
-    async def ultimate_annoying_spam_command(self, ctx, *, member=None, times: int = None):
+    async def spam(self, ctx, *, member=None, times: int = None):
         """Want to annoy a member with mentions?"""
 
         usage = f'```Usage: {ctx.prefix}ultimate_annoying_spam_command [@member] [times]```'
@@ -145,7 +145,7 @@ class Misc:
             pass
 
     @commands.command(aliases=['qr','qrgen'])
-    async def generateqr(self, ctx, *, str = None):
+    async def generateqr(self, ctx, str = None):
         if str == None:
             await ctx.send(f"You must include text or a link to convert to a QR code, {ctx.message.author.mention}")
         else:
