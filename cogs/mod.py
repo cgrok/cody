@@ -63,9 +63,17 @@ class Mod:
         await ctx.channel.set_permissions(user, send_messages=True)
         await ctx.channel.send(user.mention + ' has been unmuted.')
 
-    
+    @commands.command(aliases=['del', 'p', 'prune'], bulk=True)
+    async def purge(self, ctx, limit: int):
+        """Clean a number of messages"""
+        deleted = await ctx.channel.purge(limit=limit + 1)
+        await ctx.channel.send(f'Successfully deleted {len(deleted)} message(s)', delete_after=6)
 
-
+    @commands.command()
+    async def clean(self, ctx, limit: int = 15):
+        """Clean a number of bot's messages"""
+        deleted = await ctx.channel.purge(limit=limit + 1, check=lambda m: m.author == self.bot.user)
+        await ctx.channel.send(f'Successfully deleted {len(deleted)} message(s)', delete_after=5)
 
 
 def setup(bot):
