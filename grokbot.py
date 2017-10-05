@@ -231,10 +231,9 @@ class GrokBot(commands.Bot):
                 await ctx.send(page)
         else:
             pages = self.formatter.format_help_for(ctx, ctx.command)
-            await ctx.send("help formatting worked ")
             for page in pages:
-                await ctx.send("hi")
                 await ctx.send(page)
+    # WHY WON'T YOU WORK
 
     async def on_ready(self):
         '''Bot startup, sets uptime.'''
@@ -259,9 +258,6 @@ class GrokBot(commands.Bot):
 
     async def on_command_error(self, ctx, error):
         send_help = (commands.MissingRequiredArgument, commands.BadArgument, commands.TooManyArguments, commands.UserInputError)
-        if isinstance(error, send_help):
-            await self.send_cmd_help(ctx)
-
         em = discord.Embed(color = discord.Color.red(), timestamp=ctx.message.created_at, description="Command Error:")
         em.set_author(name=str(ctx.author), icon_url=ctx.author.avatar_url)
         if ctx.invoked_subcommand:
@@ -270,6 +266,9 @@ class GrokBot(commands.Bot):
             em.add_Field(name="Invoked Command", value=ctx.command, inline=False)
         em.add_field(name="Error", value=f'```py\n{error}\n```', inline=False)
         await bot.get_channel(365640420249567273).send(embed=em)
+
+        if isinstance(error, send_help):
+            await self.send_cmd_help(ctx)
 
     async def on_command(self, ctx):
         cmd = ctx.command.qualified_name.replace(' ', '_')
