@@ -68,7 +68,7 @@ class Developer:
     @commands.command()
     async def cmd_help(self, ctx):
         """Test the help function"""
-        await bot.send_cmd_help(ctx)
+        await self.bot.send_cmd_help(ctx)
 
     @commands.command(aliases=["reload"])
     async def reloadcog(self, ctx, *, cog: str):
