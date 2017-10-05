@@ -156,7 +156,7 @@ class Misc:
             await ctx.send(f"You must include text or a link to convert to a QR code, {ctx.message.author.mention}")
         else:
             url = f'https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl={str}&choe=UTF-8'
-            with urllib.request.urlopen(url) as link:
+            with urlopen(url) as link:
                 qrimgpage = io.BytesIO(link.read())
                 qrimg = Image.open(qrimgpage)
             await ctx.send(qrimg)
