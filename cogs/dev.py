@@ -73,6 +73,7 @@ class Developer:
     @commands.command(aliases=["reload"])
     async def reloadcog(self, ctx, *, cog: str):
         """Reloads a cog"""
+        await self.bot.send_cmd_help(ctx)
         if ctx.author.id in dev_list:
             cog = "cogs.{}".format(cog)
             await ctx.send("Attempting to reload {}...".format(cog))
