@@ -225,12 +225,13 @@ class GrokBot(commands.Bot):
               'GrokBot connected!')
 
     async def send_cmd_help(self, ctx):
-        await ctx.send("help has arrived")
         if ctx.invoked_subcommand:
+            await ctx.send("help has arrived in a subcommand near you")
             pages = self.formatter.format_help_for(ctx, ctx.invoked_subcommand)
             for page in pages:
                 await ctx.send(page)
         else:
+            await ctx.send("help has arrived in a command near you")
             pages = self.formatter.format_help_for(ctx, ctx.command)
             for page in pages:
                 await ctx.send(page)
