@@ -65,16 +65,9 @@ class Developer:
             session.add_page(em)
         await session.run()
 
-    @commands.command()
-    async def cmd_help(self, ctx):
-        """Test the help function"""
-        await self.bot.send_cmd_help(ctx)
-
     @commands.command(aliases=["reload"])
     async def reloadcog(self, ctx, *, cog: str):
         """Reloads a cog"""
-        await self.bot.send_cmd_help(ctx)
-        await ctx.send("nice")
         if ctx.author.id in dev_list:
             cog = "cogs.{}".format(cog)
             await ctx.send("Attempting to reload {}...".format(cog))
