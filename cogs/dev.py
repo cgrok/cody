@@ -224,9 +224,7 @@ class Developer:
                 await self.bot.change_presence(status=discord.Status.invisible, game=discord.Game(name=message))
                 color = discord.Color(value=0x747f8d).to_rgb()
             elif status == "stream":
-                await self.bot.change_presence(status=discord.Status.online, 
-                                               game=discord.Game(name=message, type=1,
-                                               url=f'https://www.twitch.tv/{message}'))
+                await self.bot.change_presence(status=discord.Status.online, game=discord.Game(name=message, type=1, url=f'https://www.twitch.tv/{message}'))
                 color = discord.Color(value=0x593695).to_rgb()
             elif status == "clear":
                 await self.bot.change_presence(game=None)
