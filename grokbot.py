@@ -140,7 +140,7 @@ class GrokBot(commands.Bot):
     _mention_pattern = re.compile('|'.join(_mentions_transforms.keys()))
 
     def __init__(self, **attrs):
-        super().__init__(command_prefix=self.get_pre, formatter=discord.ext.commands.HelpFormatter)
+        super().__init__(command_prefix=self.get_pre)
         self.uptime = datetime.datetime.utcnow()
         self.db = ConfigDatabase(self)
         self.session = aiohttp.ClientSession(loop=self.loop)
