@@ -157,8 +157,8 @@ class Misc:
         else:
             url = f'https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl={str}&choe=UTF-8'
             with urlopen(url) as link:
-                qrimgpage = io.BytesIO(link.read())
-                qrimg = Image.open(qrimgpage)
+                qrimg = io.BytesIO(link.read())
+                #qrimg = Image.open(qrimgpage)
             await ctx.send(file=qrimg)
         
     @commands.command(aliases=['rock', 'paper', 'scissors', 'lizard', 'spock', 'rps'])
