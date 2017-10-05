@@ -159,7 +159,7 @@ class Misc:
             with urlopen(url) as link:
                 qrimgpage = io.BytesIO(link.read())
                 qrimg = Image.open(qrimgpage)
-            await ctx.send(qrimg)
+            await ctx.send(file=qrimg)
         
     @commands.command(aliases=['rock', 'paper', 'scissors', 'lizard', 'spock', 'rps'])
     async def settle(self, ctx, your_choice : RPSLSParser= None):
