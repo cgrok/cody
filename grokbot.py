@@ -224,7 +224,7 @@ class GrokBot(commands.Bot):
         print('---------------\n'
               'GrokBot connected!')
 
-    async def send_cmd_help(self,ctx):
+    async def send_cmd_help(self, ctx):
         if ctx.invoked_subcommand:
             pages = self.formatter.format_help_for(ctx, ctx.invoked_subcommand)
             for page in pages:
