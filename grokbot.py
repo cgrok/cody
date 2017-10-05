@@ -257,6 +257,20 @@ class GrokBot(commands.Bot):
         ---------------
         '''))
 
+    async def on_command_error(self, ctx, error):
+        send_help = (commands.MissingRequiredArgument, commands.BadArgument, commands.TooManyArguments, commands.UserInputError)
+        if isinstance(error, send_help):
+            await self.send_cmd_help(ctx)
+        else:
+            em = discord.Embed(color = discord.Color.red(), timestamp=ctx.message.created_at, description="Command Error:")
+            em.set_author(name=str(ctx.author), icon_url=ctx.author.avatar_url)
+            if ctx.invoked_subcommand:
+                em.add_field(name="Invoked Subcommand", value=ctx.invoked_subcommand, inline=False)
+            else:
+                em.add_Field(name="Invoked Command", value=ctx.command, inline=False)
+            em.add_field(name="Error", value=f'```py\n{error}\n```', inline=False)
+            await bot.get_channel(365640420249567273).send(embed=em)
+
     async def on_command(self, ctx):
         cmd = ctx.command.qualified_name.replace(' ', '_')
         self.commands_used[cmd] += 1
