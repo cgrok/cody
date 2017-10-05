@@ -17,7 +17,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 '''
- 
+
 import discord
 from discord.ext import commands
 from ext.context import CustomContext
@@ -79,7 +79,7 @@ class StatsBoard:
             fmt = '{d}d ' + fmt
         uptime = fmt.format(d=days, h=hours, m=minutes, s=seconds)
         g_authors = 'verixx, fourjr, kwugfighter, FloatCobra, XAOS1502'
-        
+
         em.add_field(name='Current Status', value=str(status).title())
         em.add_field(name='Uptime', value=uptime)
         em.add_field(name='Latency', value=f'{self.bot.ws.latency*1000:.2f} ms')
@@ -224,9 +224,19 @@ class GrokBot(commands.Bot):
         print('---------------\n'
               'GrokBot connected!')
 
+    async def send_cmd_help(self,ctx):
+        if ctx.invoked_subcommand:
+            pages = self.formatter.format_help_for(ctx, ctx.invoked_subcommand)
+            for page in pages:
+                await ctx.send(page)
+        else:
+            pages = self.formatter.format_help_for(ctx, ctx.command)
+            for page in pages:
+                await ctx.send(page)
+
     async def on_ready(self):
         '''Bot startup, sets uptime.'''
-            
+
 
         for guild in self.guilds: # sets default configs for all guilds.
             if self.db.get_data(guild.id) is None:
@@ -236,8 +246,8 @@ class GrokBot(commands.Bot):
         ---------------
         Client is ready!
         ---------------
-        Authors: verixx, fourjr, kwugfighter, 
-                 FloatCobra, XAOS1502, Protty, 
+        Authors: verixx, fourjr, kwugfighter,
+                 FloatCobra, XAOS1502, Protty,
                  Dark knight, darthgimdalf
         ---------------
         Logged in as: {self.user}
