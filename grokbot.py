@@ -233,7 +233,7 @@ class GrokBot(commands.Bot):
             pages = self.formatter.format_help_for(ctx, ctx.command)
             await ctx.send("help formatting worked ")
             for page in pages:
-                await ctx.send(pages)
+                await ctx.send("hi")
                 await ctx.send(page)
 
     async def on_ready(self):
