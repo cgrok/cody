@@ -65,6 +65,10 @@ class Developer:
             session.add_page(em)
         await session.run()
 
+    @commands.command()
+    async def cmd_help(self, ctx):
+        await bot.send_cmd_help(ctx)
+        
     @commands.command(aliases=["reload"])
     async def reloadcog(self, ctx, *, cog: str):
         """Reloads a cog"""
