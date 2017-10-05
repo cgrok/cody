@@ -26,7 +26,7 @@ import discord
 from discord.ext import commands
 from discord.ext.commands import TextChannelConverter
 from ext.paginator import PaginatorSession
-from ext import embedtobox
+#from ext import embedtobox
 from PIL import Image
 from contextlib import redirect_stdout
 import traceback
