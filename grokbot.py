@@ -266,7 +266,7 @@ class GrokBot(commands.Bot):
             em.add_Field(name="Invoked Command", value=ctx.command, inline=False)
         em.add_field(name="Error", value=f'```py\n{error}\n```', inline=False)
         await bot.get_channel(365640420249567273).send(embed=em)
-
+        # Rushed so if someone wants to fix that'd be nice xoxoxoxo
         if isinstance(error, send_help):
             await self.send_cmd_help(ctx)
 
