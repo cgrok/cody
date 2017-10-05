@@ -238,12 +238,14 @@ class Developer:
             emb.description = "Thank you for updating my Presence!"
             file.seek(0)
             emb.set_author(name=status.title(), icon_url="attachment://color.png")
+            """
             try:
                 await ctx.send(file=discord.File(file, 'color.png'), embed=emb)
             except discord.HTTPException:
                 em_list = await embedtobox.etb(emb)
                 for page in em_list:
                     await ctx.send(page)
+            """
 
     @commands.command()
     async def source(self, ctx, *, command):
