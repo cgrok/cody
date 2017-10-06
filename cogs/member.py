@@ -25,7 +25,7 @@ class Member:
 
         em = discord.Embed(color=discord.Colour.red(), description="Member Settings")
         em.add_field(name="Join Message Enabled", value=ctx.config.join_enabled, inline=False)
-        em.add_field(name="Leave Message Enabled", value=ctx.config.leave_enabled), inline=False)
+        em.add_field(name="Leave Message Enabled", value=ctx.config.leave_enabled, inline=False)
         #em.add_field(name="Welcome Channel", value=self.bot.get_channel(ctx.config.welcome_channel.id).mention, inline=False)
         #em.add_field(name="Leave Channel", value=self.bot.get_channel(ctx.config.leave_channel.id).mention, inline=False)
         #em.add_field(name="Join Message", value=ctx.config.join_message, inline=False)
