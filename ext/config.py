@@ -96,7 +96,7 @@ class GuildConfig:
 
     @property
     def prefixes(self):
-        return json.loads(self.db.get_value(self.id, 'prefixes'))
+        return self.db.get_value(self.id, 'prefixes')
 
     @prefixes.setter
     def set_prefixes(self, prefixes):
@@ -150,7 +150,6 @@ class GuildConfig:
 
     @selfroles.setter
     def set_selfroles(self, roles):
-
         return self.db.set_value(self.id, 'selfroles', json.dumps(roles))
 
 class ConfigDatabase:
