@@ -90,7 +90,7 @@ class Member:
             await ctx.send(f"These roles were not found: {not_found}\n\nPlease try again.")
         parsed_role_set = list({r.name for r in parsed_roles})
 
-        ctx.db.set_value(self.id, 'selfroles', json.dumps(parsed_role_set))
+        ctx.db.set_value(ctx.guild.id, 'selfroles', json.dumps(parsed_role_set))
         await ctx.send(ctx.config.selfroles)
         await ctx.send(f"Selfroles successfully set to: {parsed_role_set}")
 
