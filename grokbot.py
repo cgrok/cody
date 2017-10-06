@@ -258,7 +258,7 @@ class GrokBot(commands.Bot):
         Client is ready!
         ---------------
         Authors: verixx, fourjr, kwugfighter,
-                 FloatCobra, XAOS1502, Protty
+                 FloatCobra, XAOS1502
         ---------------
         Logged in as: {self.user}
         User ID: {self.user.id}
