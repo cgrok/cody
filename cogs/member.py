@@ -36,7 +36,6 @@ class Member:
     @memberset.command(aliases=["welcome"], no_pm=True)
     async def join(self, ctx, *, channel:discord.TextChannel=None, enabled:str, message:str=None):
         """Join message settings
-
         Arguments for message:
         `{name}` outputs the Member's username.
         `{guild}` outputs the Guild name.
@@ -57,7 +56,6 @@ class Member:
     @memberset.command(aliases=["goodbye"], no_pm=True)
     async def leave(self, ctx, *, channel:discord.TextChannel=None, enabled:str, message:str=None):
         """Leave message settings
-
         Arguments for message:
         `{name}` outputs the Member's username.
         `{guild}` outputs the Guild name."""
@@ -76,28 +74,26 @@ class Member:
 
     @memberset.command(no_pm=True)
     async def selfroles(self, ctx, *, rolelist=None):
-            """Set which roles users can set themselves.
-
-            Seperate roles with a space, if rolename contains a space, wrap in double quotes,
-            Example:
-            Human "Non Human" Robot"""
-            if rolelist is None:
-                await ctx.send("Selfrole list cleared.")
-                ctx.config.selfroles = []
-                return
-            unparsed_roles = list(map(lambda r: r.strip(), rolelist.split(' ')))
-            parsed_roles = list(map(lambda r: self._role_from_string(server, r), unparsed_roles))
-            if len(unparsed_roles) != len(parsed_roles):
-                not_found = set(unparsed_roles) - {r.name for r in parsed_roles}
-                await ctx.send(f"These roles were not found: {not_found}\n\nPlease try again.")
-            parsed_role_set = list({r.name for r in parsed_roles})
-            ctx.config.selfroles = parsed_role_set
-            await ctx.send(f"Selfroles successfully set to: {parsed_role_set}")
+        """Set which roles users can set themselves.
+        Seperate roles with a space, if rolename contains a space, wrap in double quotes,
+        Example:
+        Human "Non Human" Robot"""
+        if rolelist is None:
+            await ctx.send("Selfrole list cleared.")
+            ctx.config.selfroles = []
+            return
+        unparsed_roles = list(map(lambda r: r.strip(), rolelist.split(' ')))
+        parsed_roles = list(map(lambda r: self._role_from_string(server, r), unparsed_roles))
+        if len(unparsed_roles) != len(parsed_roles):
+            not_found = set(unparsed_roles) - {r.name for r in parsed_roles}
+            await ctx.send(f"These roles were not found: {not_found}\n\nPlease try again.")
+        parsed_role_set = list({r.name for r in parsed_roles})
+        ctx.config.selfroles = parsed_role_set
+        await ctx.send(f"Selfroles successfully set to: {parsed_role_set}")
 
     @commands.group(no_pm=True, invoke_without_command=True)
     async def selfrole(self, ctx, *, rolename):
         """Allows users to set their own roles.
-
         Configurable using `memberset`"""
         if len(ctx.config.selfroles) == 0:
             await ctx.send("No self assignable roles found for this server.")
@@ -115,13 +111,13 @@ class Member:
         else:
             await ctx.send("Role added.")
 
-    async def on_member_join(member):
+    async def on_member_join(self, member):
         if self.bot.config.join_enabled:
             await self.bot.config.welcome_channel.send(self.bot.config.join_message.format(name=member, guild=member.guild, mention=member.mention))
         if self.bot.config.autorole_enabled:
             await member.add_roles(self.bot.config.autorole)
 
-    async def on_member_remove(member):
+    async def on_member_remove(self, member):
         if self.bot.config.leave_enabled:
             await self.bot.config.leave_channel.send(self.bot.config.leave_message.format(name=member.name, guild=member.guild))
 
