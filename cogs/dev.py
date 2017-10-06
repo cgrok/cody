@@ -252,7 +252,7 @@ class Developer:
         '''See the source code for any command.'''
         if ctx.author.id in dev_list:
             source = str(inspect.getsource(self.bot.get_command(command).callback))
-            fmt = '​`​`​`py\n' + source.replace('​`', '\u200b​`') + '\n​`​`​`'
+            fmt = '​`​`​`py\n' + source.replace('​```', '\u200b​`') + '\n​`​`​`'
             if len(fmt) > 2000:
                 async with ctx.session.post("https://hastebin.com/documents", data=source) as resp:
                     data = await resp.json()
