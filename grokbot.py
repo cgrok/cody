@@ -161,6 +161,9 @@ class GrokBot(commands.Bot):
         self.add_command(self.ping)
         self.add_command(self.shutdown)
         self.add_command(self.maintenance)
+        self.add_command(self.load)
+        self.add_command(self.reloadcog)
+        self.add_command(self.unload)
         self.load_extensions()
         self.load_community_extensions()
 
