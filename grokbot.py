@@ -91,7 +91,7 @@ class StatsBoard:
         em.add_field(name='Commands Run', value=sum(self.bot.commands_used.values()))
         em.add_field(name='Messages', value=self.bot.messages_sent)
         em.add_field(name='Github', value='[Click Here](https://github.com/verixx/grokbot)')
-        em.add_field(name='Invite', value='[Click Here]({})'.format(discord.utils.oauth_url(self.bot.user.id)))
+        em.add_field(name='Invite', value='[Click Here]({})'.format{discord.utils.oauth_url(self.bot.user.id)))
         em.set_footer(text='Bot ID: {}'.format(self.bot.user.id))
 
 
