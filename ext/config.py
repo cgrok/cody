@@ -146,7 +146,7 @@ class GuildConfig:
 
     @property
     def selfroles(self):
-        return json.loads(self.db.get_value(self.id, "selfroles"))
+        return self.db.get_value(self.id, "selfroles")
 
     @selfroles.setter
     def set_selfroles(self, roles):
