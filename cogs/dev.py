@@ -76,7 +76,7 @@ class Developer:
                 self.bot.load_extension(cog)
                 await ctx.send("Successfully reloaded the {} cog!".format(cog))
             except Exception as e:
-                await ctx.send("```py\nError loading cog: {}\n{}}\n```".format(cog, e))
+                await ctx.send(f"```py\nError loading cog: {cog}\n{e}\n```")
 
     @commands.command(pass_context=True, hidden=True, name='eval')
     async def _eval(self, ctx, *, body: str):
@@ -99,12 +99,12 @@ class Developer:
             stdout = io.StringIO()
             err = out = None
 
-            to_compile = 'async def func():\n{}'.format(textwrap.indent(body, "  "))
+            to_compile = f'async def func():\n{textwrap.indent(body, "  ")}'
 
             try:
                 exec(to_compile, env)
             except Exception as e:
-                err = await ctx.send('```py\n{}: {}\n```'.format(e.__class__.__name__, e))
+                err = await ctx.send(f'```py\n{e.__class__.__name__}: {e}\n```')
                 return await err.add_reaction('\u2049')
 
             func = env['func']
@@ -113,7 +113,7 @@ class Developer:
                     ret = await func()
             except Exception as e:
                 value = stdout.getvalue()
-                err = await ctx.send('```py\n{}{}\n```'.format(value, traceback.format_exc()))
+                err = await ctx.send(f'```py\n{value}{traceback.format_exc()}\n```')
             else:
                 value = stdout.getvalue()
                 if self.bot.token in value:
@@ -121,13 +121,13 @@ class Developer:
                 if ret is None:
                     if value:
                         try:
-                            out = await ctx.send('```py\n{}\n```'.format(value))
+                            out = await ctx.send(f'```py\n{value}\n```')
                         except:
                             out = await ctx.send('Result was too long to send.')
                 else:
                     self._last_result = ret
                     try:
-                        out = await ctx.send('```py\n{value}{ret}\n```'.format(value, ret))
+                        out = await ctx.send(f'```py\n{value}{ret}\n```')
                     except:
                         out = await ctx.send('Result was too long to send.')
 
