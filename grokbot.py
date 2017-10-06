@@ -38,7 +38,6 @@ import psutil
 
 dev_list = [
     180314310298304512,
-    227620842903830528,
     168143064517443584,
     273381165229146112,
     319395783847837696,
@@ -259,8 +258,7 @@ class GrokBot(commands.Bot):
         Client is ready!
         ---------------
         Authors: verixx, fourjr, kwugfighter,
-                 FloatCobra, XAOS1502, Protty,
-                 darthgimdalf
+                 FloatCobra, XAOS1502, Protty
         ---------------
         Logged in as: {self.user}
         User ID: {self.user.id}
