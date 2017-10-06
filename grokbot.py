@@ -249,7 +249,7 @@ class GrokBot(commands.Bot):
         ---------------
         Authors: verixx, fourjr, kwugfighter,
                  FloatCobra, XAOS1502, Protty,
-                 Dark knight, darthgimdalf
+                 darthgimdalf
         ---------------
         Logged in as: {self.user}
         User ID: {self.user.id}

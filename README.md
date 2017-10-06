@@ -26,7 +26,5 @@ Currently a work in progress, but please keep tuned because there are great thin
     
 > [FloatCobra](https://github.com/FloatCobra)
     
-> [Dark knight](https://github.com/ComputerGeek101)
-    
 > [darthgimdalf](https://github.com/ComputerGeek101)
     
