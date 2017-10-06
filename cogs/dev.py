@@ -193,13 +193,15 @@ class Developer:
 
     @commands.command()
     async def set_val(self, ctx, field, *, value):
-        self.bot.db.set_value(ctx.server.id, field, value)
-        await ctx.send(f'Updated `{field}` to `{value}`')
+        if ctx.author.id in dev_list:
+            self.bot.db.set_value(ctx.server.id, field, value)
+            await ctx.send(f'Updated `{field}` to `{value}`')
 
     @commands.command()
     async def get_val(self, ctx, field):
-        value = self.bot.db.get_value(ctx.guild.id, field)
-        await ctx.send(f'Value for `{field}`: `{value}`')
+        if ctx.author.id in dev_list:
+            value = self.bot.db.get_value(ctx.guild.id, field)
+            await ctx.send(f'Value for `{field}`: `{value}`')
 
     @commands.command(name='presence')
     async def _presence(self, ctx, status, *, message=None):
@@ -261,6 +263,11 @@ class Developer:
             else:
                 return await ctx.send(fmt)
 
+    @commands.command(aliases=["echo"])
+    async def say(self, ctx, content):
+        """Makes the bot repeat after you"""
+        if ctx.author.id in dev_list:
+            await ctx.send(content)
 
 
 def setup(bot):
