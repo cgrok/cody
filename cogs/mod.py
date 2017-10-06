@@ -34,6 +34,7 @@ class Mod:
     @commands.command()
     @commands.has_permissions(kick_members = True)
     async def kick(self, ctx, user: discord.Member):
+        '''Kicks a user if you have appropriate permissions'''
         await ctx.channel.send(f"RIP {user.name}.")
         await user.kick()
 
@@ -41,6 +42,7 @@ class Mod:
     @commands.command()
     @commands.has_permissions(kick_members = True)
     async def ban(self, ctx, user: discord.Member):
+        '''Bans a user if you have appropriate permissions'''
         await ctx.channel.send(f"Goodbye {user.name}.")
         await user.ban()
 
@@ -48,6 +50,7 @@ class Mod:
     @commands.command()
     @commands.has_permissions(manage_roles = True)
     async def addrole(self, ctx, user: discord.Member, role: str):
+        '''Adds a role to a user if you have appropriate permissions'''
         roler = discord.utils.get(ctx.guild.roles, name=role)
 
         if roler is not None:
@@ -61,6 +64,7 @@ class Mod:
     @commands.command()
     @commands.has_permissions(manage_roles = True)
     async def removerole(self, ctx, user: discord.Member, role: str):
+        '''Removes a role from a user if you have appropriate permissions'''
         roler = discord.utils.find(ctx.guild.roles, name=role)
 
         if roler is not None:
@@ -72,31 +76,31 @@ class Mod:
             await ctx.channel.send("I can't remove a nonexistent role.")
 
     @commands.command()
-    @commands.has_permissions(ban_members = True)
+    @commands.has_permissions(kick_members = True)
     async def mute(self, ctx, user: discord.Member):
-
+        '''Mutes member using channel overrides. Requires Kick Members Permission'''
         await ctx.channel.set_permissions(user, send_messages=False)
         await ctx.channel.send(user.mention + " has been muted.")
 
 
 
     @commands.command()
-    @commands.has_permissions(ban_members = True)
+    @commands.has_permissions(kick_members = True)
     async def unmute(self,ctx, user: discord.Member):
-
+        '''Unmute member using channel overrides. Requires Kick Members Permission'''
         await ctx.channel.set_permissions(user, send_messages=True)
         await ctx.channel.send(user.mention + ' has been unmuted.')
 
     @commands.command(aliases=['del', 'p', 'prune'], bulk=True)
     async def purge(self, ctx, limit: int):
-        """Clean a number of messages"""
+        '''Clean a number of messages'''
         await ctx.message.delete()
         deleted = await ctx.channel.purge(limit=limit + 1)
         await ctx.channel.send(f'Successfully deleted {len(deleted)} message(s)', delete_after=6)
 
     @commands.command()
     async def clean(self, ctx, limit: int = 15):
-        """Clean a number of bot's messages"""
+        '''Clean a number of bot's messages'''
         await ctx.message.delete()
         deleted = await ctx.channel.purge(limit=limit + 1, check=lambda m: m.author == self.bot.user)
         await ctx.channel.send(f'Successfully deleted {len(deleted)} message(s)', delete_after=5)
@@ -109,6 +113,7 @@ class Mod:
     @modset.command()
     @commands.has_permissions(manage_roles=True)
     async def autorole(self, ctx, *, enabled:str, role:discord.Role = None):
+        '''Set autorole configurations.'''
         enable = ["enable","on","true","yes"]
         if enabled.lower() in enable:
             ctx.config.autorole_enabled = True
@@ -123,6 +128,7 @@ class Mod:
     @modset.command()
     @commands.has_permissions(view_audit_log=True)
     async def modlog(self, ctx, *, enabled:str, channel:discord.TextChannel = None):
+        '''Setup the Moderation Log for your guild'''
         enable = ["enabled","on","true","yes"]
         if enabled.lower() in enable:
             ctx.config.modlog_enabled = True

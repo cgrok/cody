@@ -308,7 +308,7 @@ class GrokBot(commands.Bot):
 
     @commands.command()
     async def ping(self, ctx):
-        """Pong! Returns your websocket latency."""
+        '''Pong! Returns your websocket latency.'''
         em = discord.Embed()
         em.title ='Pong! Websocket Latency:'
         em.description = f'{self.ws.latency * 1000:.4f} ms'
@@ -332,7 +332,7 @@ class GrokBot(commands.Bot):
 
     @commands.command()
     async def shutdown(self, ctx, maintenance=None):
-        """Shuts down the bot"""
+        '''Shuts down the bot'''
         if ctx.author.id in dev_list:
             if maintenance:
                 await self.change_presence(status=discord.Status.dnd)
@@ -345,7 +345,7 @@ class GrokBot(commands.Bot):
 
     @commands.command(aliases=["reload"])
     async def reloadcog(self, ctx, *, cog: str):
-        """Reloads a cog"""
+        '''Reloads a cog'''
         if ctx.author.id in dev_list:
             cog = f"cogs.{cog}"
             await ctx.send(f"Attempting to reload {cog}...")
@@ -358,7 +358,7 @@ class GrokBot(commands.Bot):
 
     @commands.command(aliases=["loadcog"])
     async def load(self, ctx, *, cog: str):
-        """Load a cog"""
+        '''Load a cog'''
         if ctx.author.id in dev_list:
             cog = f"cogs.{cog}"
             await ctx.send(f"Attempting to load {cog}...")
@@ -370,7 +370,7 @@ class GrokBot(commands.Bot):
 
     @commands.command(aliases=["unloadcog"])
     async def unload(self, ctx, *, cog: str):
-        """Unload a cog"""
+        '''Unload a cog'''
         if ctx.author.id in dev_list:
             cog = f"cogs.{cog}"
             await ctx.send(f"Unloading {cog}")

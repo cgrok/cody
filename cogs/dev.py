@@ -66,7 +66,7 @@ class Developer:
 
     @commands.command(pass_context=True, hidden=True, name='eval')
     async def _eval(self, ctx, *, body: str):
-        """Evaluates a code"""
+        '''Evaluates a code'''
         if ctx.author.id in dev_list:
             env = {
                 'bot': self.bot,
@@ -169,7 +169,7 @@ class Developer:
             await self.bot.get_channel(364794381649051648).send(embed=e_output)
 
     def cleanup_code(self, content):
-        """Automatically removes code blocks from the code."""
+        '''Automatically removes code blocks from the code.'''
         # remove ```py\n```
         if content.startswith('```') and content.endswith('```'):
             return '\n'.join(content.split('\n')[1:-1])
@@ -191,9 +191,9 @@ class Developer:
 
     @commands.command(name='presence')
     async def _presence(self, ctx, status, *, message=None):
-        """Change I'm Grok status!
+        '''Change I'm Grok status!
         (Stream, Online, Idle, DND, Invisible, or clear it)
-        """
+        '''
         if ctx.author.id in dev_list:
             status = status.lower()
             emb = discord.Embed(title="Presence")
@@ -226,14 +226,14 @@ class Developer:
             emb.description = "Thank you for updating my Presence!"
             file.seek(0)
             emb.set_author(name=status.title(), icon_url="attachment://color.png")
-            """
+            '''
             try:
                 await ctx.send(file=discord.File(file, 'color.png'), embed=emb)
             except discord.HTTPException:
                 em_list = await embedtobox.etb(emb)
                 for page in em_list:
                     await ctx.send(page)
-            """
+            '''
 
     @commands.command()
     async def source(self, ctx, *, command):
@@ -251,7 +251,7 @@ class Developer:
 
     @commands.command(aliases=["echo"])
     async def say(self, ctx, *, content):
-        """Makes the bot repeat after you"""
+        '''Makes the bot repeat after you'''
         if ctx.author.id in dev_list:
             await ctx.send(content)
 

@@ -65,13 +65,13 @@ class Misc:
 
     @commands.command(aliases=['install'])
     async def invite(self, ctx):
-        """Official url to invite bot to your server."""
+        '''Official url to invite bot to your server.'''
         inviter = discord.utils.oauth_url(self.bot.user.id, permissions=discord.Permissions(permissions=473295983))
         await ctx.send(f'Invite me to *__your__* server with this link: \n\n<{inviter}>')
 
     @commands.command()
     async def reverse(self, ctx, *, msg: str = None):
-        """Writes backwards because reasons, in Embed."""
+        '''Writes backwards because reasons, in Embed.'''
         e = discord.Embed()
         e.colour = discord.Colour(0x8e44ad)
         if msg is None:
@@ -84,7 +84,7 @@ class Misc:
 
     @commands.command(aliases=['dvwl'])
     async def devowel(self, ctx, *, text):
-        """Removes vowels from text!"""
+        '''Removes vowels from text!'''
         dvl = text.replace('a', '').replace('A', '').replace('e', '')\
                   .replace('E', '').replace('i', '').replace('I', '')\
                   .replace('o', '').replace('O', '').replace('u', '').replace('U', '')
@@ -97,7 +97,7 @@ class Misc:
 
     @commands.command(aliases=['thisis'])
     async def thisistisis(self, ctx, *, text):
-        """Replaces vowels with the letter "i", pretty useless."""
+        '''Replaces vowels with the letter "i", pretty useless.'''
         sis = text.replace('a', 'i').replace('A', 'I').replace('e', 'i').replace('E', 'I')\
                   .replace('o', 'i').replace('O', 'I').replace('u', 'i').replace('U', 'I')
         author = ctx.message.author
@@ -110,7 +110,7 @@ class Misc:
 
     @commands.command(aliases=['christmas', 'xmas'])
     async def isitchristmas(self, ctx):
-        """Is it Christmas yet?"""
+        '''Is it Christmas yet?'''
         if date.today() == christmas:
             await ctx.send("Yes, it is Christmas today.")
         else:
@@ -119,7 +119,7 @@ class Misc:
 
     @commands.command(aliases=['halloween', 'hween', 'hwn'])
     async def isithalloween(self, ctx):
-        """Is it Halloween yet?"""
+        '''Is it Halloween yet?'''
         if date.today() == halloween:
             await ctx.send("Yes, it is Halloween today.")
         else:
@@ -128,7 +128,7 @@ class Misc:
 
     @commands.command(description='This command might get you banned')
     async def spam(self, ctx, *, member=None, times: int = None):
-        """Want to annoy a member with mentions?"""
+        '''Want to annoy a member with mentions?'''
 
         usage = f'```Usage: {ctx.prefix}ultimate_annoying_spam_command [@member] [times]```'
 
@@ -160,7 +160,7 @@ class Misc:
 
     @commands.command(aliases=['tinyurl'])
     async def tiny_url(self, ctx, str = None):
-        """Shorten URL"""
+        '''Shorten URL'''
         tinyurl = urlopen("http://tinyurl.com/api-create.php?url=" + str).read().decode("utf-8")
         usage = f'Usage: {ctx.prefix}tinyurl https://github.com/verixx/grokbot'
         url = ctx.message.starts_with('https://')
@@ -175,19 +175,20 @@ class Misc:
 
     @commands.command(aliases=['qr','qrgen'])
     async def generateqr(self, ctx, *, str = None):
-        """Generate a QR code"""
+        '''Generate a QR code'''
         if str == None:
             await ctx.send(f"You must include text or a link to convert to a QR code, {ctx.message.author.mention}")
         else:
             url = f'https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl={str}&choe=UTF-8'
             with urlopen(url) as link:
+                
                 qrimg = io.BytesIO(link.read())
                 #qrimg = Image.open(qrimgpage)
             await ctx.send(file=qrimg)
         
     @commands.command(aliases=['rock', 'paper', 'scissors', 'lizard', 'spock', 'rps'])
     async def settle(self, ctx, your_choice : RPSLSParser= None):
-        """Play rock paper scissors lizard spock """
+        '''Play rock paper scissors lizard spock '''
         if your_choice != None:
             author = ctx.message.author.display_name
             grok = self.bot.user.name
