@@ -87,10 +87,10 @@ class StatsBoard:
         em.add_field(name='Guilds', value=len(self.bot.guilds))
         em.add_field(name='Members', value=f'{total_online}/{total_unique} online')
         em.add_field(name='Channels', value=f'{channels} total')
-        memory_usage = self.bot.process.memory_full_info().uss / 1024**2
-        cpu_usage = self.bot.process.cpu_percent() / psutil.cpu_count()
-        em.add_field(name='RAM Usage', value=f'{memory_usage:.2f} MiB')
-        em.add_field(name='CPU Usage',value=f'{cpu_usage:.2f}% CPU')
+        #memory_usage = self.bot.process.memory_full_info().uss / 1024**2
+        #cpu_usage = self.bot.process.cpu_percent() / psutil.cpu_count()
+        #em.add_field(name='RAM Usage', value=f'{memory_usage:.2f} MiB')
+        #em.add_field(name='CPU Usage',value=f'{cpu_usage:.2f}% CPU')
         em.add_field(name='Commands Run', value=sum(self.bot.commands_used.values()))
         em.add_field(name='Messages', value=self.bot.messages_sent)
         em.add_field(name='Github', value='[Click Here](https://github.com/verixx/grokbot)')
