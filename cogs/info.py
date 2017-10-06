@@ -106,5 +106,13 @@ class Information:
 
         await ctx.send(embed=em)
 
+    @commands.command()
+    async def info(self, ctx):
+        '''Get information about the bot.'''
+        em = self.bot.statsboard.current_stats
+        em._author['name'] = "I'm Grok - Info"
+        em.description = "I'm Grok is a multipurpose open source discord bot written in python using the discord.py library. It is currently under development and has many people working on it as a community project. The commands that the bot will have will vary from utility/moderation to miscellaneous commands such as game statistics (CR/BS). Join the support server [here](https://discord.gg/nzqmT2D) for updates and to interact with the development team."
+        await ctx.send(embed=em)
+
 def setup(bot):
     bot.add_cog(Information(bot))
