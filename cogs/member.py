@@ -19,8 +19,8 @@ class Member:
 
     @commands.group(no_pm=True)
     async def memberset(self, ctx):
-        if ctx.invoked_subcommand is None:
-            await self.bot.send_cmd_help(ctx)
+        #if ctx.invoked_subcommand is None:
+            #await self.bot.send_cmd_help(ctx)
         color = await ctx.get_dominant_color(ctx.guild.icon_url)
         em = discord.Embed(color=color, description="Member Settings")
         em.add_field(name="Join Message Enabled", value=bool(ctx.config.join_enabled), inline=False)
