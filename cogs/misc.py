@@ -67,7 +67,7 @@ class Misc:
     async def invite(self, ctx):
         """Official url to invite bot to your server."""
         inviter = discord.utils.oauth_url(self.bot.user.id, permissions=discord.Permissions(permissions=473295983))
-        await ctx.send('Invite me to *__your__* server with this link: \n\n<{}>'.format(inviter))
+        await ctx.send(f'Invite me to *__your__* server with this link: \n\n<{inviter}>')
 
     @commands.command()
     async def reverse(self, ctx, *, msg: str = None):
