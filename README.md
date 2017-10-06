@@ -27,3 +27,5 @@ Currently a work in progress, but please keep tuned because there are great thin
 > [FloatCobra](https://github.com/FloatCobra)
 
 > [darthgimdalf](https://github.com/ComputerGeek101)
+
+> [BibleRule](https://github.com/biblerule)
