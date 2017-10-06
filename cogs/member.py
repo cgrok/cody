@@ -19,6 +19,7 @@ class Member:
 
     @commands.group(no_pm=True)
     async def memberset(self, ctx):
+        await ctx.send("the command works I guess")
         #if ctx.invoked_subcommand is None:
             #await self.bot.send_cmd_help(ctx)
 
