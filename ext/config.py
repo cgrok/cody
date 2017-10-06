@@ -160,7 +160,7 @@ class GuildConfig:
 
     @selfroles.setter
     def selfroles(self, roles):
-        return self.db.set_value(self.id, 'selfroles', json.dumps(roles))
+        return self.db.set_value(self.id, column = 'selfroles', json.dumps(roles))
 
 
 class ConfigDatabase:
