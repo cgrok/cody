@@ -11,6 +11,8 @@ Manage Channels
 Manage Roles
 Add Reactions
 View Audit Log
+Change Nickname
+Attach Files
 
-Current Permission Value: 268790998
-https://finitereality.github.io/permissions-calculator/?v=268790998
+Current Permission Value: 335932630
+https://finitereality.github.io/permissions-calculator/?v=335932630
