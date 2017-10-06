@@ -339,12 +339,25 @@ class GrokBot(commands.Bot):
             self.session.close()
             await self.logout()
 
+    @commands.command()
+    async def shutdown(self, ctx, maintenance=None):
+        """Shuts down the bot"""
+        if ctx.author.id in dev_list:
+            if maintenance:
+                await self.change_presence(status=discord.Status.dnd)
+            else:
+                await self.change_presence(status=discord.Status.offline)
+            await self.statsboard.force_update()
+            await ctx.send('Shutting Down...')
+            self.session.close()
+            await self.logout()
+
     @commands.command(aliases=["reload"])
     async def reloadcog(self, ctx, *, cog: str):
         """Reloads a cog"""
         if ctx.author.id in dev_list:
             cog = f"cogs.{cog}"
-            await ctx.send(f"Attempting to reload {cog}..."
+            await ctx.send(f"Attempting to reload {cog}...")
             self.unload_extension(cog)
             try:
                 self.load_extension(cog)
@@ -371,5 +384,6 @@ class GrokBot(commands.Bot):
             cog = f"cogs.{cog}"
             await ctx.send(f"Unloading {cog}")
             self.unload_extension(cog)
+
 if __name__ == '__main__':
     GrokBot.init('MzYxNDgyNjcxNDUwMzU3NzYy.DLWaCQ.xsaaBNrG0-g4O54DukLv3hAnwwE')
