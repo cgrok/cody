@@ -23,25 +23,62 @@ class GuildConfig:
         return json.dumps(self.db.get_data(self.id), indent=4)
 
     @property
+    def guild(self):
+        return self.bot.get_guild(self.id)
+
+    @property
     def join_message(self):
         return self.db.get_value(self.id, 'join_message')
-
-    @join_message.setter
-    def join_message(self, msg):
-        return self.db.set_value(self.id, 'join_message', msg)
 
     @property
     def leave_message(self):
         return self.db.get_value(self.id, 'leave_message')
 
-    @leave_message.setter
-    def leave_message(self, msg):
-        return self.db.set_value(self.id, 'leave_message', msg)
-
     @property
     def autorole(self):
         id = self.db.get_value(self.id, 'autorole')
         return discord.utils.get(self.guild.roles, id=id)
+
+    @property
+    def modlog(self):
+        id = self.db.get_value(self.id,'modlog')
+        return self.bot.get_channel()
+
+    @property
+    def welcome_channel(self):
+        id = self.db.get_value(self.id, 'join_channel')
+        return self.guild.get_channel(id)
+        @property
+        def prefixes(self):
+            return json.loads(self.db.get_value(self.id, 'prefixes'))
+
+    @property
+    def leave_enabled(self):
+        return bool(self.db.get_value(self.id, 'leave_enabled'))
+
+    @property
+    def join_enabled(self):
+        return bool(self.db.get_value(self.id, 'join_enabled'))
+
+    @property
+    def autorole_enabled(self):
+        return bool(self.db.get_value(self.id, 'autorole_enabled'))
+
+    @property
+    def modlog_enabled(self):
+        return bool(self.db.get_value(self.id, 'modlog_enabled'))
+
+    @property
+    def selfroles(self):
+        return self.db.get_value(self.id, "selfroles")
+
+    @join_message.setter
+    def join_message(self, msg):
+        return self.db.set_value(self.id, 'join_message', msg)
+
+    @leave_message.setter
+    def leave_message(self, msg):
+        return self.db.set_value(self.id, 'leave_message', msg)
 
     @autorole.setter
     def autorole(self, role):
@@ -51,11 +88,6 @@ class GuildConfig:
             id = role.id
         return self.db.set_value(self.id, 'autorole', id)
 
-    @property
-    def modlog(self):
-        id = self.db.get_value(self.id,'modlog')
-        return self.bot.get_channel()
-
     @modlog.setter
     def modlog(self, channel):
         if isinstance(channel, int):
@@ -64,42 +96,24 @@ class GuildConfig:
             id = channel.id
         return self.db.set_value(self.id, 'modlog_channel', id)
 
-    @property
-    def guild(self):
-        return self.bot.get_guild(self.id)
-
-    @property
-    def welcome_channel(self):
-        id = self.db.get_value(self.id, 'join_channel')
-        return self.guild.get_channel(id)
-
     @welcome_channel.setter
-    def set_welcome_channel(self, channel):
+    def welcome_channel(self, channel):
         if isinstance(channel, int):
             id = channel
         elif isinstance(channel, discord.TextChannel):
             id = channel.id
         return self.db.set_value(self.id, 'welcome_channel', id)
 
-    @property
-    def leave_channel(self):
-        id = self.db.get_value(self.id,'leave_channel')
-        return self.guild.get_channel(id)
-
     @leave_channel.setter
-    def set_leave_channel(self, channel):
+    def leave_channel(self, channel):
         if isinstance(channel, int):
             id = channel
         elif isinstance(channel, discord.TextChannel):
             id = channel.id
         return self.db.set_value(self.id, 'leave_channel', id)
 
-    @property
-    def prefixes(self):
-        return json.loads(self.db.get_value(self.id, 'prefixes'))
-
     @prefixes.setter
-    def set_prefixes(self, prefixes):
+    def prefixes(self, prefixes):
         '''
         String input:
             Prefixes must be seperated with a single space
@@ -111,45 +125,24 @@ class GuildConfig:
             set_val = json.dumps(shlex.split(prefixes))
         return self.db.set_value(self.id, 'prefixes', set_val)
 
-    @property
-    def leave_enabled(self):
-        return bool(self.db.get_value(self.id, 'leave_enabled'))
-
     @leave_enabled.setter
-    def toggle_leave(self, value:bool):
+    def leave_enabled(self, value:bool):
         return self.db.set_value(self.id, 'leave_enabled', int(value))
 
-    @property
-    def join_enabled(self):
-        return bool(self.db.get_value(self.id, 'join_enabled'))
-
     @join_enabled.setter
-    def toggle_join(self, value:bool):
+    def join_enabled(self, value:bool):
         return self.db.set_value(self.id, 'join_enabled', int(value))
 
-    @property
-    def autorole_enabled(self):
-        return bool(self.db.get_value(self.id, 'autorole_enabled'))
-
     @autorole_enabled.setter
-    def toggle_autorole(self, value:bool):
+    def autorole_enabled(self, value:bool):
         return self.db.set_value(self.id, 'autorole_enabled', int(value))
 
-    @property
-    def modlog_enabled(self):
-        return bool(self.db.get_value(self.id, 'modlog_enabled'))
-
     @modlog_enabled.setter
-    def toggle_modlog(self, value: bool):
-
+    def modlog_enabled(self, value: bool):
         return self.db.set_value(self.id, 'modlog_enabled', int(value))
 
-    @property
-    def selfroles(self):
-        return self.db.get_value(self.id, "selfroles")
-
     @selfroles.setter
-    def set_selfroles(self, roles):
+    def selfroles(self, roles):
         return self.db.set_value(self.id, 'selfroles', json.dumps(roles))
 
 class ConfigDatabase:
