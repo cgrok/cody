@@ -126,7 +126,7 @@ class Misc:
             msg = f'No, it is not Halloween today. There are {(halloween - date.today()).days} days until Halloween.'
             await ctx.send(msg)
 
-    @commands.command(description='This command might get you banned', no_pm=True))
+    @commands.command(description='This command might get you banned', no_pm=True)
     async def spam(self, ctx, *, member=None, times: int = None):
         '''Want to annoy a member with mentions?'''
 

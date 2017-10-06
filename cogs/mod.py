@@ -140,9 +140,5 @@ class Mod:
             ctx.config.modlog_channel = channel.id
             await ctx.send(f"Set modlog channel to {self.bot.get_channel(channel.id)}")
 
-    @modset.command(no_pm=True)
-    @commands.has_permissions(manage_guild=True)
-    async def prefixes(self, ctx, *, prefixes):
-
 def setup(bot):
-        bot.add_cog(Mod(bot))
+    bot.add_cog(Mod(bot))

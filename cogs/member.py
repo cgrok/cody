@@ -83,7 +83,7 @@ class Member:
             ctx.config.selfroles = []
             return
         unparsed_roles = list(map(lambda r: r.strip(), rolelist.split(' ')))
-        parsed_roles = list(map(lambda r: self._role_from_string(server, r), unparsed_roles))
+        parsed_roles = list(map(lambda r: self._role_from_string(ctx.guild, r), unparsed_roles))
         if len(unparsed_roles) != len(parsed_roles):
             not_found = set(unparsed_roles) - {r.name for r in parsed_roles}
             await ctx.send(f"These roles were not found: {not_found}\n\nPlease try again.")
@@ -100,8 +100,8 @@ class Member:
             return
         role_names = [discord.utils.get(ctx.guild.roles, id=x.id).name for x in ctx.config.selfroles]
         f = self._role_from_string
-        roles = [f(server, r) for r in role_names if r is not None]
-        role_to_add = self._role_from_string(server, rolename, roles=roles)
+        roles = [f(ctx.guild, r) for r in role_names if r is not None]
+        role_to_add = self._role_from_string(ctx.guild, rolename, roles=roles)
         try:
             await ctx.author.add_roles(role_to_add)
         except discord.errors.Forbidden:

@@ -71,7 +71,7 @@ class Information:
 
         await ctx.send(embed=em)
 
-    @commands.command(aliases=['ui'], no_pm=True))
+    @commands.command(aliases=['ui'], no_pm=True)
     async def userinfo(self, ctx, *, member : discord.Member=None):
         '''Get information about a member of a guild'''
         guild = ctx.guild or None
