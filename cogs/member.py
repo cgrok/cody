@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import asyncio
 import shlex
+import json
 
 class Member:
     """Manage Member events."""
