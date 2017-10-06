@@ -101,6 +101,38 @@ class Mod:
         deleted = await ctx.channel.purge(limit=limit + 1, check=lambda m: m.author == self.bot.user)
         await ctx.channel.send(f'Successfully deleted {len(deleted)} message(s)', delete_after=5)
 
+    @commands.group()
+    async def modset(self, ctx):
+        if ctx.invoked_subcommand is None:
+            await self.bot.send_cmd_help(ctx)
+
+    @modset.command()
+    @commands.has_permissions(manage_roles=True)
+    async def autorole(self, ctx, *, enabled:str, role:discord.Role = None):
+        enable = ["enabled","on","true","yes"]
+        if enabled.lower() in enable:
+            ctx.config.autorole_enabled = True
+            await ctx.send("Turned autorole on.")
+        else:
+            ctx.config.autorole_enabled = False
+            await ctx.send("Turned autorole off.")
+        if role is not None:
+            ctx.config.autorole = role
+            await ctx.send(f"Set autorole to {discord.utils.get(ctx.guild.roles,id=role.id)}")
+
+    @modset.command()
+    @commands.has_permissions(view_audit_log=True)
+    async def modlog(self, ctx, *, enabled:str, channel:discord.TextChannel = None):
+        enable = ["enabled","on","true","yes"]
+        if enabled.lower() in enable:
+            ctx.config.modlog_enabled = True
+            await ctx.send("Turned modlog on.")
+        else:
+            ctx.config.modlog_enabled = False
+            await ctx.send("Turned modlog off.")
+        if channel is not None:
+            ctx.config.modlog_channel = channel
+            await ctx.send(f"Set modlog channel to {self.bot.get_channel(channel.id)}")
 
 def setup(bot):
         bot.add_cog(Mod(bot))

@@ -117,36 +117,33 @@ class GuildConfig:
         return bool(self.db.get_value(self.id, 'leave_enabled'))
 
     @leave_enabled.setter
-    def toggle_leave(self):
-        value = int(not self.db.get_value(self.id, 'leave_enabled'))
-        return self.db.set_value(self.id, 'leave_enabled', value)
+    def toggle_leave(self, value:bool):
+        return self.db.set_value(self.id, 'leave_enabled', int(value))
 
     @property
     def join_enabled(self):
         return bool(self.db.get_value(self.id, 'join_enabled'))
 
     @join_enabled.setter
-    def toggle_join(self):
-        value = int(not self.db.get_value(self.id, 'join_enabled'))
-        return self.db.set_value(self.id, 'join_enabled', value)
+    def toggle_join(self, value:bool):
+        return self.db.set_value(self.id, 'join_enabled', int(value))
 
     @property
     def autorole_enabled(self):
         return bool(self.db.get_value(self.id, 'autorole_enabled'))
 
     @autorole_enabled.setter
-    def toggle_autorole(self):
-        value = int(not self.db.get_value(self.id, 'autorole_enabled'))
-        return self.db.set_value(self.id, 'autorole_enabled', value)
+    def toggle_autorole(self, value:bool):
+        return self.db.set_value(self.id, 'autorole_enabled', int(value))
 
     @property
     def modlog_enabled(self):
         return bool(self.db.get_value(self.id, 'modlog_enabled'))
 
     @modlog_enabled.setter
-    def toggle_modlog(self):
-        value = int(not self.db.get_value(self.id, 'modlog_enabled'))
-        return self.db.set_value(self.id, 'modlog_enabled', value)
+    def toggle_modlog(self, value: bool):
+
+        return self.db.set_value(self.id, 'modlog_enabled', int(value))
 
     @property
     def selfroles(self):
