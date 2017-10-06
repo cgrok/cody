@@ -5,3 +5,14 @@ Embed Links
 Manage Roles
 Kick
 Ban
+Use External Emojis
+Manage Messages
+Manage Channels
+Manage Roles
+Add Reactions
+View Audit Log
+Change Nickname
+Attach Files
+
+Current Permission Value: 335932630
+https://finitereality.github.io/permissions-calculator/?v=335932630

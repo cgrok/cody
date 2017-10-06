@@ -26,7 +26,7 @@ import discord
 from discord.ext import commands
 import aiohttp
 import string
-from cogs import embeds
+#from cogs import embeds
 import json
 
 
@@ -70,7 +70,7 @@ class Stats:
     '''Main StatsBot commands.'''
     def __init__(self, bot):
         self.bot = bot
-        self.token = open('data/token').read()
+        #self.token = open('data/token').read()
         self.headers = {'Authorization': self.token}
         self.base = 'http://harmiox.com:3001/cr/v1'
 

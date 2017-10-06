@@ -40,6 +40,9 @@ class CustomContext(commands.Context):
     def session(self):
         return self.bot.session
 
+    async def send_cmd_help(self, ctx):
+        return await bot.send_cmd_help(ctx)
+    
     @staticmethod
     def is_valid_image_url(url):
         '''Checks if a url leads to an image.'''

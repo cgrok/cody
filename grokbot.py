@@ -26,7 +26,6 @@ from collections import defaultdict
 import asyncio
 import aiohttp
 import datetime
-import psutil
 import time
 import json
 import sys
@@ -35,6 +34,8 @@ import re
 import sqlite3
 import traceback
 import textwrap
+import psutil
+
 
 class StatsBoard:
     def __init__(self, bot, channel, base=None):
@@ -76,7 +77,7 @@ class StatsBoard:
             fmt = '{d}d ' + fmt
         uptime = fmt.format(d=days, h=hours, m=minutes, s=seconds)
         g_authors = 'verixx, fourjr, kwugfighter, FloatCobra, XAOS1502'
-        
+
         em.add_field(name='Current Status', value=str(status).title())
         em.add_field(name='Uptime', value=uptime)
         em.add_field(name='Latency', value=f'{self.bot.ws.latency*1000:.2f} ms')
@@ -92,6 +93,7 @@ class StatsBoard:
         em.add_field(name='Github', value='[Click Here](https://github.com/verixx/grokbot)')
         em.add_field(name='Invite', value=f'[Click Here]({discord.utils.oauth_url(self.bot.user.id)})')
         em.set_footer(text=f'Bot ID: {self.bot.user.id}')
+
 
         return em
 
@@ -222,9 +224,20 @@ class GrokBot(commands.Bot):
         print('---------------\n'
               'GrokBot connected!')
 
+    async def send_cmd_help(self, ctx):
+        if ctx.invoked_subcommand:
+            pages = self.formatter.format_help_for(ctx, ctx.invoked_subcommand)
+            for page in pages:
+                await ctx.send(page)
+        else:
+            pages = self.formatter.format_help_for(ctx, ctx.command)
+            for page in pages:
+                await ctx.send(page)
+    # WHY WON'T YOU WORK
+
     async def on_ready(self):
         '''Bot startup, sets uptime.'''
-            
+
 
         for guild in self.guilds: # sets default configs for all guilds.
             if self.db.get_data(guild.id) is None:
@@ -234,14 +247,28 @@ class GrokBot(commands.Bot):
         ---------------
         Client is ready!
         ---------------
-        Authors: verixx, fourjr, kwugfighter, 
-                 FloatCobra, XAOS1502, Protty, 
-                 Dark knight, darthgimdalf
+        Authors: verixx, fourjr, kwugfighter,
+                 FloatCobra, XAOS1502, Protty,
+                 darthgimdalf
         ---------------
         Logged in as: {self.user}
         User ID: {self.user.id}
         ---------------
         '''))
+
+    async def on_command_error(self, ctx, error):
+        send_help = (commands.MissingRequiredArgument, commands.BadArgument, commands.TooManyArguments, commands.UserInputError)
+        em = discord.Embed(color = discord.Color.red(), timestamp=ctx.message.created_at, description="Command Error:")
+        em.set_author(name=str(ctx.author), icon_url=ctx.author.avatar_url)
+        if ctx.invoked_subcommand:
+            em.add_field(name="Invoked Subcommand", value=ctx.invoked_subcommand, inline=False)
+        else:
+            em.add_Field(name="Invoked Command", value=ctx.command, inline=False)
+        em.add_field(name="Error", value=f'```py\n{error}\n```', inline=False)
+        await bot.get_channel(365640420249567273).send(embed=em)
+        # Rushed so if someone wants to fix that'd be nice xoxoxoxo
+        if isinstance(error, send_help):
+            await self.send_cmd_help(ctx)
 
     async def on_command(self, ctx):
         cmd = ctx.command.qualified_name.replace(' ', '_')
