@@ -79,7 +79,7 @@ class StatsBoard:
 
         em.add_field(name='Current Status', value=str(status).title())
         em.add_field(name='Uptime', value=uptime)
-        em.add_field(name='Latency', value=f'{self.bot.ws.latency*1000:.2f} ms')
+        # em.add_field(name='Latency', value=f'{self.bot.ws.latency*1000:.2f} ms')
         em.add_field(name='Guilds', value=len(self.bot.guilds))
         em.add_field(name='Members', value=f'{total_online}/{total_unique} online')
         em.add_field(name='Channels', value=f'{channels} total')
