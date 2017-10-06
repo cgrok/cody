@@ -344,7 +344,7 @@ class GrokBot(commands.Bot):
         """Reloads a cog"""
         if ctx.author.id in dev_list:
             cog = f"cogs.{cog}"
-            await ctx.send(f"Attempting to reload {cog}..."
+            await ctx.send(f"Attempting to reload {cog}...")
             self.unload_extension(cog)
             try:
                 self.load_extension(cog)
