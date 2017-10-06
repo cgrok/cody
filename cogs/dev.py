@@ -65,19 +65,6 @@ class Developer:
             session.add_page(em)
         await session.run()
 
-    @commands.command(aliases=["reload"])
-    async def reloadcog(self, ctx, *, cog: str):
-        """Reloads a cog"""
-        if ctx.author.id in dev_list:
-            cog = "cogs.{}".format(cog)
-            await ctx.send("Attempting to reload {}...".format(cog))
-            self.bot.unload_extension(cog)
-            try:
-                self.bot.load_extension(cog)
-                await ctx.send("Successfully reloaded the {} cog!".format(cog))
-            except Exception as e:
-                await ctx.send(f"```py\nError loading cog: {cog}\n{e}\n```")
-
     @commands.command(pass_context=True, hidden=True, name='eval')
     async def _eval(self, ctx, *, body: str):
         """Evaluates a code"""

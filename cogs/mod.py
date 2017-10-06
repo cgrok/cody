@@ -109,7 +109,7 @@ class Mod:
     @modset.command()
     @commands.has_permissions(manage_roles=True)
     async def autorole(self, ctx, *, enabled:str, role:discord.Role = None):
-        enable = ["enabled","on","true","yes"]
+        enable = ["enable","on","true","yes"]
         if enabled.lower() in enable:
             ctx.config.autorole_enabled = True
             await ctx.send("Turned autorole on.")
