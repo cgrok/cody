@@ -203,8 +203,8 @@ class GrokBot(commands.Bot):
         return os.environ.get('PREFIX') or prefix or 'g.'
 
     @property
-    def config(self):
-        return self.db.get_guild(self.guild.id)
+    def config(self,ctx):
+        return self.db.get_guild(ctx.message.guild.id)
 
     @staticmethod
     def run_wizard():

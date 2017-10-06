@@ -116,13 +116,13 @@ class Member:
             await ctx.send("Role added.")
 
     async def on_member_join(self, member):
-        if self.bot.config.join_enabled:
+        if self.bot.config(ctx).join_enabled:
             await self.bot.config.welcome_channel.send(self.bot.config.join_message.format(name=member, guild=member.guild, mention=member.mention))
-        if self.bot.config.autorole_enabled:
+        if self.bot.config(ctx).autorole_enabled:
             await member.add_roles(self.bot.config.autorole)
 
     async def on_member_remove(self, member):
-        if self.bot.config.leave_enabled:
+        if self.bot.config(ctx).leave_enabled:
             await self.bot.config.leave_channel.send(self.bot.config.leave_message.format(name=member.name, guild=member.guild))
 
 def setup(bot):
