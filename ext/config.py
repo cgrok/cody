@@ -98,7 +98,6 @@ class GuildConfig:
     def prefixes(self):
         return json.loads(self.db.get_value(self.id, 'prefixes'))
 
-
     @prefixes.setter
     def set_prefixes(self, prefixes):
         '''
@@ -151,9 +150,7 @@ class GuildConfig:
 
     @selfroles.setter
     def set_selfroles(self, roles):
-        # Prefixes must be seperated with a single space
-        # Prefixes must be wrapped in double quotes if they are multi word
-        return self.db.set_value(self.id, 'selfroles', json.dumps(shlex.split(roles)))
+        return self.db.set_value(self.id, 'selfroles', json.dumps(roles))
 
 class ConfigDatabase:
     '''Database functions'''
@@ -189,7 +186,7 @@ class ConfigDatabase:
         with self.conn:
             default = (
                 guild_id,"[\"g.\"]",0,0,0,0,0,0,0,
-                "Welcome {user.mention} to {guild.name}","Bye Bye {user.name}!","[]",0,""
+                "Welcome {member.mention} to {member.guild.name}","Bye Bye {member.name}!","[]",0,""
                 )
             self.cur.execute(f"INSERT INTO config VALUES {default}")
 

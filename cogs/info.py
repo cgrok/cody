@@ -39,7 +39,7 @@ class Information:
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(aliases=["ri","role"])
+    @commands.command(aliases=["ri","role"], no_pm=True)
     @commands.guild_only()
     async def roleinfo(self, ctx, *, role: discord.Role):
         '''Shows information about a role'''
@@ -71,18 +71,18 @@ class Information:
 
         await ctx.send(embed=em)
 
-    @commands.command(aliases=['ui'])
+    @commands.command(aliases=['ui'], no_pm=True))
     async def userinfo(self, ctx, *, member : discord.Member=None):
-        '''Get information about a member of a server'''
-        server = ctx.guild or None
+        '''Get information about a member of a guild'''
+        guild = ctx.guild or None
         user = member or ctx.message.author
         avi = user.avatar_url
         time = ctx.message.created_at
         desc = '{0} is chilling in {1} mode.'.format(user.name, user.status)
         em = discord.Embed(description=desc, timestamp=time)
 
-        if server:
-            member_number = sorted(server.members, key=lambda m: m.joined_at).index(user)+1
+        if guild:
+            member_number = sorted(guild.members, key=lambda m: m.joined_at).index(user)+1
             roles = sorted(user.roles, key=lambda c: c.position)
             for role in roles:
                 if str(role.color) != "#000000":
@@ -96,13 +96,13 @@ class Information:
         em.color = color
         em.add_field(name='Account Created', value=user.created_at.__format__('%A, %d. %B %Y'))
 
-        if server:
+        if guild:
             em.add_field(name='Join Date', value=user.joined_at.__format__('%A, %d. %B %Y'))
             em.add_field(name='Roles', value=rolenames, inline=True)
 
         em.set_footer(text='User ID: '+str(user.id))
         em.set_thumbnail(url=avi)
-        em.set_author(name=user, icon_url=server.icon_url)
+        em.set_author(name=user, icon_url=guild.icon_url)
 
         await ctx.send(embed=em)
 
@@ -111,7 +111,7 @@ class Information:
         '''Get information about the bot.'''
         em = self.bot.statsboard.current_stats
         em._author['name'] = "I'm Grok - Info"
-        em.description = "I'm Grok is a multipurpose open source discord bot written in python using the discord.py library. It is currently under development and has many people working on it as a community project. The commands that the bot will have will vary from utility/moderation to miscellaneous commands such as game statistics (CR/BS). Join the support server [here](https://discord.gg/nzqmT2D) for updates and to interact with the development team."
+        em.description = "I'm Grok is a multipurpose open source discord bot written in python using the discord.py library. It is currently under development and has many people working on it as a community project. The commands that the bot will have will vary from utility/moderation to miscellaneous commands such as game statistics (CR/BS). Join the support guild [here](https://discord.gg/nzqmT2D) for updates and to interact with the development team."
         await ctx.send(embed=em)
 
 def setup(bot):

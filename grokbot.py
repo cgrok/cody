@@ -198,10 +198,14 @@ class GrokBot(commands.Bot):
     @staticmethod
     async def get_pre(bot, message):
         '''Returns the prefix.'''
-        with open('./data/config.json') as f: # TODO: server specific prefixes
+        with open('./data/config.json') as f: # TODO: guild specific prefixes
             prefix = json.load(f).get('PREFIX')
         return os.environ.get('PREFIX') or prefix or 'g.'
 
+    @property
+    def config(self):
+        return self.db.get_guild(self.guild.id)
+    
     @staticmethod
     def run_wizard():
         '''Wizard for first start'''

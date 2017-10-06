@@ -128,13 +128,13 @@ class Developer:
                 await ctx.message.add_reaction('\u2705')
 
             if ctx.guild:
-                serverid = ctx.guild.id
+                guildid = ctx.guild.id
             else:
-                serverid = None
+                guildid = None
 
-            await self.log_eval(ctx, body, out, err, serverid)
+            await self.log_eval(ctx, body, out, err, guildid)
 
-    async def log_eval(self, ctx, body, out, err, serverid):
+    async def log_eval(self, ctx, body, out, err, guildid):
         if out:
             to_log = self.cleanup_code(out.content)
             color = discord.Color.green()
@@ -155,7 +155,7 @@ class Developer:
             em.set_author(name=str(ctx.author), icon_url=ctx.author.avatar_url)
             em.add_field(name='Input', value=f'```py\n{body}\n```', inline=False)
             em.add_field(name=name, value=f'```{to_log}```')
-            em.set_footer(text=f'User ID: {ctx.author.id} | Server ID: {serverid}')
+            em.set_footer(text=f'User ID: {ctx.author.id} | guild ID: {guildid}')
             await self.bot.get_channel(364794381649051648).send(embed=em)
         except:
             e_input = discord.Embed(color=color, timestamp=ctx.message.created_at)
@@ -180,10 +180,10 @@ class Developer:
     @commands.command()
     async def set_val(self, ctx, field, *, value):
         if ctx.author.id in dev_list:
-            self.bot.db.set_value(ctx.server.id, field, value)
+            self.bot.db.set_value(ctx.guild.id, field, value)
             await ctx.send(f'Updated `{field}` to `{value}`')
 
-    @commands.command()
+    @commands.command(no_pm=True)
     async def get_val(self, ctx, field):
         if ctx.author.id in dev_list:
             value = self.bot.db.get_value(ctx.guild.id, field)

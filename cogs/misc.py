@@ -65,9 +65,9 @@ class Misc:
 
     @commands.command(aliases=['install'])
     async def invite(self, ctx):
-        '''Official url to invite bot to your server.'''
+        '''Official url to invite bot to your guild.'''
         inviter = discord.utils.oauth_url(self.bot.user.id, permissions=discord.Permissions(permissions=473295983))
-        await ctx.send(f'Invite me to *__your__* server with this link: \n\n<{inviter}>')
+        await ctx.send(f'Invite me to *__your__* guild with this link: \n\n<{inviter}>')
 
     @commands.command()
     async def reverse(self, ctx, *, msg: str = None):
@@ -126,7 +126,7 @@ class Misc:
             msg = f'No, it is not Halloween today. There are {(halloween - date.today()).days} days until Halloween.'
             await ctx.send(msg)
 
-    @commands.command(description='This command might get you banned')
+    @commands.command(description='This command might get you banned', no_pm=True))
     async def spam(self, ctx, *, member=None, times: int = None):
         '''Want to annoy a member with mentions?'''
 
@@ -181,11 +181,11 @@ class Misc:
         else:
             url = f'https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl={str}&choe=UTF-8'
             with urlopen(url) as link:
-                
+
                 qrimg = io.BytesIO(link.read())
                 #qrimg = Image.open(qrimgpage)
             await ctx.send(file=qrimg)
-        
+
     @commands.command(aliases=['rock', 'paper', 'scissors', 'lizard', 'spock', 'rps'])
     async def settle(self, ctx, your_choice : RPSLSParser= None):
         '''Play rock paper scissors lizard spock '''
