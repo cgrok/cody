@@ -84,14 +84,14 @@ class Member:
             await ctx.send("Selfrole list cleared.")
             ctx.config.selfroles = []
             return
-        unparsed_roles = list(map(lambda r: r.strip(), rolelist.split(' ')))
+        unparsed_roles = list(map(lambda r: r.strip(), shlex.split(rolelist)))
         parsed_roles = list(map(lambda r: self._role_from_string(ctx.guild, r), unparsed_roles))
         if len(unparsed_roles) != len(parsed_roles):
             not_found = set(unparsed_roles) - {r.name for r in parsed_roles}
             await ctx.send(f"These roles were not found: {not_found}\n\nPlease try again.")
-        parsed_role_set = list({r.name for r in parsed_roles})
+        parsed_role_set = list({r.id for r in parsed_roles})
 
-        ctx.db.set_value(ctx.guild.id, 'selfroles', str(parsed_role_set))
+        ctx.config.selfroles = parsed_role_set
         await ctx.send(ctx.config.selfroles)
         await ctx.send(f"Selfroles successfully set to: {parsed_role_set}")
 
