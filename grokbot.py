@@ -263,7 +263,7 @@ class GrokBot(commands.Bot):
         if ctx.invoked_subcommand:
             em.add_field(name="Invoked Subcommand", value=ctx.invoked_subcommand, inline=False)
         else:
-            em.add_Field(name="Invoked Command", value=ctx.command, inline=False)
+            em.add_field(name="Invoked Command", value=ctx.command, inline=False)
         em.add_field(name="Error", value=f'```py\n{error}\n```', inline=False)
         await bot.get_channel(365640420249567273).send(embed=em)
         # Rushed so if someone wants to fix that'd be nice xoxoxoxo
