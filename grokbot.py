@@ -26,7 +26,6 @@ from collections import defaultdict
 import asyncio
 import aiohttp
 import datetime
-import psutil
 import time
 import json
 import sys
@@ -35,15 +34,8 @@ import re
 import sqlite3
 import traceback
 import textwrap
+import psutil
 
-dev_list = [
-    180314310298304512,
-    227620842903830528,
-    168143064517443584,
-    273381165229146112,
-    319395783847837696,
-    323578534763298816
-]
 
 class StatsBoard:
     def __init__(self, bot, channel, base=None):
@@ -55,6 +47,7 @@ class StatsBoard:
     @property
     def current_stats(self):
         em = discord.Embed()
+        em.timestamp = datetime.datetime.utcnow()
         status = None
         me = self.channel.guild.me
         status = str(me.status)
@@ -97,8 +90,10 @@ class StatsBoard:
         em.add_field(name='CPU Usage',value=f'{cpu_usage:.2f}% CPU')
         em.add_field(name='Commands Run', value=sum(self.bot.commands_used.values()))
         em.add_field(name='Messages', value=self.bot.messages_sent)
-        # em.add_field(name='Authors', value=g_authors, inline=False)
-        em.set_footer(text=f'Powered by discord.py {discord.__version__}')
+        em.add_field(name='Github', value='[Click Here](https://github.com/verixx/grokbot)')
+        em.add_field(name='Invite', value=f'[Click Here]({discord.utils.oauth_url(self.bot.user.id)})')
+        em.set_footer(text=f'Bot ID: {self.bot.user.id}')
+
 
         return em
 
@@ -229,16 +224,16 @@ class GrokBot(commands.Bot):
         print('---------------\n'
               'GrokBot connected!')
 
-    async def send_cmd_help(self,ctx):
+    async def send_cmd_help(self, ctx):
         if ctx.invoked_subcommand:
             pages = self.formatter.format_help_for(ctx, ctx.invoked_subcommand)
             for page in pages:
                 await ctx.send(page)
-
         else:
             pages = self.formatter.format_help_for(ctx, ctx.command)
             for page in pages:
                 await ctx.send(page)
+    # WHY WON'T YOU WORK
 
     async def on_ready(self):
         '''Bot startup, sets uptime.'''
@@ -254,12 +249,26 @@ class GrokBot(commands.Bot):
         ---------------
         Authors: verixx, fourjr, kwugfighter,
                  FloatCobra, XAOS1502, Protty,
-                 Dark knight, darthgimdalf
+                 darthgimdalf
         ---------------
         Logged in as: {self.user}
         User ID: {self.user.id}
         ---------------
         '''))
+
+    async def on_command_error(self, ctx, error):
+        send_help = (commands.MissingRequiredArgument, commands.BadArgument, commands.TooManyArguments, commands.UserInputError)
+        em = discord.Embed(color = discord.Color.red(), timestamp=ctx.message.created_at, description="Command Error:")
+        em.set_author(name=str(ctx.author), icon_url=ctx.author.avatar_url)
+        if ctx.invoked_subcommand:
+            em.add_field(name="Invoked Subcommand", value=ctx.invoked_subcommand, inline=False)
+        else:
+            em.add_field(name="Invoked Command", value=ctx.command, inline=False)
+        em.add_field(name="Error", value=f'```py\n{error}\n```', inline=False)
+        await bot.get_channel(365640420249567273).send(embed=em)
+        # Rushed so if someone wants to fix that'd be nice xoxoxoxo
+        if isinstance(error, send_help):
+            await self.send_cmd_help(ctx)
 
     async def on_command(self, ctx):
         cmd = ctx.command.qualified_name.replace(' ', '_')
@@ -272,23 +281,9 @@ class GrokBot(commands.Bot):
             return
         await self.invoke(ctx)
 
-    async def on_command_error(self, ctx, error):
-        send_help = (commands.MissingRequiredArgument, commands.BadArgument, commands.TooManyArguments, commands.UserInputError)
-        em = discord.Embed(color = discord.Color.red(), timestamp=ctx.message.created_at, description="Command Error:")
-        em.set_author(name=str(ctx.author), icon_url=ctx.author.avatar_url)
-        if ctx.invoked_subcommand:
-            em.add_field(name="Invoked Subcommand", value=ctx.invoked_subcommand, inline=False)
-        else:
-            em.add_Field(name="Invoked Command", value=ctx.command, inline=False)
-        em.add_field(name="Error", value=f'```py\n{error}\n```', inline=False)
-        await self.get_channel(365640420249567273).send(embed=em)
-
-        if isinstance(error, send_help):
-            await self.send_cmd_help(ctx)
-
     async def on_message(self, message):
         '''Extra calculations'''
-        if message.author == self.user:
+        if message.author.bot:
             return
         self.messages_sent += 1
         self.last_message = time.time()
@@ -339,19 +334,6 @@ class GrokBot(commands.Bot):
             self.session.close()
             await self.logout()
 
-    @commands.command()
-    async def shutdown(self, ctx, maintenance=None):
-        """Shuts down the bot"""
-        if ctx.author.id in dev_list:
-            if maintenance:
-                await self.change_presence(status=discord.Status.dnd)
-            else:
-                await self.change_presence(status=discord.Status.offline)
-            await self.statsboard.force_update()
-            await ctx.send('Shutting Down...')
-            self.session.close()
-            await self.logout()
-
     @commands.command(aliases=["reload"])
     async def reloadcog(self, ctx, *, cog: str):
         """Reloads a cog"""
@@ -385,5 +367,7 @@ class GrokBot(commands.Bot):
             await ctx.send(f"Unloading {cog}")
             self.unload_extension(cog)
 
+
+
 if __name__ == '__main__':
-    GrokBot.init('MzYxNDgyNjcxNDUwMzU3NzYy.DLWaCQ.xsaaBNrG0-g4O54DukLv3hAnwwE')
+    GrokBot.init()
