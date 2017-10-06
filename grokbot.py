@@ -36,6 +36,14 @@ import traceback
 import textwrap
 import psutil
 
+dev_list = [
+    180314310298304512,
+    227620842903830528,
+    168143064517443584,
+    273381165229146112,
+    319395783847837696,
+    323578534763298816
+]
 
 class StatsBoard:
     def __init__(self, bot, channel, base=None):
