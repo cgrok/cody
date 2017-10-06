@@ -286,7 +286,7 @@ class GrokBot(commands.Bot):
 
     async def on_message(self, message):
         '''Extra calculations'''
-        if message.author == self.user:
+        if message.author.bot:
             return
         self.messages_sent += 1
         self.last_message = time.time()
