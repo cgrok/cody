@@ -34,10 +34,7 @@ import re
 import sqlite3
 import traceback
 import textwrap
-try:
-    import psutil
-except:
-    pass
+import psutil
 
 
 class StatsBoard:
