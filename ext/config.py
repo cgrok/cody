@@ -209,7 +209,7 @@ class ConfigDatabase:
 
     def get_value(self, guild_id, column):
         self.cur.execute(f"SELECT {column} FROM config WHERE guild_id = {guild_id}")
-        return self.cur.fetchone()
+        return self.cur.fetchone()[0]
 
     def set_value(self, guild_id, column, new_val):
         with self.conn:
