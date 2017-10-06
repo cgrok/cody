@@ -82,7 +82,7 @@ class StatsBoard:
         em.add_field(name='Uptime', value=uptime)
         # em.add_field(name='Latency', value=f'{self.bot.ws.latency*1000:.2f} ms')
         em.add_field(name='Guilds', value=len(self.bot.guilds))
-        em.add_field(name='Members', value=f'{total_online}/{total_unique} online')
+        # em.add_field(name='Members', value=f'{total_online}/{total_unique} online')
         em.add_field(name='Channels', value=f'{channels} total')
         memory_usage = self.bot.process.memory_full_info().uss / 1024**2
         cpu_usage = self.bot.process.cpu_percent() / psutil.cpu_count()
