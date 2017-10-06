@@ -70,7 +70,7 @@ class GuildConfig:
 
     @property
     def welcome_channel(self):
-        id = self.db.get_value(self.id, 'join_message_channel')
+        id = self.db.get_value(self.id, 'join_channel')
         return self.guild.get_channel(id)
 
     @welcome_channel.setter
@@ -83,7 +83,7 @@ class GuildConfig:
 
     @property
     def leave_channel(self):
-        id = self.db.get_value(self.id,'leave_message_channel')
+        id = self.db.get_value(self.id,'leave_channel')
         return self.guild.get_channel(id)
 
     @leave_channel.setter
