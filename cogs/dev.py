@@ -264,7 +264,7 @@ class Developer:
                 return await ctx.send(fmt)
 
     @commands.command(aliases=["echo"])
-    async def say(self, ctx, content):
+    async def say(self, ctx, *, content):
         """Makes the bot repeat after you"""
         if ctx.author.id in dev_list:
             await ctx.send(content)
