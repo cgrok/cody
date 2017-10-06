@@ -67,7 +67,7 @@ class Information:
         em.add_field(name="Managed", value=role.managed)
         em.add_field(name="Colour", value=colour)
         em.add_field(name='Creation Date', value=created_on)
-        em.set_footer(text=f'Role ID: {role.id}')
+        em.set_footer(text='Role ID: {}'.format(role.id))
 
         await ctx.send(embed=em)
 

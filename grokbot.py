@@ -80,19 +80,19 @@ class StatsBoard:
 
         em.add_field(name='Current Status', value=str(status).title())
         em.add_field(name='Uptime', value=uptime)
-        # em.add_field(name='Latency', value=f'{self.bot.ws.latency*1000:.2f} ms')
+        em.add_field(name='Latency', value='{0:.2f}ms'.format(self.bot.ws.latency*1000))
         em.add_field(name='Guilds', value=len(self.bot.guilds))
-        # em.add_field(name='Members', value=f'{total_online}/{total_unique} online')
-        em.add_field(name='Channels', value=f'{channels} total')
+        em.add_field(name='Members', value='{}/{} online'.format(total_online, total_unique))
+        em.add_field(name='Channels', value='{} total'.format(channels))
         memory_usage = self.bot.process.memory_full_info().uss / 1024**2
         cpu_usage = self.bot.process.cpu_percent() / psutil.cpu_count()
-        em.add_field(name='RAM Usage', value=f'{memory_usage:.2f} MiB')
-        em.add_field(name='CPU Usage',value=f'{cpu_usage:.2f}% CPU')
+        em.add_field(name='RAM Usage', value='{0:.2f} MiB'.format(memory_usage))
+        em.add_field(name='CPU Usage',value='{0:.2f}% CPU'.format(cpu_usage))
         em.add_field(name='Commands Run', value=sum(self.bot.commands_used.values()))
         em.add_field(name='Messages', value=self.bot.messages_sent)
         em.add_field(name='Github', value='[Click Here](https://github.com/verixx/grokbot)')
-        em.add_field(name='Invite', value=f'[Click Here]({discord.utils.oauth_url(self.bot.user.id)})')
-        em.set_footer(text=f'Bot ID: {self.bot.user.id}')
+        em.add_field(name='Invite', value='[Click Here]({})'.format{discord.utils.oauth_url(self.bot.user.id)))
+        em.set_footer(text='Bot ID: {}'.format(self.bot.user.id))
 
 
         return em
@@ -160,8 +160,8 @@ class GrokBot(commands.Bot):
         '''Loads the default set of extensions or a seperate one if given'''
         for extension in cogs or self._extensions:
             try:
-                self.load_extension(f'{path}{extension}')
-                print(f'Loaded extension: {extension}')
+                self.load_extension('{}{}'.format(path, extension))
+                print('Loaded extension: {}'.format(extension))
             except Exception as e:
                 traceback.print_exc()
 
@@ -243,7 +243,7 @@ class GrokBot(commands.Bot):
             if self.db.get_data(guild.id) is None:
                 self.db.set_default_config(guild.id)
 
-        print(textwrap.dedent(f'''
+        print(textwrap.dedent('''
         ---------------
         Client is ready!
         ---------------
@@ -251,10 +251,10 @@ class GrokBot(commands.Bot):
                  FloatCobra, XAOS1502, Protty,
                  darthgimdalf
         ---------------
-        Logged in as: {self.user}
-        User ID: {self.user.id}
+        Logged in as: {}
+        User ID: {}
         ---------------
-        '''))
+        '''.format(self.user, self.user.id)))
 
     async def on_command_error(self, ctx, error):
         send_help = (commands.MissingRequiredArgument, commands.BadArgument, commands.TooManyArguments, commands.UserInputError)
@@ -264,7 +264,7 @@ class GrokBot(commands.Bot):
             em.add_field(name="Invoked Subcommand", value=ctx.invoked_subcommand, inline=False)
         else:
             em.add_Field(name="Invoked Command", value=ctx.command, inline=False)
-        em.add_field(name="Error", value=f'```py\n{error}\n```', inline=False)
+        em.add_field(name="Error", value='```py\n{}\n```'.format(error), inline=False)
         await bot.get_channel(365640420249567273).send(embed=em)
         # Rushed so if someone wants to fix that'd be nice xoxoxoxo
         if isinstance(error, send_help):
@@ -302,7 +302,7 @@ class GrokBot(commands.Bot):
         """Pong! Returns your websocket latency."""
         em = discord.Embed()
         em.title ='Pong! Websocket Latency:'
-        em.description = f'{self.ws.latency * 1000:.4f} ms'
+        em.description = '{0:.2f}ms'.format(self.bot.ws.latency*1000)
         em.color = 0x00FFFF
         try:
             await ctx.send(embed=em)
