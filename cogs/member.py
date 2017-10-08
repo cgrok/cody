@@ -35,7 +35,7 @@ class Member:
 
 
     @memberset.command(aliases=["welcome"], no_pm=True)
-    async def join(self, ctx, enabled:str, channel:discord.TextChannel=None, *, message:str=None):
+    async def join(self, ctx, enabled:str, channel:discord.TextChannel=None, *, message=None):
         """Join message settings
         Arguments for message:
         `{name}` outputs the Member's username.
@@ -51,7 +51,7 @@ class Member:
         if channel is not None:
             ctx.config.welcome_channel = channel.id
             await channel.send(f"{ctx.author.mention} :information_source:, I will now send join messages here")
-        ctx.config.join_message = message
+        ctx.config.join_message = str(message)
         await ctx.send(":information_source: Welcome message set!")
 
     @memberset.command(aliases=["goodbye"], no_pm=True)
@@ -116,7 +116,7 @@ class Member:
 
     async def on_member_join(self, member):
         if self.bot.config(ctx).join_enabled:
-            await self.bot.config.welcome_channel.send(self.bot.config.join_message.format(name=member, guild=member.guild, mention=member.mention))
+            await self.bot.config.welcome_channel.send(self.bot.config.join_message.format(name=member, guild=member.guild, mention=member.mention, member=member))
         if self.bot.config(ctx).autorole_enabled:
             await member.add_roles(self.bot.config.autorole)
 
