@@ -36,7 +36,7 @@ class Member:
 
 
     @memberset.command(aliases=["welcome"], no_pm=True)
-    async def join(self, ctx, channel:discord.TextChannel=None, enabled:str, *, message:str=None):
+    async def join(self, ctx, enabled:str, channel:discord.TextChannel=None, *, message:str=None):
         """Join message settings
         Arguments for message:
         `{name}` outputs the Member's username.
