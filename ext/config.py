@@ -60,7 +60,7 @@ class GuildConfig:
 
     @property
     def modlog(self):
-        id = self.db.get_value(self.id,'modlog')
+        id = self.db.get_value(self.id,'modlog_channel')
         return self.bot.get_channel()
 
     @modlog.setter
@@ -83,7 +83,7 @@ class GuildConfig:
             id = channel
         elif isinstance(channel, discord.TextChannel):
             id = channel.id
-        return self.db.set_value(self.id, 'welcome_channel', id)
+        return self.db.set_value(self.id, 'join_channel', id)
 
 
     @property

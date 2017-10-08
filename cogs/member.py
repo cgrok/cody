@@ -23,16 +23,15 @@ class Member:
 
         if ctx.invoked_subcommand is None:
             await self.bot.send_cmd_help(ctx)
-
-        em = discord.Embed(color=discord.Colour.red(), description="Member Settings")
-        em.add_field(name="Join Message Enabled", value=ctx.config.join_enabled, inline=False)
-        em.add_field(name="Leave Message Enabled", value=ctx.config.leave_enabled, inline=False)
-        em.add_field(name="Welcome Channel", value=ctx.config.welcome_channel, inline=False)
-        em.add_field(name="Leave Channel", value=ctx.config.leave_channel, inline=False)
-        em.add_field(name="Join Message", value=ctx.config.join_message, inline=False)
-        em.add_field(name="Leave Message", value=ctx.config.leave_message, inline=False)
-        em.add_field(name="Selfroles", value=", ".join(ctx.config.selfroles))
-        await ctx.send(embed=em)
+            em = discord.Embed(color=discord.Colour.red(), description="Member Settings")
+            em.add_field(name="Join Message Enabled", value=ctx.config.join_enabled, inline=False)
+            em.add_field(name="Leave Message Enabled", value=ctx.config.leave_enabled, inline=False)
+            em.add_field(name="Welcome Channel", value=ctx.config.welcome_channel, inline=False)
+            em.add_field(name="Leave Channel", value=ctx.config.leave_channel, inline=False)
+            em.add_field(name="Join Message", value=ctx.config.join_message, inline=False)
+            em.add_field(name="Leave Message", value=ctx.config.leave_message, inline=False)
+            em.add_field(name="Selfroles", value=", ".join(ctx.config.selfroles))
+            await ctx.send(embed=em)
 
 
     @memberset.command(aliases=["welcome"], no_pm=True)
