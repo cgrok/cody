@@ -21,8 +21,8 @@ class Member:
     @commands.group(no_pm=True)
     async def memberset(self, ctx):
 
-        #if ctx.invoked_subcommand is None:
-            #await self.bot.send_cmd_help(ctx)
+        if ctx.invoked_subcommand is None:
+            await self.bot.send_cmd_help(ctx)
 
         em = discord.Embed(color=discord.Colour.red(), description="Member Settings")
         em.add_field(name="Join Message Enabled", value=ctx.config.join_enabled, inline=False)
@@ -36,7 +36,7 @@ class Member:
 
 
     @memberset.command(aliases=["welcome"], no_pm=True)
-    async def join(self, ctx, *, channel:discord.TextChannel=None, enabled:str, message:str=None):
+    async def join(self, ctx, channel:discord.TextChannel=None, enabled:str, *, message:str=None):
         """Join message settings
         Arguments for message:
         `{name}` outputs the Member's username.
