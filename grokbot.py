@@ -298,10 +298,6 @@ class GrokBot(commands.Bot):
         '''Extra calculations'''
         if message.content.startswith('Lol'):
             ctx = message
-            e = discord.Embed()
-            e.colour = discord.Colour(0xed791d)
-            e.set_author(name='┐( ˘ㅅ˘)┌ meh, not funny.')
-            await ctx.channel.send(embed=e)
 
         if message.author.bot:
             return
