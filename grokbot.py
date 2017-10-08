@@ -296,9 +296,6 @@ class GrokBot(commands.Bot):
 
     async def on_message(self, message):
         '''Extra calculations'''
-        if message.content.startswith('Lol'):
-            ctx = message
-
         if message.author.bot:
             return
         self.messages_sent += 1
