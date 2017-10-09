@@ -9,4 +9,4 @@
 - Utility commands
 
 [GitHub](https://github.com/verixx/grokbot/)
-[Get Started](#Welcome! I'm Grok)
+[Get Started](#welcome-i39m-grok)
