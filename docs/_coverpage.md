@@ -1,6 +1,6 @@
 <!-- _coverpage.md -->
 
-![logo](media/logo.png)
+![logo](media/dgTICLL.png)
 
 # I'm Grok <small>bot</small>
 
