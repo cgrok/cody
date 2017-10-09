@@ -2,7 +2,6 @@
 
 <div align="center">
         <p> <img src="https://i.imgur.com/avDbgQa.png"/> </p>
-	<p><i><b>A multipurpose discord bot!</b></i></p>
 	<p>
 		<a href="https://discord.gg/pmQSbAd"><img src="https://discordapp.com/api/guilds/345787308282478592/embed.png" alt="" /></a>
 		<img src="https://img.shields.io/badge/python-3.6-brightgreen.svg" alt="python 3.6" /></a>
@@ -20,3 +19,17 @@ If you have a suggestion or an issue to report, please use the [issue tracker](h
 If you are interested in talking to the team, we are join our Discord. Feel free to drop by and say hello. Our upcoming features and beta releases are discussed here along with some general chatting.
 
 Join our Discord Server at: https://discord.gg/nzqmT2D.
+
+# Contributors
+
+> [verixx](https://github.com/verixx)
+
+> [Kwug](https://github.com/kwugfighter)
+
+> [4JR](https://github.com/fourjr)
+
+> [XAOS1502](https://github.com/XAOS1502)
+
+> [FloatCobra](https://github.com/FloatCobra)
+
+> [BibleRule](https://github.com/biblerule)
