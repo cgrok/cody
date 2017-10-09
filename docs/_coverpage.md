@@ -4,7 +4,5 @@
 
 > A multipurpose discord bot!
 
-- Moderation, fun, utility and much more!
-
 [GitHub](https://github.com/verixx/grokbot/)
 [Get Started](#welcome-i39m-grok)
