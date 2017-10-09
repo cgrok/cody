@@ -1,5 +1,3 @@
-<!-- _coverpage.md -->
-
 ![logo](media/dgTICLL.png)
 
 # I'm Grok <small>bot</small>
