@@ -1,4 +1,4 @@
-# Welcome! I'm Grok 
+# Welcome! 
 
 I'm Grok is a multipurpose open source discord bot written in python using the discord.py library. It is currently under development and has many people working on it as a community project. The commands that the bot will have will vary from utility/moderation to miscellaneous commands such as game statistics (CR/BS). 
 
