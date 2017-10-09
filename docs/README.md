@@ -22,14 +22,4 @@ Join our Discord Server at: https://discord.gg/nzqmT2D.
 
 # Contributors
 
-> [verixx](https://github.com/verixx)
-
-> [Kwug](https://github.com/kwugfighter)
-
-> [4JR](https://github.com/fourjr)
-
-> [XAOS1502](https://github.com/XAOS1502)
-
-> [FloatCobra](https://github.com/FloatCobra)
-
-> [BibleRule](https://github.com/biblerule)
+This project consists of 6 core developers: [verixx](https://github.com/verixx), [Kwug](https://github.com/kwugfighter), [4JR](https://github.com/fourjr), [XAOS1502](https://github.com/XAOS1502), [FloatCobra](https://github.com/FloatCobra) and last but not least [BibleRule](https://github.com/biblerule). Contributions to this project are always welcome, if you contribute a lot and if you become integral to the development of the bot, you will be given write access to the repository. 
