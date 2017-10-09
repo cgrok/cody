@@ -1,2 +1,1 @@
-- [Welcome](README.md)
 - [Commands](commands.md)
