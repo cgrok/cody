@@ -26,6 +26,7 @@ import discord
 from discord.ext import commands
 from urllib.parse import urlparse
 # from ext import embedtobox
+from PIL import Image
 import datetime
 import asyncio
 import psutil
@@ -113,6 +114,58 @@ class Information:
         em._author['name'] = "I'm Grok - Info"
         em.description = "I'm Grok is a multipurpose open source discord bot written in python using the discord.py library. It is currently under development and has many people working on it as a community project. The commands that the bot will have will vary from utility/moderation to miscellaneous commands such as game statistics (CR/BS). Join the support guild [here](https://discord.gg/nzqmT2D) for updates and to interact with the development team."
         await ctx.send(embed=em)
+
+    @commands.command(aliases=['av'])
+    async def avatar(self, ctx, *, member : discord.Member=None):
+        """Returns someone's avatar, or your own"""
+        member = member or ctx.author
+        av = member.avatar_url
+        if ".gif" in av:
+            av += "&f=.gif"
+        em = discord.Embed(url=av)
+        em.colour = (discord.Colour(0xed791d))
+        em.set_author(name=str(member), icon_url=av)
+        em.set_image(url=av)
+        try:
+            await ctx.send(embed=em)
+        '''except discord.HTTPException:
+            em_list = await embedtobox.etb(em)
+            for page in em_list:
+                await ctx.send(page)
+            try:
+                async with ctx.session.get(av) as resp:
+                    image = await resp.read()
+                with io.BytesIO(image) as file:
+                    await ctx.send(file=discord.File(file, 'avatar.png'))
+            except discord.HTTPException:
+                await ctx.send(av)'''
+        except:
+            return
+
+    @commands.command(aliases=['servericon'], no_pm=True)
+    async def serverlogo(self, ctx):
+        """Returns the server's logo image"""
+        icon = ctx.guild.icon_url
+        em = discord.Embed(url=icon)
+        em.colour = (discord.Colour(0xed791d))
+        em.set_author(name=ctx.guild.guilder.name, icon_url=icon)
+        em.set_image(url=icon)
+        try:
+            await ctx.send(embed=em)
+        '''except discord.HTTPException:
+            em_list = await embedtobox.etb(em)
+            for page in em_list:
+                await ctx.send(page)
+            try:
+                async with ctx.session.get(icon) as resp:
+                    image = await resp.read()
+                with io.BytesIO(image) as file:
+                    await ctx.send(file=discord.File(file, 'serverlogo.png'))
+            except discord.HTTPException:
+                await ctx.send(icon)'''
+        except:
+            return
+
 
 def setup(bot):
     bot.add_cog(Information(bot))
