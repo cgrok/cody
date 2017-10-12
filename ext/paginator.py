@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 from collections import OrderedDict
 import asyncio
+import inspect
 
 class PaginatorSession:
     '''
@@ -27,7 +28,7 @@ class PaginatorSession:
     close:
         Forcefully destroy a session
     '''
-    def __init__(self, ctx, timeout=60, *, pages=[]):
+    def __init__(self, ctx, timeout=60, *, pages=[], page_nums=True, help_color=0x00FFFF):
         self.ctx = ctx
         self.timeout = timeout
         self.pages = pages
@@ -41,7 +42,10 @@ class PaginatorSession:
             '⏭': self.last_page,
             '🔢': self.ask_for_page,
             '⏹': self.close,
+            '❔': self.show_help_page,
             })
+        self.help_color = help_color
+        self.page_num_enabled = page_nums
 
     def add_page(self, embed):
         if isinstance(embed, discord.Embed):
@@ -50,7 +54,7 @@ class PaginatorSession:
             raise TypeError('Page must be an Embed object.')
 
     def valid_page(self, index):
-        if index < 0 and index+1 > len(self.pages):
+        if index < 0 or index+1 > len(self.pages):
             return False
         else:
             return True
@@ -59,7 +63,12 @@ class PaginatorSession:
         if not self.valid_page(index):
             return
         self.current = index
+
         page = self.pages[index]
+
+        if self.page_num_enabled:
+            fmt = f'Page {index+1}/{len(self.pages)}'
+            page.set_footer(text=fmt)
 
         if self.running:
             await self.base.edit(embed=page)
@@ -103,18 +112,38 @@ class PaginatorSession:
             await show_page()
 
     def previous_page(self):
+        '''Go to the previous page.'''
         return self.show_page(self.current-1)
 
     def next_page(self):
+        '''Go to the next page'''
         return self.show_page(self.current+1)
 
     def first_page(self):
+        '''Go to immediately to the first page'''
         return self.show_page(0)
 
     def last_page(self):
+        '''Go to immediately to the last page'''
         return self.show_page(len(self.pages)-1)
 
+    async def show_help_page(self):
+        '''Shows this page.'''
+        em = discord.Embed(color=self.color)
+        em.title = 'How do I use this?'
+
+        em.description = 'React with each of the following ' \
+                         'reactions to navigate this ' \
+                         'embed pagination session.'
+
+        for reaction, callback in self.reaction_map.items():
+            doc = inspect.getdoc(callback)
+            em.add_field(name=reaction, value=doc)
+
+        await self.base.edit(embed=em)
+
     def close(self, delete=True):
+        '''Delete this embed.'''
         self.running = False
         if delete:
             return self.base.delete()
