@@ -27,7 +27,7 @@ def setup(bot):
 # Installing Cogs
 
 ### Important
-You are only allowed to install cogs if you [self host this bot](some self host guide) and not use our instance of the bot. 
+You are only allowed to install cogs if you [self host this bot](https://verixx.github.io/grokbot/#/installation?id=self-hosting) and not use our instance of the bot. 
 
 ### How do I install a cog?
 
