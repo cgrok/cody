@@ -1,15 +1,8 @@
 # How To Install
 
-Testing codeblocks
+## Our Bot
+Get it from [here](https://discordapp.com/oauth2/authorize/?permissions=0&scope=bot&client_id=361482671450357762)!  
+**LINK HAS NO PERMISISONS**
 
-```python
-@client.cmd('ping')
-async def ping(ctx) -> is_mod:
-    await ctx.reply('Pong!')
-```
-
-# Python
-
-download this that
-
-# Good to Go!
+## Self-Hosting
+Some Instructions here!
