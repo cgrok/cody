@@ -103,3 +103,4 @@ ENV/
 *.json
 *.db
 *.json
+data/config.json
