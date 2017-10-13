@@ -22,7 +22,7 @@ def setup(bot):
     bot.add_cog(Cog(bot))
 ```
 
-!> We are not obliged to provide support for creating cogs. For Discord API help, you can join their [official server](https://discord.gg/discord-api).
+!> We are not obliged to provide support for creating cogs. For discord.py help, you can join their [official server](https://discord.gg/discord-api).
 
 # Installing Cogs
 
