@@ -3,8 +3,7 @@ This is a short guide on creating your own cogs for Grok Bot.
 ### Library    
 All cogs have to be written in [discord.py 1.0.0.a](https://discordpy.readthedocs.io/en/rewrite/)   
 ### Data Storage
-If you want to store any data in your cogs, you have to use [sqlite3](https://docs.python.org/2/library/sqlite3.html).     
-**Do not use JSON files or any other storage files.**
+If you want to store any data in your cogs, it is highly encouraged you use [sqlite3](https://docs.python.org/2/library/sqlite3.html).  
 ### Example of a basic cog
 ```py
 class Cog:
