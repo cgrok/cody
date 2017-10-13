@@ -35,6 +35,7 @@ import sqlite3
 import traceback
 import textwrap
 import psutil
+import inspect
 
 dev_list = [
     180314310298304512,
@@ -181,6 +182,86 @@ class GrokBot(commands.Bot):
             to_load = fp.read().splitlines()
         if to_load:
             self.load_extensions(to_load, 'cogs.community.')
+
+    def add_cog(self, cog):
+        """
+        Adds a "cog" to the bot. Modified to inclued 
+        database table initialisation functions.
+        """
+
+        cog_name = type(cog).__name__
+
+        self.cogs[cog_name] = cog
+
+        try:
+            check = getattr(cog, '_{.__class__.__name__}__global_check'.format(cog))
+        except AttributeError:
+            pass
+        else:
+            self.add_check(check)
+
+        try:
+            check = getattr(cog, '_{.__class__.__name__}__global_check_once'.format(cog))
+        except AttributeError:
+            pass
+        else:
+            self.add_check(check, call_once=True)
+
+        members = inspect.getmembers(cog)
+        for name, member in members:
+            # register commands the cog has
+            if isinstance(member, Command):
+                if member.parent is None:
+                    self.add_command(member)
+                continue
+
+            # Initialise cog tables
+            if name.startswith('_init_table_'):
+                table_name = name.replace('_init_table_', cog_name)
+                self.initialise_table(table_name, member)
+
+            # register event listeners the cog has
+            if name.startswith('on_'):
+                self.add_listener(member, name)
+
+
+    def get_type(self, param):
+
+        annotation_map = {
+            str: 'STRING',
+            int: 'INTEGER',
+            float: 'REAL',
+                }
+
+        if param.annotation ia inspect._empty:
+            return 'STRING'
+        else:
+            return annotation_map.get(param.annotation, 'STRING')
+
+
+    def initialise_table(name, function):
+        
+        TABLE = ''
+
+        signature = inspect.signature(function).parameters.items()
+
+        for i, (name, param) in enumerate(signature):
+            if not i:
+                TABLE += f'{name} {self.get_type(param)} PRIMARY KEY UNIQUE,'
+            else:
+                TABLE += f'{name} {self.get_type(param)}'
+
+        query = '''CREATE TABLE IF NOT EXISTS {name}({TABLE})'''.format(name=name, TABLE=TABLE)
+
+        with self.db.conn:
+            self.db.cur.execute(query)
+
+        self.return_table_object(name, function)
+
+
+    def return_table_object(name, function):
+        pass
+
 
     @property
     def token(self):
