@@ -126,6 +126,4 @@ class Member:
 
 def setup(bot):
         n = Member(bot)
-        bot.add_cog(n)
-        bot.add_listener(n.on_member_join, "on_member_join")
-        bot.add_listener(n.on_member_remove, "on_member_remove")
+        return bot.add_cog(n)
