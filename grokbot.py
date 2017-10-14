@@ -302,7 +302,7 @@ class GrokBot(commands.Bot):
         '''Returns the prefix.'''
         with open('./data/config.json') as f: # TODO: guild specific prefixes
             prefix = json.load(f).get('PREFIX')
-        return 't.'
+        return os.environ.get('PREFIX') or prefix or 'g.'
 
     @property
     def config(self,ctx):
