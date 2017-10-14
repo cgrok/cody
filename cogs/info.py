@@ -128,17 +128,6 @@ class Information:
         em.set_image(url=av)
         try:
             await ctx.send(embed=em)
-        '''except discord.HTTPException:
-            em_list = await embedtobox.etb(em)
-            for page in em_list:
-                await ctx.send(page)
-            try:
-                async with ctx.session.get(av) as resp:
-                    image = await resp.read()
-                with io.BytesIO(image) as file:
-                    await ctx.send(file=discord.File(file, 'avatar.png'))
-            except discord.HTTPException:
-                await ctx.send(av)'''
         except:
             return
 
@@ -152,20 +141,9 @@ class Information:
         em.set_image(url=icon)
         try:
             await ctx.send(embed=em)
-        '''except discord.HTTPException:
-            em_list = await embedtobox.etb(em)
-            for page in em_list:
-                await ctx.send(page)
-            try:
-                async with ctx.session.get(icon) as resp:
-                    image = await resp.read()
-                with io.BytesIO(image) as file:
-                    await ctx.send(file=discord.File(file, 'serverlogo.png'))
-            except discord.HTTPException:
-                await ctx.send(icon)'''
         except:
             return
 
 
 def setup(bot):
-    bot.add_cog(Information(bot))
+    return bot.add_cog(Information(bot))
