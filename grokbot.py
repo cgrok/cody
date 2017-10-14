@@ -36,6 +36,7 @@ import traceback
 import textwrap
 import psutil
 import inspect
+import importlib
 
 dev_list = [
     180314310298304512,
@@ -161,9 +162,6 @@ class GrokBot(commands.Bot):
         self.add_command(self.ping)
         self.add_command(self.shutdown)
         self.add_command(self.maintenance)
-        self.add_command(self.load)
-        self.add_command(self.reloadcog)
-        self.add_command(self.unload)
         self.load_extensions()
         self.load_community_extensions()
 
@@ -174,7 +172,7 @@ class GrokBot(commands.Bot):
                 self.load_extension(f'{path}{extension}')
                 print(f'Loaded extension: {extension}')
             except Exception as e:
-                traceback.print_exc()
+                print(e)
 
     def load_community_extensions(self):
         '''Loads up community extensions.'''
@@ -182,6 +180,27 @@ class GrokBot(commands.Bot):
             to_load = fp.read().splitlines()
         if to_load:
             self.load_extensions(to_load, 'cogs.community.')
+
+
+    def load_extension(self, name):
+        """Loads an extension.
+        """
+        if name in self.extensions:
+            return
+
+        lib = importlib.import_module(name)
+        if not hasattr(lib, 'setup'):
+            del lib
+            del sys.modules[name]
+            raise discord.ClientException('extension does not have a setup function')
+
+        try:
+            ret = lib.setup(self)
+        except Exception as e:
+            raise e
+        else:
+            self.extensions[name] = lib
+            return ret
 
     def add_cog(self, cog):
         """
@@ -210,12 +229,12 @@ class GrokBot(commands.Bot):
         members = inspect.getmembers(cog)
         for name, member in members:
             # register commands the cog has
-            if isinstance(member, Command):
+            if isinstance(member, commands.Command):
                 if member.parent is None:
                     self.add_command(member)
                 continue
 
-            # Initialise cog tables
+            # Initialise cog database tables
             if name.startswith('_init_table_'):
                 table_name = name.replace('_init_table_', cog_name)
                 self.initialise_table(table_name, member)
@@ -223,6 +242,8 @@ class GrokBot(commands.Bot):
             # register event listeners the cog has
             if name.startswith('on_'):
                 self.add_listener(member, name)
+
+        return cog
 
 
     def get_type(self, param):
@@ -233,7 +254,7 @@ class GrokBot(commands.Bot):
             float: 'REAL',
                 }
 
-        if param.annotation ia inspect._empty:
+        if param.annotation is inspect._empty:
             return 'STRING'
         else:
             return annotation_map.get(param.annotation, 'STRING')
@@ -281,7 +302,7 @@ class GrokBot(commands.Bot):
         '''Returns the prefix.'''
         with open('./data/config.json') as f: # TODO: guild specific prefixes
             prefix = json.load(f).get('PREFIX')
-        return os.environ.get('PREFIX') or prefix or 'g.'
+        return 't.'
 
     @property
     def config(self,ctx):
@@ -351,6 +372,7 @@ class GrokBot(commands.Bot):
         '''))
 
     async def on_command_error(self, ctx, error):
+
         send_help = (commands.MissingRequiredArgument, commands.BadArgument, commands.TooManyArguments, commands.UserInputError)
         em = discord.Embed(color = discord.Color.red(), timestamp=ctx.message.created_at, description="Command Error:")
         em.set_author(name=str(ctx.author), icon_url=ctx.author.avatar_url)
@@ -360,9 +382,7 @@ class GrokBot(commands.Bot):
             em.add_field(name="Invoked Command", value=ctx.command, inline=False)
         em.add_field(name="Error", value=f'```py\n{error}\n```', inline=False)
         await self.get_channel(365640420249567273).send(embed=em)
-        # Rushed so if someone wants to fix that'd be nice xoxoxoxo
-        if isinstance(error, send_help):
-            await self.send_cmd_help(ctx)
+
 
     async def on_command(self, ctx):
         cmd = ctx.command.qualified_name.replace(' ', '_')
@@ -428,38 +448,6 @@ class GrokBot(commands.Bot):
             self.session.close()
             await self.logout()
 
-    @commands.command(aliases=["reload"])
-    async def reloadcog(self, ctx, *, cog: str):
-        '''Reloads a cog'''
-        if ctx.author.id in dev_list:
-            cog = f"cogs.{cog}"
-            await ctx.send(f"Attempting to reload {cog}...")
-            self.unload_extension(cog)
-            try:
-                self.load_extension(cog)
-                await ctx.send(f"Successfully reloaded the {cog} cog!")
-            except Exception as e:
-                await ctx.send(f"​`​`​`py\nError loading cog: {cog}\n{e}\n​`​`​`")
-
-    @commands.command(aliases=["loadcog"])
-    async def load(self, ctx, *, cog: str):
-        '''Load a cog'''
-        if ctx.author.id in dev_list:
-            cog = f"cogs.{cog}"
-            await ctx.send(f"Attempting to load {cog}...")
-            try:
-                self.load_extension(cog)
-                await ctx.send(f"Successfully loaded the {cog} cog!")
-            except Exception as e:
-                await ctx.send(f"​`​`​`py\nError loading cog: {cog}\n{e}\n​`​`​`")
-
-    @commands.command(aliases=["unloadcog"])
-    async def unload(self, ctx, *, cog: str):
-        '''Unload a cog'''
-        if ctx.author.id in dev_list:
-            cog = f"cogs.{cog}"
-            await ctx.send(f"Unloading {cog}")
-            self.unload_extension(cog)
 
 
 
