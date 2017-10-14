@@ -41,7 +41,7 @@ class CogManage:
 
     @install.command()
     async def custom(self, ctx, *, link):
-        cogname = link.split('/')[-1]split('.')[0]
+        cogname = link.split('/')[-1].split('.')[0]
         async with ctx.session.get(link) as resp:
             raw = await resp.text()
         await self.install_cog(ctx, raw, cogname)
