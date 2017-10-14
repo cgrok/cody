@@ -258,4 +258,4 @@ class Developer:
 
 
 def setup(bot):
-    bot.add_cog(Developer(bot))
+    return bot.add_cog(Developer(bot))
