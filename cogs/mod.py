@@ -141,4 +141,4 @@ class Mod:
             await ctx.send(f"Set modlog channel to {self.bot.get_channel(channel.id)}")
 
 def setup(bot):
-    bot.add_cog(Mod(bot))
+    return bot.add_cog(Mod(bot))
