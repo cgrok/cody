@@ -63,7 +63,7 @@ class Misc:
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(aliases=['install'])
+    @commands.command()
     async def invite(self, ctx):
         '''Official url to invite bot to your guild.'''
         inviter = discord.utils.oauth_url(self.bot.user.id, permissions=discord.Permissions(permissions=473295983))
@@ -240,4 +240,4 @@ class Misc:
 
 
 def setup(bot):
-    bot.add_cog(Misc(bot))
+    return bot.add_cog(Misc(bot))
