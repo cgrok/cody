@@ -5,7 +5,6 @@ All cogs have to be written in [discord.py 1.0.0.a](https://discordpy.readthedoc
 ### Data Storage
 If you want to store any data in your cogs, it is highly encouraged you use [sqlite3](https://docs.python.org/2/library/sqlite3.html).  
 ### Example of a basic cog
-<script src="//unpkg.com/prismjs/components/prism-python.min.js"></script>
 ```python
 class Cog:
   def __init__(self, bot):
