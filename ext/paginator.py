@@ -47,6 +47,8 @@ class PaginatorSession:
         self.help_color = help_color
         self.page_num_enabled = page_nums
 
+
+
     def add_page(self, embed):
         if isinstance(embed, discord.Embed):
             self.pages.append(embed)
@@ -111,7 +113,10 @@ class PaginatorSession:
 
             show_page = self.reaction_map.get(reaction.emoji)
 
-            await show_page()
+            if asyncio.iscoroutinefunction(show_page):
+                await show_page()
+            else:
+                show_page()
 
     def previous_page(self):
         '''Go to the previous page.'''
@@ -128,6 +133,9 @@ class PaginatorSession:
     def last_page(self):
         '''Go to immediately to the last page'''
         return self.show_page(len(self.pages)-1)
+
+    def _show_help_page(self):
+        return self.ctx.bot.loop.create_task(self.show_help_page())
 
     async def show_help_page(self):
         '''Shows this page.'''
