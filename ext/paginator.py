@@ -42,7 +42,7 @@ class PaginatorSession:
             '⏭': self.last_page,
             '🔢': self.ask_for_page,
             '⏹': self.close,
-            '❔': self.show_help_page,
+            '🤔': self.show_help_page,
             })
         self.help_color = help_color
         self.page_num_enabled = page_nums
