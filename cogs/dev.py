@@ -59,10 +59,11 @@ class Developer:
 
     @commands.command()
     async def paginate(self, ctx):
-        session = PaginatorSession(ctx)
+        embeds = []
         for x in range(10):
             em = discord.Embed(title=f'Page: {x+1}', description='hello' * x)
-            session.add_page(em)
+            embeds.append(em)
+        session = PaginatorSession(ctx, pages=embeds)
         await session.run()
 
     @commands.command(pass_context=True, hidden=True, name='eval')
