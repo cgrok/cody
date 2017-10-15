@@ -42,12 +42,10 @@ class PaginatorSession:
             '⏭': self.last_page,
             '🔢': self.ask_for_page,
             '⏹': self.close,
-            '🤔': self._show_help_page,
+            '🤔': self.show_help_page,
             })
         self.help_color = help_color
         self.page_num_enabled = page_nums
-
-
 
     def add_page(self, embed):
         if isinstance(embed, discord.Embed):
@@ -66,8 +64,6 @@ class PaginatorSession:
             return
 
         self.current = index
-        self.showing_help = False
-
         page = self.pages[index]
 
         if self.page_num_enabled:
@@ -113,10 +109,7 @@ class PaginatorSession:
 
             show_page = self.reaction_map.get(reaction.emoji)
 
-            if asyncio.iscoroutinefunction(show_page):
-                await show_page()
-            else:
-                show_page()
+            await show_page()
 
     def previous_page(self):
         '''Go to the previous page.'''
@@ -133,9 +126,6 @@ class PaginatorSession:
     def last_page(self):
         '''Go to immediately to the last page'''
         return self.show_page(len(self.pages)-1)
-
-    def _show_help_page(self):
-        return self.ctx.bot.loop.create_task(self.show_help_page())
 
     async def show_help_page(self):
         '''Shows this page.'''
@@ -157,16 +147,10 @@ class PaginatorSession:
             em.set_footer(text=fmt)
 
         await self.base.edit(embed=em)
-        self.showing_help = True
-        await asyncio.sleep(15)
-        if self.showing_help is True:
-            await self.show_page(self.current)
-
 
     def close(self, delete=True):
         '''Delete this embed.'''
         self.running = False
-        self.showing_help = False
         if delete:
             return self.base.delete()
 
