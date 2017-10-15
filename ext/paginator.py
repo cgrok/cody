@@ -129,7 +129,7 @@ class PaginatorSession:
 
     async def show_help_page(self):
         '''Shows this page.'''
-        em = discord.Embed(color=self.color)
+        em = discord.Embed(color=self.help_color)
         em.title = 'How do I use this?'
 
         em.description = 'React with each of the following ' \
