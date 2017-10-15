@@ -61,7 +61,7 @@ class Developer:
     async def paginate(self, ctx):
         session = PaginatorSession(ctx)
         for x in range(10):
-            em = discord.Embed(title=f'Page: {x}', description='hello' * x)
+            em = discord.Embed(title=f'Page: {x+1}', description='hello' * x)
             session.add_page(em)
         await session.run()
 

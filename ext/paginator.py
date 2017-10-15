@@ -62,7 +62,9 @@ class PaginatorSession:
     async def show_page(self, index: int):
         if not self.valid_page(index):
             return
+
         self.current = index
+        self.showing_help = False
 
         page = self.pages[index]
 
@@ -147,10 +149,16 @@ class PaginatorSession:
             em.set_footer(text=fmt)
 
         await self.base.edit(embed=em)
+        self.showing_help = True
+        await asyncio.sleep(15)
+        if self.showing_help is True:
+            await self.show_page(self.current)
+
 
     def close(self, delete=True):
         '''Delete this embed.'''
         self.running = False
+        self.showing_help = False
         if delete:
             return self.base.delete()
 
