@@ -130,11 +130,10 @@ class PaginatorSession:
     async def show_help_page(self):
         '''Shows this page.'''
         em = discord.Embed(color=self.help_color)
-        em.title = 'How do I use this?'
+        em.title = 'Pagination Session - Help'
 
         em.description = 'React with each of the following ' \
-                         'reactions to navigate this ' \
-                         'embed pagination session.'
+                         'reactions to navigate.' \
         help = ''
 
         for reaction, callback in self.reaction_map.items():
@@ -161,6 +160,7 @@ class PaginatorSession:
             m.content.isdigit()
 
     async def ask_for_page(self):
+        '''Type in the page number.'''
         to_delete = []
         
         x = await self.ctx.send('What page do you want to go to?')
