@@ -138,7 +138,7 @@ class PaginatorSession:
 
         for reaction, callback in self.reaction_map.items():
             doc = inspect.getdoc(callback)
-            em.add_field(name=reaction, value=doc)
+            em.add_field(name=reaction, value=doc, inline=False)
 
         await self.base.edit(embed=em)
 
