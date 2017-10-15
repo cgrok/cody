@@ -133,7 +133,7 @@ class PaginatorSession:
         em.title = 'Pagination Session - Help'
 
         em.description = 'React with each of the following ' \
-                         'reactions to navigate.' \
+                         'reactions to navigate.'
         help = ''
 
         for reaction, callback in self.reaction_map.items():
