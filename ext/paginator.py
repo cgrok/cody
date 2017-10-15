@@ -144,8 +144,8 @@ class PaginatorSession:
         em.add_field(name='Reactions?', value=help)
         
         if self.page_num_enabled:
-            fmt = f'Page {index+1}/{len(self.pages)}'
-            page.set_footer(text=fmt)
+            fmt = f'Page {self.current+1}/{len(self.pages)}'
+            em.set_footer(text=fmt)
 
         await self.base.edit(embed=em)
 
