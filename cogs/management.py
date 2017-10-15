@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from __main__ import dev_list
-
+import os
 
 class CogManage:
     '''
@@ -28,7 +28,15 @@ class CogManage:
 
     @commands.command()
     async def uninstall(self, ctx, cogname):
-        pass
+        '''Uninstall a cog.'''
+        path = f'cogs/{cogname}.py'
+        if os.path.isfile(path):
+            self.bot.unload_extension(f'cogs.{cogname}')
+            os.remove(path)
+            await ctx.send(f'Successfully uninstalled: `{cogname}`')
+        else:
+            await ctx.send(f'No cog file named: `{cogname}`')
+
 
     @commands.group(invoke_without_command=True)
     async def install(self, ctx, *, cogname):
@@ -41,6 +49,7 @@ class CogManage:
 
     @install.command()
     async def custom(self, ctx, *, link):
+        '''Install a custom cog from a different link.'''
         cogname = link.split('/')[-1].split('.')[0]
         async with ctx.session.get(link) as resp:
             raw = await resp.text()
