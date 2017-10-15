@@ -135,10 +135,17 @@ class PaginatorSession:
         em.description = 'React with each of the following ' \
                          'reactions to navigate this ' \
                          'embed pagination session.'
+        help = ''
 
         for reaction, callback in self.reaction_map.items():
             doc = inspect.getdoc(callback)
-            em.add_field(name=reaction, value=doc, inline=False)
+            help += f'{reaction} - {doc}\n'
+            
+        em.add_field(name='Reactions?', value=help)
+        
+        if self.page_num_enabled:
+            fmt = f'Page {index+1}/{len(self.pages)}'
+            page.set_footer(text=fmt)
 
         await self.base.edit(embed=em)
 
