@@ -38,10 +38,10 @@ class PaginatorSession:
         self.reaction_map = OrderedDict({
             '⏮': self.first_page,
             '◀': self.previous_page,
+            '⏹': self.close,
             '▶': self.next_page,
             '⏭': self.last_page,
             '🔢': self.ask_for_page,
-            '⏹': self.close,
             '🤔': self.show_help_page,
             })
         self.help_color = help_color
