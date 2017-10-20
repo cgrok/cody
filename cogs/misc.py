@@ -132,9 +132,9 @@ class Misc:
 
         usage = f'```Usage: {ctx.prefix}ultimate_annoying_spam_command [@member] [times]```'
 
-        if member or times is None:
-            await ctx.send(usage)
-            return
+        # if member or times is None:
+        #     await ctx.send(usage)
+        #     return
 
         if times is None:
             times = 25
@@ -156,7 +156,7 @@ class Misc:
             try:
                 await ctx.send(f'{member.mention} LOL')
             except Exception:
-                pass
+                await ctx.send(usage)
 
     @commands.command(aliases=['tinyurl'])
     async def tiny_url(self, ctx, str = None):
