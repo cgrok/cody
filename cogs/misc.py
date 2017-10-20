@@ -126,37 +126,6 @@ class Misc:
             msg = f'No, it is not Halloween today. There are {(halloween - date.today()).days} days until Halloween.'
             await ctx.send(msg)
 
-    @commands.command(description='This command might get you banned', no_pm=True)
-    async def spam(self, ctx, *, member=None, times: int = None):
-        '''Want to annoy a member with mentions?'''
-
-        usage = f'```Usage: {ctx.prefix}ultimate_annoying_spam_command [@member] [times]```'
-
-        # if member or times is None:
-        #     await ctx.send(usage)
-        #     return
-
-        if times is None:
-            times = 25
-
-        if times > 100:
-            times = 35
-
-        if times is 0:
-            await ctx.send(f'Someone, not saying who, *cough cough {author}* felt sorry about using this command.')
-            return
-
-        if times < 0:
-            await ctx.send("Well, that's just not enough times to annoy anybody. Don't chicken out now!")
-            return
-
-        await message.delete()
-
-        for i in range(0, times):
-            try:
-                await ctx.send(f'{member.mention} LOL')
-            except Exception:
-                await ctx.send(usage)
 
     @commands.command(aliases=['tinyurl'])
     async def tiny_url(self, ctx, str = None):
