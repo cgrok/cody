@@ -35,11 +35,11 @@ halloween = date(2017, 10, 31)
 christmas = date(2017, 12, 25)
 
 class RPSLS(Enum):
-    rock     = "\N{RAISED FIST}"
-    paper    = "\N{RAISED HAND WITH FINGERS SPLAYED}"
-    scissors = "\N{BLACK SCISSORS}"
-    lizard   = "\N{LIZARD}"
-    spock    = "\N{RAISED HAND WITH PART BETWEEN MIDDLE AND RING FINGERS}"
+    rock     = "\N{RAISED FIST} Rock!"
+    paper    = "\N{RAISED HAND WITH FINGERS SPLAYED} Paper!"
+    scissors = "\N{BLACK SCISSORS} Scissors!"
+    lizard   = "\N{LIZARD} Lizard!"
+    spock    = "\N{RAISED HAND WITH PART BETWEEN MIDDLE AND RING FINGERS} Spock!"
 
 
 class RPSLSParser:
@@ -130,17 +130,29 @@ class Misc:
     @commands.command(aliases=['tinyurl'])
     async def tiny_url(self, ctx, str = None):
         '''Shorten URL'''
-        tinyurl = urlopen("http://tinyurl.com/api-create.php?url=" + str).read().decode("utf-8")
-        usage = f'Usage: {ctx.prefix}tinyurl https://github.com/verixx/grokbot'
-        url = ctx.message.starts_with('https://')
-        if str is None:
-            await ctx.send(usage)
-        if str is int:
-            await ctx.send(usage)
-        if str is url:
-            await ctx.send(tinyurl)
-        else:
+        usage = f'**Usage:**\n`{ctx.prefix}{ctx.invoked_with} https://cdn.discordapp.com/avatars/323578534763298816/a_e9ce069bedf43001b27805cd8ef9c0db.gif`'
+        try:
+            await ctx.message.delete()
+        except discord.Forbidden:
             pass
+
+        if url != None:
+            apitiny = 'http://tinyurl.com/api-create.php?url='
+            tiny_url = urlopen(apitiny + link).read().decode("utf-8")
+            e = discord.Embed()
+            e.color = await ctx.get_dominant_color(ctx.author.avatar_url)
+            e.add_field(name="🌏 Original", value=f'~~`{link}`~~')
+            e.add_field(name="Tinyurl 🔗", value=f'```{tiny_url}```')
+            try:
+                await ctx.send(embed=e)
+            except discord.HTTPException:
+                em_list = await embedtobox.etb(e)
+                for page in em_list:
+                    await ctx.send(page)
+
+        else:
+            await ctx.send(usage, delete_after=15)
+            return
 
     @commands.command(aliases=['qr','qrgen'])
     async def generateqr(self, ctx, *, str = None):
@@ -157,7 +169,7 @@ class Misc:
 
     @commands.command(aliases=['rock', 'paper', 'scissors', 'lizard', 'spock', 'rps'])
     async def settle(self, ctx, your_choice : RPSLSParser= None):
-        '''Play rock paper scissors lizard spock '''
+        '''Play rock paper scissors, lizard spock '''
         if your_choice != None:
             author = ctx.message.author.display_name
             grok = self.bot.user.name
@@ -206,6 +218,51 @@ class Misc:
         else:
             msg = 'rock, paper, scissors, lizard, OR spock'
             await ctx.send(f'Enter: `{ctx.prefix}{ctx.invoked_with} {msg}`', delete_after=5)
+
+    @commands.command()
+    async def guess(self, number: int):
+        """Write a number between 1 and 7"""
+        answer = random.randint(1, 7)
+
+        e = discord.Embed()
+        e.colour = discord.Colour(0x9b59b6)
+        if number < answer or number > answer:
+            q_mark = '\N{BLACK QUESTION MARK ORNAMENT}'
+            guessed_wrong = [
+                'Not even close, the right number was:',
+                'Better luck next time, the number was:',
+                'How could you have known that the number was:',
+                'Hmm, well, the right number was:',
+                'Not getting any better, the number was:',
+                'Right number was:'
+                ]
+            e.add_field(name=f'{q_mark} Choice: `{number}`', 
+                        value=f'```{random.choice(guessed_wrong)} {answer}```', inline=True)
+            try:
+                await ctx.send(embed=e)
+            except discord.HTTPException:
+                em_list = await embedtobox.etb(e)
+                for page in em_list:
+                    await ctx.send(page)
+
+        if number is answer:
+            q_mark = '\N{BLACK QUESTION MARK ORNAMENT}'
+            guessed_right = [
+                'You guessed correctly!',
+                'Everyone knew you could do it!',
+                'You got the right answer!',
+                'History will remember you...'
+                ]
+            e.add_field(name=f'{q_mark} Correct number: `{answer}`', 
+                        value=f'```{random.choice(guessed_right)}```', inline=True)
+            try:
+                await ctx.send(embed=e)
+            except discord.HTTPException:
+                em_list = await embedtobox.etb(e)
+                for page in em_list:
+                    await ctx.send(page)
+        else:
+            return
 
 
 def setup(bot):
