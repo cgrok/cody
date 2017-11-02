@@ -91,8 +91,34 @@ class Misc:
             pass
 
         if msg != None:
-            text = msg.lower().replace(' ', '    ').replace('10', ':keycap_ten:').replace('ab', ':ab:').replace('cl', ':cl:').replace('0', ':zero:').replace('1', ':one:').replace('2', ':two:').replace('3', ':three:').replace('4', ':four:').replace('5', ':five:').replace('6', ':six:').replace('7', ':seven:').replace('8', ':eight:').replace('9', ':nine:').replace('!', ':exclamation:').replace('?', ':grey_question:').replace('vs', ':vs:').replace('.', ':small_orange_diamond:').replace(',', ':small_red_triangle_down:').replace('a', ':a:').replace('b', ':b:').replace('c', ':regional_indicator_c:').replace('d', ':regional_indicator_d:').replace('e', ':regional_indicator_e:').replace('f', ':regional_indicator_f:').replace('g', ':regional_indicator_g:').replace('h', ':regional_indicator_h:').replace('i', ':regional_indicator_i:').replace('j', ':regional_indicator_j:').replace('k', ':regional_indicator_k:').replace('l', ':regional_indicator_l:').replace('m', ':regional_indicator_m:').replace('n', ':regional_indicator_n:').replace('o', ':o2:').replace('p', ':parking:').replace('q', ':regional_indicator_q:').replace('r', ':regional_indicator_r:').replace('s', ':regional_indicator_s:').replace('t', ':regional_indicator_t:').replace('u', ':regional_indicator_u:').replace('v', ':regional_indicator_v:').replace('w', ':regional_indicator_w:').replace('x', ':regional_indicator_x:').replace('y', ':regional_indicator_y:').replace('z', ':regional_indicator_z:')
-            await ctx.send(text)
+            out = msg.lower()
+            text = out.replace(' ', '    ').replace('10', '\u200B:keycap_ten:')\
+                      .replace('ab', '\u200B🆎').replace('cl', '\u200B🆑')\
+                      .replace('0', '\u200B:zero:').replace('1', '\u200B:one:')\
+                      .replace('2', '\u200B:two:').replace('3', '\u200B:three:')\
+                      .replace('4', '\u200B:four:').replace('5', '\u200B:five:')\
+                      .replace('6', '\u200B:six:').replace('7', '\u200B:seven:')\
+                      .replace('8', '\u200B:eight:').replace('9', '\u200B:nine:')\
+                      .replace('!', '\u200B❗').replace('?', '\u200B❓')\
+                      .replace('vs', '\u200B🆚').replace('.', '\u200B🔸')\
+                      .replace(',', '🔻').replace('a', '\u200B🅰')\
+                      .replace('b', '\u200B🅱').replace('c', '\u200B🇨')\
+                      .replace('d', '\u200B🇩').replace('e', '\u200B🇪')\
+                      .replace('f', '\u200B🇫').replace('g', '\u200B🇬')\
+                      .replace('h', '\u200B🇭').replace('i', '\u200B🇮')\
+                      .replace('j', '\u200B🇯').replace('k', '\u200B🇰')\
+                      .replace('l', '\u200B🇱').replace('m', '\u200B🇲')\
+                      .replace('n', '\u200B🇳').replace('ñ', '\u200B🇳')\
+                      .replace('o', '\u200B🅾').replace('p', '\u200B🅿')\
+                      .replace('q', '\u200B🇶').replace('r', '\u200B🇷')\
+                      .replace('s', '\u200B🇸').replace('t', '\u200B🇹')\
+                      .replace('u', '\u200B🇺').replace('v', '\u200B🇻')\
+                      .replace('w', '\u200B🇼').replace('x', '\u200B🇽')\
+                      .replace('y', '\u200B🇾').replace('z', '\u200B🇿')
+            try:
+                await ctx.send(text)
+            except Exception as e:
+                await ctx.send(f'```{e}```')
         else:
             await ctx.send('Write something, reee!', delete_after=3.0)
 
