@@ -26,7 +26,7 @@ import discord
 from discord.ext import commands
 from discord.ext.commands import TextChannelConverter
 from ext.paginator import PaginatorSession
-#from ext import embedtobox
+from ext import embedtobox
 from PIL import Image
 from contextlib import redirect_stdout
 import traceback
@@ -193,49 +193,55 @@ class Developer:
 
     @commands.command(name='presence')
     async def _presence(self, ctx, status, *, message=None):
-        '''Change I'm Grok status!
-        (Stream, Online, Idle, DND, Invisible, or clear it)
-        '''
+        '''Change Grok Discord status! (Stream, Online, Idle, DND, Invisible, or clear it)'''
         if ctx.author.id in dev_list:
+
             status = status.lower()
             emb = discord.Embed(title="Presence")
             emb.color = await ctx.get_dominant_color(ctx.author.avatar_url)
             file = io.BytesIO()
             if status == "online":
-                await self.bot.change_presence(status=discord.Status.online, game=discord.Game(name=message))
+                await self.bot.change_presence(status=discord.Status.online, game=discord.Game(name=message), afk=True)
                 color = discord.Color(value=0x43b581).to_rgb()
             elif status == "idle":
-                await self.bot.change_presence(status=discord.Status.idle, game=discord.Game(name=message))
+                await self.bot.change_presence(status=discord.Status.idle, game=discord.Game(name=message), afk=True)
                 color = discord.Color(value=0xfaa61a).to_rgb()
             elif status == "dnd":
-                await self.bot.change_presence(status=discord.Status.dnd, game=discord.Game(name=message))
+                await self.bot.change_presence(status=discord.Status.dnd, game=discord.Game(name=message), afk=True)
                 color = discord.Color(value=0xf04747).to_rgb()
             elif status == "invis" or status == "invisible":
-                await self.bot.change_presence(status=discord.Status.invisible, game=discord.Game(name=message))
+                await self.bot.change_presence(status=discord.Status.invisible, game=discord.Game(name=message), afk=True)
                 color = discord.Color(value=0x747f8d).to_rgb()
             elif status == "stream":
-                await self.bot.change_presence(status=discord.Status.online, game=discord.Game(name=message, type=1, url=f'https://www.twitch.tv/{message}'))
+                await self.bot.change_presence(status=discord.Status.online, game=discord.Game(name=message, type=1, url=f'https://www.twitch.tv/{message}'), afk=True)
                 color = discord.Color(value=0x593695).to_rgb()
+            elif status == "listen":
+                await self.bot.change_presence(game=discord.Game(name=message, type=2), afk=True)
+                color = discord.Color(value=0x43b581).to_rgb()
+            elif status == "watch":
+                await self.bot.change_presence(game=discord.Game(name=message, type=3), afk=True)
+                color = discord.Color(value=0x43b581).to_rgb()
             elif status == "clear":
-                await self.bot.change_presence(game=None)
+                await self.bot.change_presence(game=None, afk=True)
                 emb.description = "Presence cleared."
                 return await ctx.send(embed=emb)
             else:
-                emb.description = "Please enter either `online`, `idle`, `dnd`, `invisible`, or `clear`."
+                emb.description = "Please enter either `online`, `idle`, `dnd`, `invisible`, `stream`, `watch`, `listen`, or `clear`."
                 return await ctx.send(embed=emb)
 
             Image.new('RGB', (500, 500), color).save(file, format='PNG')
-            emb.description = "Thank you for updating my Presence!"
+            if message:
+                emb.description = f"Your presence has been changed. 'Game': {message}"
+            else:
+                emb.description = f"Your presence has been changed"
             file.seek(0)
             emb.set_author(name=status.title(), icon_url="attachment://color.png")
-            '''
             try:
                 await ctx.send(file=discord.File(file, 'color.png'), embed=emb)
             except discord.HTTPException:
                 em_list = await embedtobox.etb(emb)
                 for page in em_list:
                     await ctx.send(page)
-            '''
 
     @commands.command()
     async def source(self, ctx, *, command):
@@ -255,6 +261,7 @@ class Developer:
     async def say(self, ctx, *, content):
         '''Makes the bot repeat after you'''
         if ctx.author.id in dev_list:
+            await ctx.message.delete()
             await ctx.send(content)
 
 
