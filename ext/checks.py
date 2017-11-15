@@ -24,8 +24,8 @@ def is_dev():
 def has_role(ctx, *, role, check = all):
     async def pred(ctx):
 
-        is_dev = await is_dev()
-        if is_dev:
+        dev = is_dev()
+        if dev:
             return True
 
         if role in ctx.author.roles:
@@ -34,21 +34,21 @@ def has_role(ctx, *, role, check = all):
             return False
     return commands.check(pred)
 async def check_permissions(ctx, perms, *, check=all):
-    is_dev = await is_dev()
-    if is_dev:
+    dev = is_dev()
+    if dev:
         return True
 
     resolved = ctx.channel.permissions_for(ctx.author)
     return check(getattr(resolved, name, None) == value for name, value in perms.items())
 
 def has_permissions(*, check=all, **perms):
-    async def pred():
+    async def pred(ctx):
         return await check_permissions(ctx, perms, check=check)
     return commands.check(pred)
 
 async def check_guild_permissions(ctx, perms, *, check=all):
-    is_dev = await is_dev(ctx)
-    if is_dev:
+    dev = is_dev()
+    if dev:
         return True
 
     if ctx.guild is None:

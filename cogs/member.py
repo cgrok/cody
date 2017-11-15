@@ -4,6 +4,7 @@ import asyncio
 import shlex
 import json
 from ext import config
+from ext import checks
 
 class Member:
     """Manage Member events."""
@@ -22,6 +23,7 @@ class Member:
         return role
 
     @commands.group(no_pm=True)
+    @checks.is_mod()
     async def memberset(self, ctx):
 
         if ctx.invoked_subcommand is None:
