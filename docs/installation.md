@@ -15,7 +15,7 @@ Get it from [here](https://discordapp.com/oauth2/authorize/?permissions=0&scope=
 *Here's a GIF to explain the first 5 steps*
 ![GIF to explain the first 5 steps](https://i.imgur.com/Y2ouW7I.gif)
 
-6. Download the bot from the [github page](https://github.com/verixx/grokbot/archive/master.zip).
+6. Download the bot from the [github page](https://github.com/cgrok/grokbot/archive/master.zip).
 7. Extract the zip file to the desktop or wherever you want.
 8. Open your terminal or cmd.
 9. Navigate to the bot folder. i.e `cd desktop/grokbot-master`
