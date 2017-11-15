@@ -199,15 +199,15 @@ class ConfigDatabase:
                 guild_id,"[\"g.\"]",0,0,0,0,0,0,0,
                 "Welcome {member.mention} to {member.guild.name}","Bye Bye {member.name}!","[]",0,""
                 )
-            self.cur.execute("INSERT INTO config VALUES ?", default)
+            self.cur.execute("INSERT INTO config VALUES {}".format(default))
 
     def get_guild(self, guild_id):
         """Returns a dict of all fields"""
         return GuildConfig(self, guild_id)
 
-    def get_data(self, guild_id):
+    def get_data(self, guild_id:int ):
         """Returns a raw dict of all fields"""
-        self.cur.execute("SELECT * FROM config WHERE guild_id = ?", guild_id)
+        self.cur.execute("SELECT * FROM config WHERE guild_id = ?", (guild_id,))
         columns = [x[0] for x in self.cur.description]
         rows = self.cur.fetchone()
         if rows is None:
@@ -219,9 +219,10 @@ class ConfigDatabase:
             return raw_dict
 
     def get_value(self, guild_id, column):
-        self.cur.execute("SELECT {column} FROM config WHERE guild_id = ?", guild_id)
+        self.cur.execute("SELECT {} FROM config WHERE guild_id = ?".format(column), (guild_id,))
         return self.cur.fetchone()[0]
+
 
     def set_value(self, guild_id, column, new_val):
         with self.conn:
-            self.cur.execute("UPDATE config SET ? = ? WHERE guild_id = ?", (column, new_val, guild_id))
+            self.cur.execute("UPDATE config SET {} = ? WHERE guild_id = ?".format(column), (new_val, guild_id))
