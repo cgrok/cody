@@ -27,6 +27,7 @@ from discord.ext import commands
 from discord.ext.commands import TextChannelConverter
 from ext.paginator import PaginatorSession
 from ext import embedtobox
+from ext import checks
 from PIL import Image
 from contextlib import redirect_stdout
 import traceback
@@ -57,6 +58,7 @@ class Developer:
         self._last_google = None
         self._last_result = None
 
+    @checks.is_dev()
     @commands.command()
     async def paginate(self, ctx):
         embeds = []
@@ -66,75 +68,83 @@ class Developer:
         session = PaginatorSession(ctx, pages=embeds)
         await session.run()
 
+    @commands.command()
+    @checks.is_dev()
+    async def test(self, ctx):
+        """used to test checks"""
+        await ctx.send("test complete")
+
+
     @commands.command(pass_context=True, hidden=True, name='eval')
+    @checks.is_dev()
     async def _eval(self, ctx, *, body: str):
         '''Evaluates a code'''
-        if ctx.author.id in dev_list:
-            env = {
-                'bot': self.bot,
-                'ctx': ctx,
-                'channel': ctx.channel,
-                'author': ctx.author,
-                'guild': ctx.guild,
-                'message': ctx.message,
-                '_': self._last_result
-            }
 
-            env.update(globals())
+        env = {
+            'bot': self.bot,
+            'ctx': ctx,
+            'channel': ctx.channel,
+            'author': ctx.author,
+            'guild': ctx.guild,
+            'message': ctx.message,
+            '_': self._last_result
+        }
 
-            body = self.cleanup_code(body)
+        env.update(globals())
 
-            stdout = io.StringIO()
-            err = out = None
+        body = self.cleanup_code(body)
 
-            to_compile = f'async def func():\n{textwrap.indent(body, "  ")}'
+        stdout = io.StringIO()
+        err = out = None
 
-            try:
-                exec(to_compile, env)
-            except Exception as e:
-                err = await ctx.send(f'```py\n{e.__class__.__name__}: {e}\n```')
-                return await err.add_reaction('\u2049')
+        to_compile = f'async def func():\n{textwrap.indent(body, "  ")}'
 
-            func = env['func']
-            try:
-                with redirect_stdout(stdout):
-                    ret = await func()
-            except Exception as e:
-                value = stdout.getvalue()
-                err = await ctx.send(f'```py\n{value}{traceback.format_exc()}\n```')
-            else:
-                value = stdout.getvalue()
-                if self.bot.token in value:
-                    value = value.replace(self.bot.token, "[EXPUNGED]")
-                if ret is None:
-                    if value:
-                        try:
-                            out = await ctx.send(f'```py\n{value}\n```')
-                        except:
-                            out = await ctx.send('Result was too long to send.')
-                else:
-                    self._last_result = ret
+        try:
+            exec(to_compile, env)
+        except Exception as e:
+            err = await ctx.send(f'```py\n{e.__class__.__name__}: {e}\n```')
+            return await err.add_reaction('\u2049')
+
+        func = env['func']
+        try:
+            with redirect_stdout(stdout):
+                ret = await func()
+        except Exception as e:
+            value = stdout.getvalue()
+            err = await ctx.send(f'```py\n{value}{traceback.format_exc()}\n```')
+        else:
+            value = stdout.getvalue()
+            if self.bot.token in value:
+                value = value.replace(self.bot.token, "[EXPUNGED]")
+            if ret is None:
+                if value:
                     try:
-                        out = await ctx.send(f'```py\n{value}{ret}\n```')
+                        out = await ctx.send(f'```py\n{value}\n```')
                     except:
                         out = await ctx.send('Result was too long to send.')
-
-            if out:
-                to_log = self.cleanup_code(out.content)
-                await out.add_reaction('\u2705')
-            elif err:
-                to_log = self.cleanup_code(err.content)
-                await err.add_reaction('\u2049')
             else:
-                to_log = 'No textual output.'
-                await ctx.message.add_reaction('\u2705')
+                self._last_result = ret
+                try:
+                    out = await ctx.send(f'```py\n{value}{ret}\n```')
+                except:
+                    out = await ctx.send('Result was too long to send.')
 
-            if ctx.guild:
-                guildid = ctx.guild.id
-            else:
-                guildid = None
+        if out:
+            to_log = self.cleanup_code(out.content)
+            await out.add_reaction('\u2705')
+        elif err:
+            to_log = self.cleanup_code(err.content)
+            await err.add_reaction('\u2049')
+        else:
+            to_log = 'No textual output.'
+            await ctx.message.add_reaction('\u2705')
 
-            await self.log_eval(ctx, body, out, err, guildid)
+        if ctx.guild:
+            guildid = ctx.guild.id
+        else:
+            guildid = None
+
+        await self.log_eval(ctx, body, out, err, guildid)
 
     async def log_eval(self, ctx, body, out, err, guildid):
         if out:
@@ -180,89 +190,88 @@ class Developer:
         return content.strip('` \n')
 
     @commands.command()
+    @checks.is_dev()
     async def set_val(self, ctx, field, *, value):
-        if ctx.author.id in dev_list:
-            self.bot.db.set_value(ctx.guild.id, field, value)
-            await ctx.send(f'Updated `{field}` to `{value}`')
+        self.bot.db.set_value(ctx.guild.id, field, value)
+        await ctx.send(f'Updated `{field}` to `{value}`')
 
     @commands.command(no_pm=True)
+    @checks.is_dev()
     async def get_val(self, ctx, field):
-        if ctx.author.id in dev_list:
-            value = self.bot.db.get_value(ctx.guild.id, field)
-            await ctx.send(f'Value for `{field}`: `{value}`')
+        value = self.bot.db.get_value(ctx.guild.id, field)
+        await ctx.send(f'Value for `{field}`: `{value}`')
 
     @commands.command(name='presence')
+    @checks.is_dev()
     async def _presence(self, ctx, status, *, message=None):
         '''Change Grok Discord status! (Stream, Online, Idle, DND, Invisible, or clear it)'''
-        if ctx.author.id in dev_list:
+        status = status.lower()
+        emb = discord.Embed(title="Presence")
+        emb.color = await ctx.get_dominant_color(ctx.author.avatar_url)
+        file = io.BytesIO()
+        if status == "online":
+            await self.bot.change_presence(status=discord.Status.online, game=discord.Game(name=message), afk=True)
+            color = discord.Color(value=0x43b581).to_rgb()
+        elif status == "idle":
+            await self.bot.change_presence(status=discord.Status.idle, game=discord.Game(name=message), afk=True)
+            color = discord.Color(value=0xfaa61a).to_rgb()
+        elif status == "dnd":
+            await self.bot.change_presence(status=discord.Status.dnd, game=discord.Game(name=message), afk=True)
+            color = discord.Color(value=0xf04747).to_rgb()
+        elif status == "invis" or status == "invisible":
+            await self.bot.change_presence(status=discord.Status.invisible, game=discord.Game(name=message), afk=True)
+            color = discord.Color(value=0x747f8d).to_rgb()
+        elif status == "stream":
+            await self.bot.change_presence(status=discord.Status.online, game=discord.Game(name=message, type=1, url=f'https://www.twitch.tv/{message}'), afk=True)
+            color = discord.Color(value=0x593695).to_rgb()
+        elif status == "listen":
+            await self.bot.change_presence(game=discord.Game(name=message, type=2), afk=True)
+            color = discord.Color(value=0x43b581).to_rgb()
+        elif status == "watch":
+            await self.bot.change_presence(game=discord.Game(name=message, type=3), afk=True)
+            color = discord.Color(value=0x43b581).to_rgb()
+        elif status == "clear":
+            await self.bot.change_presence(game=None, afk=True)
+            emb.description = "Presence cleared."
+            return await ctx.send(embed=emb)
+        else:
+            emb.description = "Please enter either `online`, `idle`, `dnd`, `invisible`, `stream`, `watch`, `listen`, or `clear`."
+            return await ctx.send(embed=emb)
 
-            status = status.lower()
-            emb = discord.Embed(title="Presence")
-            emb.color = await ctx.get_dominant_color(ctx.author.avatar_url)
-            file = io.BytesIO()
-            if status == "online":
-                await self.bot.change_presence(status=discord.Status.online, game=discord.Game(name=message), afk=True)
-                color = discord.Color(value=0x43b581).to_rgb()
-            elif status == "idle":
-                await self.bot.change_presence(status=discord.Status.idle, game=discord.Game(name=message), afk=True)
-                color = discord.Color(value=0xfaa61a).to_rgb()
-            elif status == "dnd":
-                await self.bot.change_presence(status=discord.Status.dnd, game=discord.Game(name=message), afk=True)
-                color = discord.Color(value=0xf04747).to_rgb()
-            elif status == "invis" or status == "invisible":
-                await self.bot.change_presence(status=discord.Status.invisible, game=discord.Game(name=message), afk=True)
-                color = discord.Color(value=0x747f8d).to_rgb()
-            elif status == "stream":
-                await self.bot.change_presence(status=discord.Status.online, game=discord.Game(name=message, type=1, url=f'https://www.twitch.tv/{message}'), afk=True)
-                color = discord.Color(value=0x593695).to_rgb()
-            elif status == "listen":
-                await self.bot.change_presence(game=discord.Game(name=message, type=2), afk=True)
-                color = discord.Color(value=0x43b581).to_rgb()
-            elif status == "watch":
-                await self.bot.change_presence(game=discord.Game(name=message, type=3), afk=True)
-                color = discord.Color(value=0x43b581).to_rgb()
-            elif status == "clear":
-                await self.bot.change_presence(game=None, afk=True)
-                emb.description = "Presence cleared."
-                return await ctx.send(embed=emb)
-            else:
-                emb.description = "Please enter either `online`, `idle`, `dnd`, `invisible`, `stream`, `watch`, `listen`, or `clear`."
-                return await ctx.send(embed=emb)
-
-            Image.new('RGB', (500, 500), color).save(file, format='PNG')
-            if message:
-                emb.description = f"Your presence has been changed. 'Game': {message}"
-            else:
-                emb.description = f"Your presence has been changed"
-            file.seek(0)
-            emb.set_author(name=status.title(), icon_url="attachment://color.png")
-            try:
-                await ctx.send(file=discord.File(file, 'color.png'), embed=emb)
-            except discord.HTTPException:
-                em_list = await embedtobox.etb(emb)
-                for page in em_list:
-                    await ctx.send(page)
+        Image.new('RGB', (500, 500), color).save(file, format='PNG')
+        if message:
+            emb.description = f"Your presence has been changed. 'Game': {message}"
+        else:
+            emb.description = f"Your presence has been changed"
+        file.seek(0)
+        emb.set_author(name=status.title(), icon_url="attachment://color.png")
+        try:
+            await ctx.send(file=discord.File(file, 'color.png'), embed=emb)
+        except discord.HTTPException:
+            em_list = await embedtobox.etb(emb)
+            for page in em_list:
+                await ctx.send(page)
 
     @commands.command()
+    @checks.is_dev()
     async def source(self, ctx, *, command):
         '''See the source code for any command.'''
-        if ctx.author.id in dev_list:
-            source = str(inspect.getsource(self.bot.get_command(command).callback))
-            fmt = '```py\n'+source.replace('`','\u200b`')+'\n```'
-            if len(fmt) > 2000:
-                async with ctx.session.post("https://hastebin.com/documents", data=source) as resp:
-                    data = await resp.json()
-                key = data['key']
-                return await ctx.send(f'Command source: <https://hastebin.com/{key}.py>')
-            else:
-                return await ctx.send(fmt)
+        source = str(inspect.getsource(self.bot.get_command(command).callback))
+        fmt = '```py\n'+source.replace('`','\u200b`')+'\n```'
+        if len(fmt) > 2000:
+            async with ctx.session.post("https://hastebin.com/documents", data=source) as resp:
+                data = await resp.json()
+            key = data['key']
+            return await ctx.send(f'Command source: <https://hastebin.com/{key}.py>')
+        else:
+            return await ctx.send(fmt)
 
     @commands.command(aliases=["echo"])
+    @checks.is_dev()
     async def say(self, ctx, *, content):
         '''Makes the bot repeat after you'''
-        if ctx.author.id in dev_list:
-            await ctx.message.delete()
-            await ctx.send(content)
+        await ctx.message.delete()
+        await ctx.send(content)
 
 
 def setup(bot):
