@@ -3,12 +3,15 @@ from discord.ext import commands
 import asyncio
 import shlex
 import json
+from ext import config
 
 class Member:
     """Manage Member events."""
 
     def __init__(self, bot):
         self.bot = bot
+        self.config = bot.db
+
 
     def _role_from_string(self, server, rolename, roles=None):
         if roles is None:
@@ -24,13 +27,19 @@ class Member:
         if ctx.invoked_subcommand is None:
             await self.bot.send_cmd_help(ctx)
             em = discord.Embed(color=discord.Colour.red(), description="Member Settings")
-            em.add_field(name="Join Message Enabled", value=ctx.config.join_enabled, inline=False)
-            em.add_field(name="Leave Message Enabled", value=ctx.config.leave_enabled, inline=False)
-            em.add_field(name="Welcome Channel", value=ctx.config.welcome_channel, inline=False)
-            em.add_field(name="Leave Channel", value=ctx.config.leave_channel, inline=False)
-            em.add_field(name="Join Message", value=ctx.config.join_message, inline=False)
-            em.add_field(name="Leave Message", value=ctx.config.leave_message, inline=False)
-            em.add_field(name="Selfroles", value=", ".join(ctx.config.selfroles))
+            try:
+                em.add_field(name="Join Message Enabled", value=ctx.config.join_enabled, inline=False)
+                em.add_field(name="Leave Message Enabled", value=ctx.config.leave_enabled, inline=False)
+                em.add_field(name="Welcome Channel", value=ctx.config.welcome_channel, inline=False)
+                em.add_field(name="Leave Channel", value=ctx.config.leave_channel, inline=False)
+                em.add_field(name="Join Message", value=ctx.config.join_message, inline=False)
+                em.add_field(name="Leave Message", value=ctx.config.leave_message, inline=False)
+                try:
+                    em.add_field(name="Selfroles", value=", ".join(ctx.config.selfroles))
+                except:
+                    em.add_field(name="Selfroles", value="No selfroles set")
+            except Exception as e:
+                print(e)
             await ctx.send(embed=em)
 
 
@@ -115,14 +124,14 @@ class Member:
             await ctx.send("Role added.")
 
     async def on_member_join(self, member):
-        if self.bot.config(ctx).join_enabled:
-            await self.bot.config.welcome_channel.send(self.bot.config.join_message.format(name=member, guild=member.guild, mention=member.mention, member=member))
-        if self.bot.config(ctx).autorole_enabled:
-            await member.add_roles(self.bot.config.autorole)
+        if self.config.get_guild(member.guild.id).join_enabled:
+            await self.config.get_guild(member.guild.id).welcome_channel.send(self.config.get_guild(member.guild.id).join_message.format(name=member, guild=member.guild, mention=member.mention, member=member))
+        if self.config.get_guild(member.guild.id).autorole_enabled:
+            await member.add_roles(self.config.get_guild(member.guild.id).autorole)
 
     async def on_member_remove(self, member):
-        if self.bot.config(ctx).leave_enabled:
-            await self.bot.config.leave_channel.send(self.bot.config.leave_message.format(name=member.name, guild=member.guild))
+        if self.config.get_guild(member.guild.id).leave_enabled:
+            await self.config.get_guild(member.guild.id).send(self.config.get_guild(member.guild.id).leave_message.format(name=member.name, guild=member.guild))
 
 def setup(bot):
         n = Member(bot)
