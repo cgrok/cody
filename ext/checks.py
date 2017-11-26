@@ -21,10 +21,19 @@ def is_dev():
                 return False
     return commands.check(pred)
 
+def is_developer():
+    with open('./data/devs.txt') as f:
+        devlist = f.read().splitlines()
+        print(devlist)
+        if str(ctx.author.id) in devlist:
+            return True
+        else:
+            return False
+
 def has_role(ctx, *, role, check = all):
     async def pred(ctx):
 
-        dev = is_dev()
+        dev = is_developer()
         if dev:
             return True
 
@@ -34,7 +43,7 @@ def has_role(ctx, *, role, check = all):
             return False
     return commands.check(pred)
 async def check_permissions(ctx, perms, *, check=all):
-    dev = is_dev()
+    dev = is_developer()
     if dev:
         return True
 
@@ -47,7 +56,7 @@ def has_permissions(*, check=all, **perms):
     return commands.check(pred)
 
 async def check_guild_permissions(ctx, perms, *, check=all):
-    dev = is_dev()
+    dev = is_developer()
     if dev:
         return True
 

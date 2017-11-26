@@ -40,7 +40,7 @@ class Mod:
 
 
     @commands.command(no_pm=True)
-    @commands.has_permissions(kick_members = True)
+    @commands.has_permissions(ban_members = True)
     async def ban(self, ctx, user: discord.Member):
         '''Bans a user if you have appropriate permissions'''
         await ctx.channel.send(f"Goodbye {user.name}.")
