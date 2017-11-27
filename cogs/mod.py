@@ -24,6 +24,7 @@ SOFTWARE.
 
 import discord
 from discord.ext import commands
+from ext import checks
 
 class Mod:
 
@@ -32,7 +33,7 @@ class Mod:
 
 
     @commands.command(no_pm=True)
-    @commands.has_permissions(kick_members = True)
+    @checks.has_permissions(kick_members = True)
     async def kick(self, ctx, user: discord.Member):
         '''Kicks a user if you have appropriate permissions'''
         await ctx.channel.send(f"RIP {user.name}.")
