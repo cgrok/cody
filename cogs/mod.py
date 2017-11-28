@@ -141,5 +141,12 @@ class Mod:
             ctx.config.modlog_channel = channel.id
             await ctx.send(f"Set modlog channel to {self.bot.get_channel(channel.id)}")
 
+    @commands.command()
+    async def warn(self, ctx, user: discord.Member, *, reason: str):
+        """Warn a user"""   
+        warning = f"You've been warned in **{ctx.author.guild}** by **{ctx.message.author.name}** for: {reason}"
+        await user.send(warning)
+        await ctx.send(f"**{user}** has been warned")
+
 def setup(bot):
     return bot.add_cog(Mod(bot))
