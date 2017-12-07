@@ -93,6 +93,7 @@ class Mod:
         await ctx.channel.send(user.mention + ' has been unmuted.')
 
     @commands.command(aliases=['del', 'p', 'prune'], bulk=True)
+    @commands.has_permissions(delete_messages = True)
     async def purge(self, ctx, limit: int):
         '''Clean a number of messages'''
         await ctx.message.delete()
@@ -107,6 +108,7 @@ class Mod:
         await ctx.channel.send(f'Successfully deleted {len(deleted)} message(s)', delete_after=5)
 
     @commands.group(no_pm=True)
+    @commands.has_permissions(manage_server = True)
     async def modset(self, ctx):
         if ctx.invoked_subcommand is None:
             await self.bot.send_cmd_help(ctx)
@@ -142,6 +144,7 @@ class Mod:
             await ctx.send(f"Set modlog channel to {self.bot.get_channel(channel.id)}")
 
     @commands.command()
+    @commands.has_permissions(kick_members = True)
     async def warn(self, ctx, user: discord.Member, *, reason: str):
         """Warn a user"""   
         warning = f"You've been warned in **{ctx.author.guild}** by **{ctx.message.author.name}** for: {reason}"
